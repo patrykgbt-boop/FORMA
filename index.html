@@ -927,7 +927,7 @@
     $("#dietWeekLabel").textContent=`${formatDate(week)} – ${formatDate(fmtISO(weekEnd))}`;
     const natural=dateDayNumber(todayISO);if(!selectedDietDay)selectedDietDay=natural;
     $("#dietDayTabs").innerHTML=days.map((d,i)=>`<button type="button" class="diet-day-btn ${selectedDietDay===i+1?"active":""}" data-day="${i+1}">${d.slice(0,3)}<small>${formatDate(fmtISO(new Date(parseDate(week).getTime()+i*86400000)))}</small></button>`).join("");
-    $$$("#dietDayTabs .diet-day-btn").forEach(b=>b.addEventListener("click",()=>{selectedDietDay=Number(b.dataset.day);renderDietDay();renderFoodLog();}));
+    $$("#dietDayTabs .diet-day-btn").forEach(b=>b.addEventListener("click",()=>{selectedDietDay=Number(b.dataset.day);renderDietDay();renderFoodLog();}));
     renderDietDay();
     renderFoodLog();
     renderFoodProductLibrary();
