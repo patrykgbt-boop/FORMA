@@ -8,6 +8,7 @@
   <style>
 *{box-sizing:border-box} :root{--bg:#0b1020;--side:#0f172a;--panel:#121a2d;--panel2:#182238;--line:#27324a;--text:#eef2ff;--muted:#93a0b8;--accent:#5eead4;--accent2:#2dd4bf;--good:#86efac;--bad:#fca5a5;--warning:#fde68a} body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}button,input,select,textarea{font:inherit}.app-shell{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;padding:24px 18px;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column}.brand{display:flex;gap:12px;align-items:center;padding:4px 8px 28px}.brand-mark{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#60a5fa);color:#07111f;display:grid;place-items:center;font-weight:900;font-size:22px}.brand strong{display:block;letter-spacing:.08em}.brand small{display:block;color:var(--muted);margin-top:2px}nav{display:grid;gap:8px}.nav-btn{border:0;background:transparent;color:var(--muted);padding:12px 14px;border-radius:12px;text-align:left;cursor:pointer;display:flex;gap:12px;align-items:center}.nav-btn:hover,.nav-btn.active{background:var(--panel2);color:var(--text)}.nav-btn.active{box-shadow:inset 3px 0 0 var(--accent)}.sidebar-note{margin-top:auto;padding:14px;border:1px solid var(--line);border-radius:14px;display:flex;gap:10px;align-items:center}.sidebar-note small{color:var(--muted);display:block;margin-top:2px}.dot{width:9px;height:9px;border-radius:50%;background:var(--good);box-shadow:0 0 0 4px rgba(134,239,172,.08)}main{padding:28px 32px 56px;min-width:0}.topbar{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:26px}.topbar h1{margin:3px 0 0;font-size:30px}.eyebrow{color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.13em;margin:0}.top-actions{display:flex;gap:10px;align-items:center}.date-chip{border:1px solid var(--line);padding:10px 13px;border-radius:12px;color:var(--muted)}button,.file-btn{cursor:pointer}.primary,.secondary,.danger,.text-btn,.file-btn{border-radius:11px;padding:11px 15px;border:1px solid var(--line)}.primary{background:var(--accent);color:#07111f;border-color:transparent;font-weight:800}.primary:hover{background:var(--accent2)}.secondary,.file-btn{background:var(--panel2);color:var(--text)}.danger{background:transparent;color:var(--bad);border-color:rgba(252,165,165,.35)}.text-btn{background:transparent;color:var(--accent);border-color:transparent}.view{display:none}.view.active{display:block}.hero-card{background:linear-gradient(135deg,#16243d,#142b34);border:1px solid #284553;border-radius:22px;padding:24px 28px;display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:18px}.hero-card h2{margin:7px 0 8px;font-size:25px}.hero-card p:last-child{color:#b6c3d6;margin:0}.hero-ring{position:relative;width:120px;height:120px;flex:0 0 120px}.hero-ring svg{width:120px;height:120px;transform:rotate(-90deg)}.ring-bg,.ring-value{fill:none;stroke-width:10}.ring-bg{stroke:rgba(255,255,255,.09)}.ring-value{stroke:var(--accent);stroke-linecap:round;stroke-dasharray:301.6;stroke-dashoffset:301.6;transition:stroke-dashoffset .4s}.hero-ring>div{position:absolute;inset:0;display:grid;place-content:center;text-align:center}.hero-ring b{font-size:25px}.hero-ring span{display:block;color:var(--muted);font-size:11px}.stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:14px}.stat-card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px}.stat-card{padding:18px}.stat-label{color:var(--muted);font-size:12px}.stat-card strong{display:block;font-size:24px;margin:7px 0 5px}.stat-card small{color:var(--muted)}.dashboard-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,.7fr);gap:14px;margin-bottom:14px}.panel{padding:20px}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.panel-head h3{margin:4px 0 0;font-size:18px}.pill{font-size:12px;color:var(--muted);background:var(--panel2);padding:7px 10px;border-radius:999px}.chart-wrap{position:relative;min-height:260px}.chart-wrap.large{min-height:320px}canvas{display:block;width:100%;height:auto}.empty-chart{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:13px}.progress-list{display:grid;gap:18px}.progress-row>div:first-child{display:flex;justify-content:space-between;gap:10px;margin-bottom:7px;font-size:13px}.progress-row span{color:var(--muted)}.bar{height:8px;border-radius:20px;background:var(--panel2);overflow:hidden}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#60a5fa);border-radius:20px;transition:width .35s}.entries{display:grid;gap:9px}.entry-row,.journal-item{display:grid;grid-template-columns:110px 1fr auto;gap:12px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#10192b}.entry-row .meta,.journal-item .meta{color:var(--muted);font-size:12px}.entry-row strong,.journal-item strong{font-size:14px}.entry-badges{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.badge{padding:5px 8px;border-radius:999px;background:var(--panel2);font-size:11px;color:#c7d2e6}.two-col{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:14px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.form-grid label{display:grid;gap:7px;color:#c7d2e6;font-size:13px}.form-grid input,.form-grid select,.form-grid textarea,.big-note{width:100%;background:#0d1627;border:1px solid var(--line);color:var(--text);border-radius:11px;padding:11px 12px;outline:none}.form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus,.big-note:focus{border-color:var(--accent)}.span-2{grid-column:1/-1}.form-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.message{font-size:12px;color:var(--muted)}.journal-list{display:grid;gap:9px;max-height:760px;overflow:auto;padding-right:3px}.journal-item{grid-template-columns:1fr auto;cursor:pointer}.journal-item:hover{border-color:#3b4968}.journal-item .actions{display:flex;gap:6px}.icon-btn{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:7px 9px}.week-grid{display:grid;grid-template-columns:repeat(7,minmax(150px,1fr));gap:10px;overflow-x:auto;padding-bottom:4px}.day-card{background:#0e1729;border:1px solid var(--line);border-radius:14px;padding:13px;min-width:150px}.day-card h4{margin:0 0 9px}.day-card textarea{width:100%;min-height:190px;resize:vertical;background:transparent;border:0;color:var(--text);outline:none}.muted{color:var(--muted)}.big-note{resize:vertical;min-height:300px}.summary-stack{display:grid;gap:5px}.summary-stack>div{display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid var(--line);padding:13px 2px}.summary-stack span{color:var(--muted)}.stack-actions{display:grid;gap:10px;margin:18px 0}.file-btn{text-align:center}.file-btn input{display:none}.callout{margin-top:20px;border:1px solid #34505b;background:#10252b;border-radius:14px;padding:15px}.callout p{color:#b9c8d0;font-size:13px;line-height:1.55;margin-bottom:0}.toast{position:fixed;right:22px;bottom:22px;background:#edfdf9;color:#07251f;padding:12px 16px;border-radius:12px;font-weight:700;opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:translateY(0)}@media(max-width:1000px){.app-shell{grid-template-columns:82px minmax(0,1fr)}.sidebar{padding:22px 12px}.brand>div:last-child,.nav-btn:not(.active) span+*,.sidebar-note>div:last-child{display:none}.brand{justify-content:center;padding-left:0;padding-right:0}.nav-btn{font-size:0;justify-content:center}.nav-btn span{font-size:19px}.nav-btn.active{font-size:0}.sidebar-note{justify-content:center}.stat-grid{grid-template-columns:repeat(2,1fr)}.dashboard-grid,.two-col{grid-template-columns:1fr}}@media(max-width:650px){.app-shell{display:block}.sidebar{position:fixed;left:0;right:0;bottom:0;top:auto;height:auto;z-index:20;border-right:0;border-top:1px solid var(--line);padding:8px;background:rgba(15,23,42,.98)}.brand,.sidebar-note{display:none}nav{display:grid;grid-template-columns:repeat(6,1fr);gap:3px}.nav-btn,.nav-btn.active{padding:10px 3px;font-size:0;justify-content:center;box-shadow:none}.nav-btn span{font-size:18px}main{padding:20px 14px 88px}.topbar{align-items:flex-start}.top-actions{flex-direction:column;align-items:flex-end}.date-chip{font-size:12px}.hero-card{padding:20px;align-items:flex-start}.hero-card h2{font-size:21px}.hero-ring{width:92px;height:92px;flex-basis:92px}.hero-ring svg{width:92px;height:92px}.hero-ring b{font-size:20px}.stat-grid{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}.span-2{grid-column:auto}.panel{padding:16px}.entry-row{grid-template-columns:1fr}.entry-badges{justify-content:flex-start}.toast{right:14px;bottom:80px;left:14px;text-align:center}}.auth-screen{position:fixed;inset:0;z-index:100;background:rgba(5,10,20,.96);display:grid;place-items:center;padding:18px}.auth-screen.hidden{display:none}.auth-card{width:min(440px,100%);background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:26px}.auth-brand{padding:0 0 24px}.auth-card h1{margin:8px 0 8px;font-size:28px}.auth-form{display:grid;gap:14px;margin-top:20px}.auth-form label{display:grid;gap:7px;color:#c7d2e6;font-size:13px}.auth-form input{width:100%;background:#0d1627;border:1px solid var(--line);color:var(--text);border-radius:11px;padding:12px;outline:none}.auth-form input:focus{border-color:var(--accent)}.auth-actions{display:flex;gap:10px;flex-wrap:wrap}.sync-ok{color:var(--good)!important;border-color:rgba(134,239,172,.25)!important}.sync-bad{color:var(--warning)!important}@media(max-width:650px){#signOutBtn{padding:8px 10px;font-size:12px}.top-actions{max-width:180px}.auth-card{padding:20px}}
 
+.workout-panel{margin-top:14px}.workout-toolbar{display:grid;grid-template-columns:minmax(220px,.55fr) minmax(0,1fr);gap:14px;margin-bottom:16px}.workout-toolbar label,.plan-editor-grid label{display:grid;gap:7px;color:#c7d2e6;font-size:13px}.workout-toolbar select,.plan-editor-grid input,.plan-editor-grid textarea,.plan-editor-grid select,.set-input{width:100%;background:#0d1627;border:1px solid var(--line);color:var(--text);border-radius:9px;padding:9px 10px;outline:none}.workout-exercises{display:grid;gap:12px}.exercise-card{border:1px solid var(--line);border-radius:16px;background:#0e1729;padding:15px}.exercise-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:12px}.exercise-head h4{margin:0 0 4px}.exercise-meta{color:var(--muted);font-size:12px;line-height:1.5}.progression-chip{font-size:12px;line-height:1.35;background:#10252b;border:1px solid #34505b;border-radius:11px;padding:8px 10px;max-width:310px}.set-table{display:grid;gap:7px}.set-row{display:grid;grid-template-columns:44px minmax(90px,1fr) minmax(90px,1fr) minmax(80px,.8fr) 42px;gap:7px;align-items:center}.set-row.header{color:var(--muted);font-size:11px;padding:0 3px}.set-no{text-align:center;color:var(--muted);font-size:12px}.remove-set{border:1px solid var(--line);background:var(--panel2);color:var(--bad);border-radius:8px;padding:9px}.exercise-actions{display:flex;gap:8px;margin-top:9px}.plan-editor-head{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin-bottom:14px}.plan-editor-head label{min-width:220px}.plan-exercises{display:grid;gap:10px}.plan-ex-row{border:1px solid var(--line);border-radius:13px;padding:12px;background:#0e1729}.plan-editor-grid{display:grid;grid-template-columns:minmax(210px,1.7fr) repeat(5,minmax(80px,.6fr));gap:9px}.plan-editor-grid .notes-field{grid-column:1/-1}.plan-row-actions{display:flex;justify-content:flex-end;margin-top:8px}.plan-remove{background:transparent;border:1px solid rgba(252,165,165,.35);color:var(--bad);border-radius:9px;padding:8px 10px}.history-mini{margin-top:9px;color:var(--muted);font-size:12px}.workout-summary{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.workout-summary .badge{font-size:12px}.workout-empty{padding:18px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);text-align:center}@media(max-width:850px){.workout-toolbar{grid-template-columns:1fr}.exercise-head{display:block}.progression-chip{margin-top:10px;max-width:none}.plan-editor-grid{grid-template-columns:1fr 1fr}.plan-editor-grid label:first-child,.plan-editor-grid .notes-field{grid-column:1/-1}}@media(max-width:650px){.set-row{grid-template-columns:32px 1fr 1fr 72px 36px;gap:5px}.set-input{padding:8px 6px}.plan-editor-grid{grid-template-columns:1fr 1fr}.exercise-card{padding:12px}}
 </style>
 </head>
 <body>
@@ -207,6 +208,24 @@
             <div id="journalList" class="journal-list"></div>
           </article>
         </div>
+
+        <article class="panel workout-panel">
+          <div class="panel-head">
+            <div><p class="eyebrow">TRENING SZCZEGÓŁOWY</p><h3>Serie, ciężar i progresja</h3></div>
+            <span class="pill">automatyczna progresja</span>
+          </div>
+          <div class="workout-toolbar">
+            <label>Dzień planu
+              <select id="workoutDaySelect"></select>
+            </label>
+            <div class="callout" style="margin:0"><strong>Zasada</strong><p style="margin-top:5px">Wpisz ciężar, powtórzenia i opcjonalnie RIR. Po zapisaniu aplikacja pokaże poprzedni wynik i zasugeruje ciężar na kolejną sesję.</p></div>
+          </div>
+          <div id="workoutExercises" class="workout-exercises"></div>
+          <div class="form-actions" style="margin-top:16px">
+            <button id="saveDetailedWorkout" class="primary" type="button">Zapisz trening</button>
+            <span id="workoutMessage" class="message"></span>
+          </div>
+        </article>
       </section>
 
       <section class="view" id="view-training">
@@ -221,6 +240,20 @@
           <p class="muted">Tu możesz wpisać plan, który ustalimy razem. Dane są synchronizowane z chmurą.</p>
           <div id="trainingWeek" class="week-grid"></div>
         </article>
+
+        <article class="panel" style="margin-top:14px">
+          <div class="panel-head">
+            <div><p class="eyebrow">STRUKTURA TRENINGU</p><h3>Ćwiczenia i zasady progresji</h3></div>
+          </div>
+          <div class="plan-editor-head">
+            <label>Dzień planu<select id="planDaySelect" class="set-input"></select></label>
+            <button id="addPlanExercise" class="secondary" type="button">+ Dodaj ćwiczenie</button>
+            <button id="saveStructuredPlan" class="primary" type="button">Zapisz ćwiczenia</button>
+            <span id="structuredPlanMessage" class="message"></span>
+          </div>
+          <div id="structuredPlanRows" class="plan-exercises"></div>
+        </article>
+
         <article class="panel" style="margin-top:14px">
           <div class="panel-head"><div><p class="eyebrow">PERIODYZACJA</p><h3>Plan 6 miesięcy</h3></div></div>
           <textarea id="trainingProgram" class="big-note" rows="18" placeholder="Tu przechowujemy długoterminowy plan, bloki treningowe i zasady progresji."></textarea>
@@ -311,8 +344,8 @@
   const SUPABASE_KEY = "sb_publishable_-3RrLnYXbVyGL7QeKgsEwg_ynhEAi7f";
   const CACHE_PREFIX = "forma_cloud_v1_";
   const DEFAULT = {
-    settings:{height:185,targetWeight:84,calories:2500,protein:180,steps:8000,workouts:4,goal:"redukcja"},
-    entries:[], trainingPlan:{}, trainingProgram:"", dietPlan:""
+    settings:{height:null,targetWeight:null,calories:null,protein:null,steps:null,workouts:4,goal:"forma"},
+    entries:[], trainingPlan:{}, trainingProgram:"", dietPlan:"", exercisePlan:[], workoutSessions:[], workoutSets:[]
   };
 
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
@@ -389,14 +422,17 @@
     setSync(true,"Pobieranie danych…");
     const cached=loadCache();
     try{
-      const [sRes,eRes,tRes,pRes,dRes]=await Promise.all([
+      const [sRes,eRes,tRes,pRes,dRes,xRes,wRes,setRes]=await Promise.all([
         client.from("user_settings").select("*").eq("user_id",currentUser.id).maybeSingle(),
         client.from("daily_entries").select("*").eq("user_id",currentUser.id).order("entry_date",{ascending:true}),
         client.from("training_plan").select("*").eq("user_id",currentUser.id).order("day_of_week",{ascending:true}),
         client.from("training_program").select("*").eq("user_id",currentUser.id).maybeSingle(),
-        client.from("diet_plan").select("*").eq("user_id",currentUser.id).maybeSingle()
+        client.from("diet_plan").select("*").eq("user_id",currentUser.id).maybeSingle(),
+        client.from("training_exercises").select("*").eq("user_id",currentUser.id).eq("active",true).order("day_of_week",{ascending:true}).order("sort_order",{ascending:true}),
+        client.from("workout_sessions").select("*").eq("user_id",currentUser.id).order("session_date",{ascending:true}),
+        client.from("workout_sets").select("*").eq("user_id",currentUser.id).order("set_number",{ascending:true})
       ]);
-      for(const r of [sRes,eRes,tRes,pRes,dRes]) if(r.error) throw r.error;
+      for(const r of [sRes,eRes,tRes,pRes,dRes,xRes,wRes,setRes]) if(r.error) throw r.error;
       state=cloneDefault();
       if(sRes.data) state.settings=settingsFromDb(sRes.data);
       else { state.settings=cached.settings||cloneDefault().settings; await client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"}); }
@@ -404,6 +440,9 @@
       state.trainingPlan={}; (tRes.data||[]).forEach(r=>state.trainingPlan[days[r.day_of_week-1]]=r.content||"");
       state.trainingProgram=pRes.data?.content||"";
       state.dietPlan=dRes.data?.content||"";
+      state.exercisePlan=xRes.data||[];
+      state.workoutSessions=wRes.data||[];
+      state.workoutSets=setRes.data||[];
       saveCache(); renderAll(); setSync(true,"Online • zsynchronizowano");
     }catch(err){
       console.error(err); state=cached; renderAll(); setSync(false,"Offline • dane z pamięci");
@@ -486,11 +525,129 @@
   }
   function setProgress(bar,text,percent,label){$("#"+bar).style.width=Math.max(0,Math.min(100,percent||0))+"%";$("#"+text).textContent=label;}
 
+
+  const workoutDayLabels={1:"Dzień 1 — Upper A",2:"Dzień 2 — Lower A",4:"Dzień 3 — Upper B",6:"Dzień 4 — Lower B"};
+  function availableWorkoutDays(){return [...new Set((state.exercisePlan||[]).filter(x=>x.active!==false).map(x=>Number(x.day_of_week)))].sort((a,b)=>a-b);}
+  function dateDayNumber(date){const d=parseDate(date).getDay();return d===0?7:d;}
+  function sessionFor(date,day){return (state.workoutSessions||[]).find(s=>s.session_date===date&&Number(s.day_of_week)===Number(day));}
+  function sessionSets(sessionId,exerciseId){return (state.workoutSets||[]).filter(s=>s.session_id===sessionId&&s.exercise_id===exerciseId).sort((a,b)=>a.set_number-b.set_number);}
+  function recentPerformances(exerciseId,beforeDate){
+    return (state.workoutSessions||[]).filter(s=>s.session_date<beforeDate).sort((a,b)=>b.session_date.localeCompare(a.session_date)).map(s=>{
+      const sets=sessionSets(s.id,exerciseId).filter(x=>x.reps!=null);
+      return sets.length?{session:s,sets}:null;
+    }).filter(Boolean).slice(0,2);
+  }
+  function perfSummary(sets){
+    if(!sets?.length)return "brak";
+    return sets.map(s=>`${s.weight_kg==null?"—":Number(s.weight_kg).toFixed(Number(s.weight_kg)%1?1:0)} kg × ${s.reps??"—"}${s.rir==null?"":` (RIR ${s.rir})`}`).join(" • ");
+  }
+  function evaluatePerformance(ex,sets){
+    const work=sets.filter(s=>s.reps!=null);
+    if(!work.length)return {allTop:false,allMin:false,base:null};
+    const enough=work.length>=Number(ex.target_sets||1);
+    const allTop=enough&&work.slice(0,ex.target_sets).every(s=>Number(s.reps)>=Number(ex.rep_max))&&work.slice(0,ex.target_sets).every(s=>s.rir==null||Number(s.rir)>=1);
+    const allMin=enough&&work.slice(0,ex.target_sets).every(s=>Number(s.reps)>=Number(ex.rep_min));
+    const base=work[0].weight_kg==null?null:Number(work[0].weight_kg);
+    return {allTop,allMin,base};
+  }
+  function progressionFor(ex,date){
+    const prev=recentPerformances(ex.id,date), step=Number(ex.progression_step_kg||2.5);
+    if(!prev.length){
+      return {weight:ex.start_weight_kg==null?null:Number(ex.start_weight_kg),message:"Pierwsza sesja — ustal bazę",previous:"Brak wcześniejszego wyniku"};
+    }
+    const p1=evaluatePerformance(ex,prev[0].sets),p2=prev[1]?evaluatePerformance(ex,prev[1].sets):null;
+    let weight=p1.base, message="Utrzymaj ciężar i dodaj powtórzenia";
+    if(p1.allTop&&p1.base!=null){weight=p1.base+step;message=`Progres: +${step} kg`;}
+    else if(!p1.allMin&&p2&&!p2.allMin&&p1.base!=null){
+      const raw=p1.base*0.925;weight=Math.max(0,Math.round(raw/step)*step);message="2 słabsze sesje — reset ok. -7,5%";
+    } else if(p1.allMin){message="Zakres zaliczony — dobij do górnej granicy";}
+    return {weight,message,previous:`${prev[0].session.session_date}: ${perfSummary(prev[0].sets)}`};
+  }
+  function renumberSetRows(card){[...card.querySelectorAll(".set-row.data")].forEach((r,i)=>{r.querySelector(".set-no").textContent=i+1;r.dataset.setno=i+1;});}
+  function makeSetRow(setNo,weight,reps="",rir=""){
+    const row=document.createElement("div");row.className="set-row data";row.dataset.setno=setNo;
+    row.innerHTML=`<div class="set-no">${setNo}</div><input class="set-input set-weight" type="number" step="0.5" min="0" placeholder="kg" value="${weight??""}"><input class="set-input set-reps" type="number" step="1" min="0" max="100" placeholder="powt." value="${reps??""}"><input class="set-input set-rir" type="number" step="0.5" min="0" max="10" placeholder="RIR" value="${rir??""}"><button class="remove-set" type="button">×</button>`;
+    row.querySelector(".remove-set").addEventListener("click",()=>{row.remove();renumberSetRows(row.closest(".exercise-card"));});
+    return row;
+  }
+  function renderWorkoutModule(){
+    const select=$("#workoutDaySelect"),container=$("#workoutExercises");if(!select||!container)return;
+    const daysAvail=availableWorkoutDays();const date=$("#jDate").value||todayISO;
+    const previousValue=Number(select.value)||null;const natural=dateDayNumber(date);
+    const chosen=daysAvail.includes(previousValue)?previousValue:(daysAvail.includes(natural)?natural:(daysAvail[0]||1));
+    select.innerHTML=daysAvail.map(d=>`<option value="${d}">${workoutDayLabels[d]||days[d-1]}</option>`).join("");
+    select.value=String(chosen);
+    const exercises=(state.exercisePlan||[]).filter(x=>Number(x.day_of_week)===chosen&&x.active!==false).sort((a,b)=>a.sort_order-b.sort_order);
+    const session=sessionFor(date,chosen);
+    if(!exercises.length){container.innerHTML='<div class="workout-empty">Brak ćwiczeń w tym dniu. Dodaj je w zakładce Trening.</div>';return;}
+    container.innerHTML="";
+    exercises.forEach(ex=>{
+      const progression=progressionFor(ex,date);const existing=session?sessionSets(session.id,ex.id):[];
+      const card=document.createElement("div");card.className="exercise-card";card.dataset.exid=ex.id;card.dataset.name=ex.name;card.dataset.recweight=progression.weight??"";
+      card.innerHTML=`<div class="exercise-head"><div><h4>${esc(ex.name)}</h4><div class="exercise-meta">Plan: ${ex.target_sets}×${ex.rep_min}${ex.rep_max!==ex.rep_min?"–"+ex.rep_max:""} • krok ${ex.progression_step_kg} kg${ex.notes?"<br>"+esc(ex.notes):""}</div></div><div class="progression-chip"><strong>${esc(progression.message)}</strong><br><span class="muted">Sugerowany ciężar: ${progression.weight==null?"ustal na treningu":progression.weight+" kg"}</span></div></div><div class="set-table"><div class="set-row header"><div>#</div><div>Ciężar</div><div>Powt.</div><div>RIR</div><div></div></div><div class="set-rows"></div></div><div class="exercise-actions"><button class="secondary add-set" type="button">+ seria</button></div><div class="history-mini">Poprzednio: ${esc(progression.previous)}</div>`;
+      const rows=card.querySelector(".set-rows");
+      if(existing.length) existing.forEach((s,i)=>rows.appendChild(makeSetRow(i+1,s.weight_kg==null?"":Number(s.weight_kg),s.reps??"",s.rir??"")));
+      else for(let i=1;i<=Number(ex.target_sets);i++) rows.appendChild(makeSetRow(i,progression.weight??"","",""));
+      card.querySelector(".add-set").addEventListener("click",()=>rows.appendChild(makeSetRow(rows.children.length+1,progression.weight??"","","")));
+      container.appendChild(card);
+    });
+    $("#workoutMessage").textContent=session?"Wczytano zapisany trening z tego dnia. Możesz go edytować.":"";
+  }
+  async function saveDetailedWorkout(){
+    if(!currentUser)return;
+    const date=$("#jDate").value||todayISO,day=Number($("#workoutDaySelect").value);
+    $("#workoutMessage").textContent="Zapisywanie treningu…";
+    const sessionPayload={user_id:currentUser.id,session_date:date,day_of_week:day,duration_min:val("#jDuration"),mood:$("#jMood").value||null,notes:$("#jNotes").value.trim(),completed_at:new Date().toISOString(),updated_at:new Date().toISOString()};
+    const sRes=await client.from("workout_sessions").upsert(sessionPayload,{onConflict:"user_id,session_date,day_of_week"}).select("*").single();
+    if(sRes.error){console.error(sRes.error);$("#workoutMessage").textContent="Błąd zapisu sesji.";return;}
+    const sessionId=sRes.data.id;
+    const del=await client.from("workout_sets").delete().eq("session_id",sessionId).eq("user_id",currentUser.id);
+    if(del.error){console.error(del.error);$("#workoutMessage").textContent="Błąd aktualizacji serii.";return;}
+    const payload=[];
+    [...$("#workoutExercises").querySelectorAll(".exercise-card")].forEach(card=>{
+      [...card.querySelectorAll(".set-row.data")].forEach((row,i)=>{
+        const w=row.querySelector(".set-weight").value,r=row.querySelector(".set-reps").value,rir=row.querySelector(".set-rir").value;
+        if(w===""&&r===""&&rir==="")return;
+        payload.push({session_id:sessionId,user_id:currentUser.id,exercise_id:card.dataset.exid,exercise_name:card.dataset.name,set_number:i+1,weight_kg:w===""?null:Number(w),reps:r===""?null:Number(r),rir:rir===""?null:Number(rir),updated_at:new Date().toISOString()});
+      });
+    });
+    if(payload.length){const ins=await client.from("workout_sets").insert(payload);if(ins.error){console.error(ins.error);$("#workoutMessage").textContent="Błąd zapisu serii.";return;}}
+    const daily={user_id:currentUser.id,entry_date:date,training_type:workoutDayLabels[day]||days[day-1],training_duration_min:val("#jDuration"),mood:$("#jMood").value||null,updated_at:new Date().toISOString()};
+    const dRes=await client.from("daily_entries").upsert(daily,{onConflict:"user_id,entry_date"});if(dRes.error)console.error(dRes.error);
+    await loadCloud();go("journal");$("#jDate").value=date;$("#workoutDaySelect").value=String(day);renderWorkoutModule();$("#workoutMessage").textContent="Trening zapisany. Progresja przeliczona.";toast("Trening zapisany");
+  }
+
+  function planDayOptionLabel(d){return workoutDayLabels[d]||days[d-1];}
+  function makePlanExerciseRow(ex={}){
+    const row=document.createElement("div");row.className="plan-ex-row";row.dataset.id=ex.id||"";
+    row.innerHTML=`<div class="plan-editor-grid"><label>Nazwa<input class="pe-name" value="${esc(ex.name||"")}" placeholder="np. Wyciskanie sztangi"></label><label>Serie<input class="pe-sets" type="number" min="1" max="10" value="${ex.target_sets??3}"></label><label>Powt. min<input class="pe-min" type="number" min="1" max="50" value="${ex.rep_min??8}"></label><label>Powt. max<input class="pe-max" type="number" min="1" max="50" value="${ex.rep_max??12}"></label><label>Start kg<input class="pe-start" type="number" step="0.5" min="0" value="${ex.start_weight_kg??""}"></label><label>Krok kg<input class="pe-step" type="number" step="0.5" min="0.5" value="${ex.progression_step_kg??2.5}"></label><label class="notes-field">Uwagi / technika<textarea class="pe-notes" rows="2">${esc(ex.notes||"")}</textarea></label></div><div class="plan-row-actions"><button class="plan-remove" type="button">Usuń ćwiczenie</button></div>`;
+    row.querySelector(".plan-remove").addEventListener("click",()=>row.remove());return row;
+  }
+  function renderStructuredPlanEditor(){
+    const select=$("#planDaySelect"),container=$("#structuredPlanRows");if(!select||!container)return;
+    const old=Number(select.value)||1;select.innerHTML=[1,2,3,4,5,6,7].map(d=>`<option value="${d}">${planDayOptionLabel(d)}</option>`).join("");select.value=String(old);
+    const exs=(state.exercisePlan||[]).filter(x=>Number(x.day_of_week)===Number(select.value)&&x.active!==false).sort((a,b)=>a.sort_order-b.sort_order);
+    container.innerHTML="";exs.forEach(ex=>container.appendChild(makePlanExerciseRow(ex)));
+    if(!exs.length)container.innerHTML='<div class="workout-empty">Ten dzień nie ma jeszcze ćwiczeń.</div>';
+  }
+  async function saveStructuredPlan(){
+    if(!currentUser)return;const day=Number($("#planDaySelect").value),rows=[...$("#structuredPlanRows").querySelectorAll(".plan-ex-row")];
+    const parsed=rows.map((row,i)=>({id:row.dataset.id||null,user_id:currentUser.id,day_of_week:day,sort_order:i+1,name:row.querySelector(".pe-name").value.trim(),target_sets:Number(row.querySelector(".pe-sets").value||3),rep_min:Number(row.querySelector(".pe-min").value||8),rep_max:Number(row.querySelector(".pe-max").value||12),start_weight_kg:row.querySelector(".pe-start").value===""?null:Number(row.querySelector(".pe-start").value),progression_step_kg:Number(row.querySelector(".pe-step").value||2.5),notes:row.querySelector(".pe-notes").value.trim(),active:true,updated_at:new Date().toISOString()})).filter(x=>x.name);
+    $("#structuredPlanMessage").textContent="Zapisywanie…";
+    const existing=(state.exercisePlan||[]).filter(x=>Number(x.day_of_week)===day);const keep=new Set(parsed.filter(x=>x.id).map(x=>x.id));const removed=existing.filter(x=>!keep.has(x.id)).map(x=>x.id);
+    const ops=[];
+    parsed.forEach(x=>{if(x.id){const {id,...data}=x;ops.push(client.from("training_exercises").update(data).eq("id",id).eq("user_id",currentUser.id));}else{const {id,...data}=x;ops.push(client.from("training_exercises").insert(data));}});
+    if(removed.length)ops.push(client.from("training_exercises").delete().in("id",removed).eq("user_id",currentUser.id));
+    const res=await Promise.all(ops);const err=res.find(x=>x.error)?.error;if(err){console.error(err);$("#structuredPlanMessage").textContent="Błąd zapisu planu.";return;}
+    await loadCloud();go("training");$("#planDaySelect").value=String(day);renderStructuredPlanEditor();$("#structuredPlanMessage").textContent="Plan zapisany.";toast("Ćwiczenia zapisane");
+  }
+
   function renderJournal(){
     const sorted=[...state.entries].sort((a,b)=>b.date.localeCompare(a.date));
     $("#journalList").innerHTML=sorted.map(e=>`<div class="journal-item" data-date="${e.date}"><div><strong>${formatDate(e.date)} ${e.training?`• ${esc(e.training)}`:""}</strong><div class="meta">${e.weight!=null?e.weight.toFixed(1)+" kg • ":""}${e.calories!=null?e.calories+" kcal • ":""}${e.protein!=null?e.protein+" g białka":""}</div></div><div class="actions"><button class="icon-btn edit" data-date="${e.date}">Edytuj</button><button class="icon-btn delete" data-date="${e.date}">×</button></div></div>`).join("")||`<div class="muted">Brak wpisów.</div>`;
     $$(".edit").forEach(b=>b.addEventListener("click",ev=>{ev.stopPropagation();loadEntry(b.dataset.date)}));
-    $$(".delete").forEach(b=>b.addEventListener("click",async ev=>{ev.stopPropagation();const date=b.dataset.date;if(!confirm(`Usunąć wpis z ${date}?`))return;const ok=await cloud(()=>client.from("daily_entries").delete().eq("user_id",currentUser.id).eq("entry_date",date));if(ok){state.entries=state.entries.filter(e=>e.date!==date);saveCache();renderAll();toast("Wpis usunięty");}}));
+    $(".delete").forEach(b=>b.addEventListener("click",async ev=>{ev.stopPropagation();const date=b.dataset.date;if(!confirm(`Usunąć wpis z ${date}?`))return;const ok=await cloud(()=>client.from("daily_entries").delete().eq("user_id",currentUser.id).eq("entry_date",date));if(ok){state.entries=state.entries.filter(e=>e.date!==date);saveCache();renderAll();toast("Wpis usunięty");}}));
+    renderWorkoutModule();
   }
   function loadEntry(date){ const e=state.entries.find(x=>x.date===date); if(!e)return; const map={jDate:"date",jWeight:"weight",jCalories:"calories",jProtein:"protein",jCarbs:"carbs",jFat:"fat",jSteps:"steps",jSleep:"sleep",jTraining:"training",jDuration:"duration",jCardio:"cardio",jMood:"mood",jMeals:"meals",jNotes:"notes"}; Object.entries(map).forEach(([id,k])=>$("#"+id).value=e[k]??""); go("journal"); $("#journalMessage").textContent="Wczytano wpis do edycji."; }
   $("#journalForm").addEventListener("submit",async ev=>{
@@ -503,10 +660,17 @@
 
   function renderTraining(){
     $("#trainingProgram").value=state.trainingProgram||"";
+    renderStructuredPlanEditor();
     $("#trainingWeek").innerHTML=days.map((day,i)=>`<div class="day-card"><h4>${day}</h4><textarea data-day="${day}" data-index="${i+1}" placeholder="Np. Push&#10;Wyciskanie 4×6-8&#10;OHP 3×8...">${esc(state.trainingPlan[day]||"")}</textarea></div>`).join("");
     $$("#trainingWeek textarea").forEach(t=>{let timer;t.addEventListener("input",()=>{state.trainingPlan[t.dataset.day]=t.value;saveCache();clearTimeout(timer);timer=setTimeout(async()=>{await cloud(()=>client.from("training_plan").upsert({user_id:currentUser.id,day_of_week:Number(t.dataset.index),content:t.value,updated_at:new Date().toISOString()},{onConflict:"user_id,day_of_week"}),"Plan zapisany");},650);});});
   }
   $("#resetPlan").addEventListener("click",async()=>{if(!confirm("Wyczyścić cały plan treningowy?"))return;const ok=await cloud(()=>client.from("training_plan").delete().eq("user_id",currentUser.id));if(ok){state.trainingPlan={};saveCache();renderTraining();toast("Plan wyczyszczony");}});
+  $("#saveDetailedWorkout").addEventListener("click",saveDetailedWorkout);
+  $("#workoutDaySelect").addEventListener("change",renderWorkoutModule);
+  $("#jDate").addEventListener("change",renderWorkoutModule);
+  $("#planDaySelect").addEventListener("change",renderStructuredPlanEditor);
+  $("#addPlanExercise").addEventListener("click",()=>{const container=$("#structuredPlanRows");if(container.querySelector(".workout-empty"))container.innerHTML="";container.appendChild(makePlanExerciseRow());});
+  $("#saveStructuredPlan").addEventListener("click",saveStructuredPlan);
   $("#saveTrainingProgram").addEventListener("click",async()=>{state.trainingProgram=$("#trainingProgram").value;const ok=await cloud(()=>client.from("training_program").upsert({user_id:currentUser.id,content:state.trainingProgram,updated_at:new Date().toISOString()},{onConflict:"user_id"}));if(ok){saveCache();$("#trainingProgramMessage").textContent="Zapisano w chmurze.";toast("Plan 6 miesięcy zapisany");}});
 
   function renderDiet(){const s=state.settings,seven=lastNDays(7),ak=avg(seven.filter(e=>e.calories!=null).map(e=>e.calories)),ap=avg(seven.filter(e=>e.protein!=null).map(e=>e.protein));$("#dietKcal").textContent=s.calories||"—";$("#dietProtein").textContent=s.protein||"—";$("#dietAvgKcal").textContent=ak?Math.round(ak):"—";$("#dietAvgProtein").textContent=ap?Math.round(ap):"—";$("#dietKcalDelta").textContent=ak&&s.calories?`${ak>s.calories?"+":""}${Math.round(ak-s.calories)} kcal vs cel`:"—";$("#dietProteinDelta").textContent=ap&&s.protein?`${ap>s.protein?"+":""}${Math.round(ap-s.protein)} g vs cel`:"—";$("#dietPlan").value=state.dietPlan||"";}
@@ -525,7 +689,7 @@
   $("#exportJson").addEventListener("click",()=>download("forma-backup.json",JSON.stringify(state,null,2),"application/json"));
   $("#exportCsv").addEventListener("click",()=>{const headers=["date","weight","calories","protein","carbs","fat","steps","sleep","training","duration","cardio","mood","meals","notes"],q=v=>`"${String(v??"").replaceAll('"','""')}"`,rows=[headers.join(";"),...state.entries.sort((a,b)=>a.date.localeCompare(b.date)).map(e=>headers.map(h=>q(e[h])).join(";"))];download("forma-dziennik.csv","\ufeff"+rows.join("\n"),"text/csv;charset=utf-8");});
   $("#importJson").addEventListener("change",async ev=>{const f=ev.target.files?.[0];if(!f)return;try{const obj=JSON.parse(await f.text());if(!obj||!Array.isArray(obj.entries))throw Error();state={...cloneDefault(),...obj};const ops=[client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"}),...state.entries.map(e=>client.from("daily_entries").upsert(entryToDb(e),{onConflict:"user_id,entry_date"}))];for(let i=0;i<days.length;i++){const content=state.trainingPlan?.[days[i]]||"";if(content)ops.push(client.from("training_plan").upsert({user_id:currentUser.id,day_of_week:i+1,content},{onConflict:"user_id,day_of_week"}));}ops.push(client.from("training_program").upsert({user_id:currentUser.id,content:state.trainingProgram||""},{onConflict:"user_id"}));ops.push(client.from("diet_plan").upsert({user_id:currentUser.id,content:state.dietPlan||""},{onConflict:"user_id"}));const results=await Promise.all(ops);if(results.some(r=>r.error))throw results.find(r=>r.error).error;saveCache();renderAll();toast("Dane zaimportowane do chmury");}catch(err){console.error(err);toast("Nie udało się zaimportować pliku");}finally{ev.target.value=""}});
-  $("#wipeData").addEventListener("click",async()=>{if(!confirm("Na pewno usunąć wszystkie dane FORMA z chmury? Tej operacji nie można cofnąć."))return;const results=await Promise.all([client.from("daily_entries").delete().eq("user_id",currentUser.id),client.from("training_plan").delete().eq("user_id",currentUser.id),client.from("training_program").delete().eq("user_id",currentUser.id),client.from("diet_plan").delete().eq("user_id",currentUser.id),client.from("user_settings").delete().eq("user_id",currentUser.id)]);if(results.some(r=>r.error)){toast("Nie udało się usunąć danych");return;}state=cloneDefault();await client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"});saveCache();renderAll();toast("Dane usunięte");});
+  $("#wipeData").addEventListener("click",async()=>{if(!confirm("Na pewno usunąć wszystkie dane FORMA z chmury? Tej operacji nie można cofnąć."))return;const results=await Promise.all([client.from("workout_sessions").delete().eq("user_id",currentUser.id),client.from("training_exercises").delete().eq("user_id",currentUser.id),client.from("daily_entries").delete().eq("user_id",currentUser.id),client.from("training_plan").delete().eq("user_id",currentUser.id),client.from("training_program").delete().eq("user_id",currentUser.id),client.from("diet_plan").delete().eq("user_id",currentUser.id),client.from("user_settings").delete().eq("user_id",currentUser.id)]);if(results.some(r=>r.error)){toast("Nie udało się usunąć danych");return;}state=cloneDefault();await client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"});saveCache();renderAll();toast("Dane usunięte");});
 
   window.addEventListener("online",()=>{ if(currentUser&&!syncing) loadCloud(); });
   window.addEventListener("offline",()=>setSync(false,"Offline"));
