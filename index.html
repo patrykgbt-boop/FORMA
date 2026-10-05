@@ -221,6 +221,11 @@
           <p class="muted">Tu możesz wpisać plan, który ustalimy razem. Dane są synchronizowane z chmurą.</p>
           <div id="trainingWeek" class="week-grid"></div>
         </article>
+        <article class="panel" style="margin-top:14px">
+          <div class="panel-head"><div><p class="eyebrow">PERIODYZACJA</p><h3>Plan 6 miesięcy</h3></div></div>
+          <textarea id="trainingProgram" class="big-note" rows="18" placeholder="Tu przechowujemy długoterminowy plan, bloki treningowe i zasady progresji."></textarea>
+          <div class="form-actions"><button id="saveTrainingProgram" class="primary">Zapisz plan 6 miesięcy</button><span id="trainingProgramMessage" class="message"></span></div>
+        </article>
       </section>
 
       <section class="view" id="view-diet">
@@ -307,7 +312,7 @@
   const CACHE_PREFIX = "forma_cloud_v1_";
   const DEFAULT = {
     settings:{height:185,targetWeight:84,calories:2500,protein:180,steps:8000,workouts:4,goal:"redukcja"},
-    entries:[], trainingPlan:{}, dietPlan:""
+    entries:[], trainingPlan:{}, trainingProgram:"", dietPlan:""
   };
 
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
@@ -384,18 +389,20 @@
     setSync(true,"Pobieranie danych…");
     const cached=loadCache();
     try{
-      const [sRes,eRes,tRes,dRes]=await Promise.all([
+      const [sRes,eRes,tRes,pRes,dRes]=await Promise.all([
         client.from("user_settings").select("*").eq("user_id",currentUser.id).maybeSingle(),
         client.from("daily_entries").select("*").eq("user_id",currentUser.id).order("entry_date",{ascending:true}),
         client.from("training_plan").select("*").eq("user_id",currentUser.id).order("day_of_week",{ascending:true}),
+        client.from("training_program").select("*").eq("user_id",currentUser.id).maybeSingle(),
         client.from("diet_plan").select("*").eq("user_id",currentUser.id).maybeSingle()
       ]);
-      for(const r of [sRes,eRes,tRes,dRes]) if(r.error) throw r.error;
+      for(const r of [sRes,eRes,tRes,pRes,dRes]) if(r.error) throw r.error;
       state=cloneDefault();
       if(sRes.data) state.settings=settingsFromDb(sRes.data);
       else { state.settings=cached.settings||cloneDefault().settings; await client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"}); }
       state.entries=(eRes.data||[]).map(entryFromDb);
       state.trainingPlan={}; (tRes.data||[]).forEach(r=>state.trainingPlan[days[r.day_of_week-1]]=r.content||"");
+      state.trainingProgram=pRes.data?.content||"";
       state.dietPlan=dRes.data?.content||"";
       saveCache(); renderAll(); setSync(true,"Online • zsynchronizowano");
     }catch(err){
@@ -495,10 +502,12 @@
   $("#clearJournal").addEventListener("click",()=>{["#jWeight","#jCalories","#jProtein","#jCarbs","#jFat","#jSteps","#jSleep","#jDuration","#jCardio","#jMeals","#jNotes"].forEach(id=>$(id).value="");$("#jTraining").value="";$("#jMood").value="";$("#jDate").value=todayISO;$("#journalMessage").textContent="";});
 
   function renderTraining(){
+    $("#trainingProgram").value=state.trainingProgram||"";
     $("#trainingWeek").innerHTML=days.map((day,i)=>`<div class="day-card"><h4>${day}</h4><textarea data-day="${day}" data-index="${i+1}" placeholder="Np. Push&#10;Wyciskanie 4×6-8&#10;OHP 3×8...">${esc(state.trainingPlan[day]||"")}</textarea></div>`).join("");
     $$("#trainingWeek textarea").forEach(t=>{let timer;t.addEventListener("input",()=>{state.trainingPlan[t.dataset.day]=t.value;saveCache();clearTimeout(timer);timer=setTimeout(async()=>{await cloud(()=>client.from("training_plan").upsert({user_id:currentUser.id,day_of_week:Number(t.dataset.index),content:t.value,updated_at:new Date().toISOString()},{onConflict:"user_id,day_of_week"}),"Plan zapisany");},650);});});
   }
   $("#resetPlan").addEventListener("click",async()=>{if(!confirm("Wyczyścić cały plan treningowy?"))return;const ok=await cloud(()=>client.from("training_plan").delete().eq("user_id",currentUser.id));if(ok){state.trainingPlan={};saveCache();renderTraining();toast("Plan wyczyszczony");}});
+  $("#saveTrainingProgram").addEventListener("click",async()=>{state.trainingProgram=$("#trainingProgram").value;const ok=await cloud(()=>client.from("training_program").upsert({user_id:currentUser.id,content:state.trainingProgram,updated_at:new Date().toISOString()},{onConflict:"user_id"}));if(ok){saveCache();$("#trainingProgramMessage").textContent="Zapisano w chmurze.";toast("Plan 6 miesięcy zapisany");}});
 
   function renderDiet(){const s=state.settings,seven=lastNDays(7),ak=avg(seven.filter(e=>e.calories!=null).map(e=>e.calories)),ap=avg(seven.filter(e=>e.protein!=null).map(e=>e.protein));$("#dietKcal").textContent=s.calories||"—";$("#dietProtein").textContent=s.protein||"—";$("#dietAvgKcal").textContent=ak?Math.round(ak):"—";$("#dietAvgProtein").textContent=ap?Math.round(ap):"—";$("#dietKcalDelta").textContent=ak&&s.calories?`${ak>s.calories?"+":""}${Math.round(ak-s.calories)} kcal vs cel`:"—";$("#dietProteinDelta").textContent=ap&&s.protein?`${ap>s.protein?"+":""}${Math.round(ap-s.protein)} g vs cel`:"—";$("#dietPlan").value=state.dietPlan||"";}
   $("#saveDietPlan").addEventListener("click",async()=>{state.dietPlan=$("#dietPlan").value;const ok=await cloud(()=>client.from("diet_plan").upsert({user_id:currentUser.id,content:state.dietPlan,updated_at:new Date().toISOString()},{onConflict:"user_id"}));if(ok){saveCache();$("#dietMessage").textContent="Zapisano w chmurze.";toast("Plan diety zapisany");}});
@@ -515,8 +524,8 @@
   function download(filename,text,type){const blob=new Blob([text],{type}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),500);}
   $("#exportJson").addEventListener("click",()=>download("forma-backup.json",JSON.stringify(state,null,2),"application/json"));
   $("#exportCsv").addEventListener("click",()=>{const headers=["date","weight","calories","protein","carbs","fat","steps","sleep","training","duration","cardio","mood","meals","notes"],q=v=>`"${String(v??"").replaceAll('"','""')}"`,rows=[headers.join(";"),...state.entries.sort((a,b)=>a.date.localeCompare(b.date)).map(e=>headers.map(h=>q(e[h])).join(";"))];download("forma-dziennik.csv","\ufeff"+rows.join("\n"),"text/csv;charset=utf-8");});
-  $("#importJson").addEventListener("change",async ev=>{const f=ev.target.files?.[0];if(!f)return;try{const obj=JSON.parse(await f.text());if(!obj||!Array.isArray(obj.entries))throw Error();state={...cloneDefault(),...obj};const ops=[client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"}),...state.entries.map(e=>client.from("daily_entries").upsert(entryToDb(e),{onConflict:"user_id,entry_date"}))];for(let i=0;i<days.length;i++){const content=state.trainingPlan?.[days[i]]||"";if(content)ops.push(client.from("training_plan").upsert({user_id:currentUser.id,day_of_week:i+1,content},{onConflict:"user_id,day_of_week"}));}ops.push(client.from("diet_plan").upsert({user_id:currentUser.id,content:state.dietPlan||""},{onConflict:"user_id"}));const results=await Promise.all(ops);if(results.some(r=>r.error))throw results.find(r=>r.error).error;saveCache();renderAll();toast("Dane zaimportowane do chmury");}catch(err){console.error(err);toast("Nie udało się zaimportować pliku");}finally{ev.target.value=""}});
-  $("#wipeData").addEventListener("click",async()=>{if(!confirm("Na pewno usunąć wszystkie dane FORMA z chmury? Tej operacji nie można cofnąć."))return;const results=await Promise.all([client.from("daily_entries").delete().eq("user_id",currentUser.id),client.from("training_plan").delete().eq("user_id",currentUser.id),client.from("diet_plan").delete().eq("user_id",currentUser.id),client.from("user_settings").delete().eq("user_id",currentUser.id)]);if(results.some(r=>r.error)){toast("Nie udało się usunąć danych");return;}state=cloneDefault();await client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"});saveCache();renderAll();toast("Dane usunięte");});
+  $("#importJson").addEventListener("change",async ev=>{const f=ev.target.files?.[0];if(!f)return;try{const obj=JSON.parse(await f.text());if(!obj||!Array.isArray(obj.entries))throw Error();state={...cloneDefault(),...obj};const ops=[client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"}),...state.entries.map(e=>client.from("daily_entries").upsert(entryToDb(e),{onConflict:"user_id,entry_date"}))];for(let i=0;i<days.length;i++){const content=state.trainingPlan?.[days[i]]||"";if(content)ops.push(client.from("training_plan").upsert({user_id:currentUser.id,day_of_week:i+1,content},{onConflict:"user_id,day_of_week"}));}ops.push(client.from("training_program").upsert({user_id:currentUser.id,content:state.trainingProgram||""},{onConflict:"user_id"}));ops.push(client.from("diet_plan").upsert({user_id:currentUser.id,content:state.dietPlan||""},{onConflict:"user_id"}));const results=await Promise.all(ops);if(results.some(r=>r.error))throw results.find(r=>r.error).error;saveCache();renderAll();toast("Dane zaimportowane do chmury");}catch(err){console.error(err);toast("Nie udało się zaimportować pliku");}finally{ev.target.value=""}});
+  $("#wipeData").addEventListener("click",async()=>{if(!confirm("Na pewno usunąć wszystkie dane FORMA z chmury? Tej operacji nie można cofnąć."))return;const results=await Promise.all([client.from("daily_entries").delete().eq("user_id",currentUser.id),client.from("training_plan").delete().eq("user_id",currentUser.id),client.from("training_program").delete().eq("user_id",currentUser.id),client.from("diet_plan").delete().eq("user_id",currentUser.id),client.from("user_settings").delete().eq("user_id",currentUser.id)]);if(results.some(r=>r.error)){toast("Nie udało się usunąć danych");return;}state=cloneDefault();await client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"});saveCache();renderAll();toast("Dane usunięte");});
 
   window.addEventListener("online",()=>{ if(currentUser&&!syncing) loadCloud(); });
   window.addEventListener("offline",()=>setSync(false,"Offline"));
