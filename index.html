@@ -1021,14 +1021,14 @@
     list.innerHTML=[...groups.entries()].map(([cat,rows])=>'<div class="shopping-group"><div class="shopping-group-title">'+esc(cat)+'</div>'+
       rows.map(x=>'<div class="shopping-item '+(x.checked?"checked":"")+'" data-id="'+x.id+'"><input class="shopping-check" type="checkbox" '+(x.checked?"checked":"")+' aria-label="Kupiono '+esc(x.item_name)+'"><div class="shopping-item-name">'+esc(x.item_name)+(x.source==="manual"?'<span class="shopping-source">ręcznie</span>':'')+'</div><div class="shopping-item-qty">'+esc(x.quantity_text||"")+'</div><button class="shopping-delete" type="button" aria-label="Usuń '+esc(x.item_name)+'">×</button></div>').join("")+
       '</div>').join("");
-    $(".shopping-check").forEach(ch=>ch.addEventListener("change",async()=>{
+    $$(".shopping-check").forEach(ch=>ch.addEventListener("change",async()=>{
       const row=ch.closest(".shopping-item"),id=row.dataset.id,item=(state.shoppingList||[]).find(x=>x.id===id);if(!item)return;
       const prev=!!item.checked,next=!!ch.checked;item.checked=next;row.classList.toggle("checked",next);renderShoppingProgressOnly();
       const r=await client.from("shopping_list_items").update({checked:next,updated_at:new Date().toISOString()}).eq("id",id).eq("user_id",currentUser.id);
       if(r.error){console.error(r.error);item.checked=prev;ch.checked=prev;row.classList.toggle("checked",prev);renderShoppingProgressOnly();toast("Nie udało się zapisać");}
       else saveCache();
     }));
-    $(".shopping-delete").forEach(btn=>btn.addEventListener("click",async()=>{
+    $$(".shopping-delete").forEach(btn=>btn.addEventListener("click",async()=>{
       const row=btn.closest(".shopping-item"),id=row.dataset.id,item=(state.shoppingList||[]).find(x=>x.id===id);if(!item)return;
       const r=await client.from("shopping_list_items").delete().eq("id",id).eq("user_id",currentUser.id);
       if(r.error){console.error(r.error);toast("Nie udało się usunąć produktu");return;}
