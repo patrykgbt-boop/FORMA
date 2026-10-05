@@ -22,6 +22,7 @@
 .food-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0 16px}.food-summary-card{background:#0e1729;border:1px solid var(--line);border-radius:12px;padding:12px}.food-summary-card span{display:block;color:var(--muted);font-size:11px}.food-summary-card strong{display:block;font-size:20px;margin-top:5px}.food-meal-section{border:1px solid var(--line);border-radius:14px;background:#0e1729;margin-bottom:12px;overflow:hidden}.food-meal-head{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}.food-meal-head h4{margin:0}.food-meal-actions{display:flex;gap:7px;flex-wrap:wrap}.mini-btn{border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:8px;padding:7px 9px;font-size:12px}.food-items{padding:10px;display:grid;gap:8px}.food-row{display:grid;grid-template-columns:minmax(180px,1.6fr) 90px repeat(4,78px) minmax(120px,.9fr) 38px;gap:7px;align-items:center}.food-row.header{color:var(--muted);font-size:10px;padding:0 4px}.food-row input{width:100%;background:#0d1627;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:8px 7px;outline:none}.food-row input:focus{border-color:var(--accent)}.food-total{font-size:11px;color:#c7d2e6;line-height:1.35}.food-remove{border:1px solid var(--line);background:var(--panel2);color:var(--bad);border-radius:8px;padding:8px}.food-library{display:grid;grid-template-columns:1fr 1fr;gap:14px}.food-product-form{display:grid;grid-template-columns:1.4fr repeat(5,.7fr);gap:8px}.food-product-form input{width:100%;background:#0d1627;border:1px solid var(--line);color:var(--text);border-radius:9px;padding:9px}.saved-products{display:grid;gap:7px;max-height:280px;overflow:auto}.saved-product{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:9px 10px;background:#0e1729}.saved-product small{color:var(--muted)}@media(max-width:1100px){.food-row{grid-template-columns:minmax(160px,1.5fr) 80px repeat(4,70px) minmax(110px,.8fr) 36px}.food-library{grid-template-columns:1fr}.food-product-form{grid-template-columns:1fr 1fr 1fr}}@media(max-width:750px){.food-summary-grid{grid-template-columns:1fr 1fr}.food-row.header{display:none}.food-row{grid-template-columns:1fr 1fr}.food-row .food-name{grid-column:1/-1}.food-total{grid-column:1/-1}.food-remove{justify-self:end}.food-product-form{grid-template-columns:1fr 1fr}.food-product-form .fp-name{grid-column:1/-1}}
 .scan-tools{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}.scan-card{border:1px solid var(--line);background:#0e1729;border-radius:14px;padding:14px}.scan-card h4{margin:0 0 10px}.scan-grid{display:grid;grid-template-columns:minmax(160px,1fr) auto auto;gap:8px;align-items:center}.scan-grid input,.scan-grid select,.scan-card select{width:100%;background:#0d1627;border:1px solid var(--line);color:var(--text);border-radius:9px;padding:9px}.scan-result{margin-top:10px;font-size:12px;color:var(--muted);line-height:1.5}.scan-result strong{color:var(--text)}.ai-tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:9px}.ai-preview{margin-top:10px;padding:10px;border:1px dashed var(--line);border-radius:10px;color:var(--muted);font-size:12px;line-height:1.5}.hidden{display:none!important}@media(max-width:850px){.scan-tools{grid-template-columns:1fr}.scan-grid{grid-template-columns:1fr 1fr}.scan-grid input{grid-column:1/-1}}@media(max-width:600px){.ai-tools{grid-template-columns:1fr}.scan-grid{grid-template-columns:1fr}}
 .pwa-only-note{display:none}@media(display-mode:standalone){#installPwaBtn{display:none!important}body{overscroll-behavior-y:none}.pwa-only-note{display:block}}@media(max-width:650px){.sidebar{padding-bottom:calc(8px + env(safe-area-inset-bottom));}.top-actions #installPwaBtn{padding:8px 10px;font-size:12px}main{padding-top:calc(20px + env(safe-area-inset-top));}}
+.training-calendar-panel{overflow:hidden}.training-schedule-form{display:grid;grid-template-columns:1fr .8fr .8fr 1.35fr 1.4fr 1.6fr;gap:9px}.training-schedule-form label{display:grid;gap:6px;color:#c7d2e6;font-size:12px}.training-schedule-form input,.training-schedule-form select{width:100%;background:#0d1627;border:1px solid var(--line);color:var(--text);border-radius:9px;padding:9px;outline:none}.training-schedule-form input:focus,.training-schedule-form select:focus{border-color:var(--accent)}.training-schedule-list{display:grid;gap:9px;margin-top:16px}.training-schedule-item{display:grid;grid-template-columns:minmax(160px,.9fr) minmax(180px,1.2fr) auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:13px;background:#0e1729;padding:12px}.training-schedule-item.past{opacity:.68}.training-schedule-time strong,.training-schedule-main strong{display:block}.training-schedule-time small,.training-schedule-main small{display:block;color:var(--muted);margin-top:3px;line-height:1.45}.training-schedule-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.google-btn{background:#fff;color:#172033;border-color:#fff;font-weight:750}.schedule-status{display:inline-block;margin-left:6px;font-size:10px;padding:3px 6px;border-radius:999px;background:var(--panel2);color:var(--muted)}@media(max-width:1050px){.training-schedule-form{grid-template-columns:repeat(3,1fr)}.training-schedule-item{grid-template-columns:1fr auto}.training-schedule-main{grid-column:1/-1;grid-row:1}}@media(max-width:650px){.training-schedule-form{grid-template-columns:1fr 1fr}.training-schedule-form .schedule-title,.training-schedule-form .schedule-notes{grid-column:1/-1}.training-schedule-item{grid-template-columns:1fr}.training-schedule-main{grid-row:auto;grid-column:auto}.training-schedule-actions{justify-content:flex-start}.training-schedule-actions button{flex:1 1 auto}}
 </style>
 </head>
 <body>
@@ -243,7 +244,28 @@
       </section>
 
       <section class="view" id="view-training">
-        <article class="panel">
+        <article class="panel training-calendar-panel">
+          <div class="panel-head">
+            <div><p class="eyebrow">KALENDARZ TRENINGOWY</p><h3>Zaplanuj trening i dodaj do Google Calendar</h3></div>
+            <span class="pill">Google Calendar</span>
+          </div>
+          <p class="muted">Zapisz termin w FORMIE. Przycisk Google Calendar otworzy gotowe wydarzenie z nazwą treningu, czasem i listą ćwiczeń — wystarczy je zatwierdzić w Google.</p>
+          <div class="training-schedule-form">
+            <label>Data<input id="scheduleDate" type="date"></label>
+            <label>Godzina<input id="scheduleTime" type="time" value="18:00"></label>
+            <label>Czas [min]<input id="scheduleDuration" type="number" min="15" max="360" step="5" value="90"></label>
+            <label>Dzień planu<select id="scheduleDay"></select></label>
+            <label class="schedule-title">Nazwa<input id="scheduleTitle" type="text" placeholder="np. Upper A"></label>
+            <label class="schedule-notes">Uwagi<input id="scheduleNotes" type="text" placeholder="np. po pracy, bez cardio"></label>
+          </div>
+          <div class="form-actions" style="margin-top:12px">
+            <button id="saveTrainingSchedule" class="primary" type="button">Zaplanuj trening</button>
+            <span id="trainingScheduleMessage" class="message"></span>
+          </div>
+          <div id="trainingScheduleList" class="training-schedule-list"></div>
+        </article>
+
+        <article class="panel" style="margin-top:14px">
           <div class="panel-head">
             <div>
               <p class="eyebrow">PLAN TYGODNIA</p>
@@ -454,7 +476,7 @@
   const CACHE_PREFIX = "forma_cloud_v1_";
   const DEFAULT = {
     settings:{height:null,targetWeight:null,calories:null,protein:null,carbs:null,fat:null,steps:null,workouts:4,goal:"forma"},
-    entries:[], trainingPlan:{}, trainingProgram:"", dietPlan:"", dietWeekPlan:[], exercisePlan:[], workoutSessions:[], workoutSets:[], foodProducts:[], foodLogItems:[], mealPresets:[], mealPresetItems:[]
+    entries:[], trainingPlan:{}, trainingProgram:"", dietPlan:"", dietWeekPlan:[], exercisePlan:[], workoutSessions:[], workoutSets:[], trainingSchedule:[], foodProducts:[], foodLogItems:[], mealPresets:[], mealPresetItems:[]
   };
 
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
@@ -531,7 +553,7 @@
     setSync(true,"Pobieranie danych…");
     const cached=loadCache();
     try{
-      const [sRes,eRes,tRes,pRes,dRes,dwRes,xRes,wRes,setRes,fpRes,flRes,mpRes,mpiRes]=await Promise.all([
+      const [sRes,eRes,tRes,pRes,dRes,dwRes,xRes,wRes,setRes,tsRes,fpRes,flRes,mpRes,mpiRes]=await Promise.all([
         client.from("user_settings").select("*").eq("user_id",currentUser.id).maybeSingle(),
         client.from("daily_entries").select("*").eq("user_id",currentUser.id).order("entry_date",{ascending:true}),
         client.from("training_plan").select("*").eq("user_id",currentUser.id).order("day_of_week",{ascending:true}),
@@ -541,12 +563,13 @@
         client.from("training_exercises").select("*").eq("user_id",currentUser.id).eq("active",true).order("day_of_week",{ascending:true}).order("sort_order",{ascending:true}),
         client.from("workout_sessions").select("*").eq("user_id",currentUser.id).order("session_date",{ascending:true}),
         client.from("workout_sets").select("*").eq("user_id",currentUser.id).order("set_number",{ascending:true}),
+        client.from("training_schedule").select("*").eq("user_id",currentUser.id).order("scheduled_date",{ascending:true}).order("start_time",{ascending:true}),
         client.from("food_products").select("*").eq("user_id",currentUser.id).order("name",{ascending:true}),
         client.from("food_log_items").select("*").eq("user_id",currentUser.id).order("entry_date",{ascending:true}).order("meal_type",{ascending:true}).order("sort_order",{ascending:true}),
         client.from("meal_presets").select("*").eq("user_id",currentUser.id).order("name",{ascending:true}),
         client.from("meal_preset_items").select("*").eq("user_id",currentUser.id).order("sort_order",{ascending:true})
       ]);
-      for(const r of [sRes,eRes,tRes,pRes,dRes,dwRes,xRes,wRes,setRes,fpRes,flRes,mpRes,mpiRes]) if(r.error) throw r.error;
+      for(const r of [sRes,eRes,tRes,pRes,dRes,dwRes,xRes,wRes,setRes,tsRes,fpRes,flRes,mpRes,mpiRes]) if(r.error) throw r.error;
       state=cloneDefault();
       if(sRes.data) state.settings=settingsFromDb(sRes.data);
       else { state.settings=cached.settings||cloneDefault().settings; await client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"}); }
@@ -558,6 +581,7 @@
       state.exercisePlan=xRes.data||[];
       state.workoutSessions=wRes.data||[];
       state.workoutSets=setRes.data||[];
+      state.trainingSchedule=tsRes.data||[];
       state.foodProducts=fpRes.data||[];
       state.foodLogItems=flRes.data||[];
       state.mealPresets=mpRes.data||[];
@@ -777,8 +801,87 @@
   });
   $("#clearJournal").addEventListener("click",()=>{["#jWeight","#jCalories","#jProtein","#jCarbs","#jFat","#jSteps","#jSleep","#jDuration","#jCardio","#jMeals","#jNotes"].forEach(id=>$(id).value="");$("#jTraining").value="";$("#jMood").value="";$("#jDate").value=todayISO;$("#journalMessage").textContent="";});
 
+  function scheduleDayLabel(day){return workoutDayLabels[Number(day)]||days[Number(day)-1]||"Trening";}
+  function scheduleExerciseSummary(day){
+    const exs=(state.exercisePlan||[]).filter(x=>Number(x.day_of_week)===Number(day)&&x.active!==false).sort((a,b)=>a.sort_order-b.sort_order);
+    return exs.map(x=>x.name+" — "+x.target_sets+"×"+x.rep_min+(x.rep_max!==x.rep_min?"–"+x.rep_max:"")).join("\n");
+  }
+  function setScheduleDefaults(){
+    const date=$("#scheduleDate"),daySel=$("#scheduleDay"),title=$("#scheduleTitle");
+    if(!date||!daySel)return;
+    if(!date.value)date.value=todayISO;
+    const avail=availableWorkoutDays();
+    const natural=dateDayNumber(date.value||todayISO);
+    const current=Number(daySel.value)||null;
+    const chosen=avail.includes(current)?current:(avail.includes(natural)?natural:(avail[0]||1));
+    daySel.innerHTML=avail.map(d=>'<option value="'+d+'">'+esc(scheduleDayLabel(d))+'</option>').join("");
+    daySel.value=String(chosen);
+    if(title&&!title.dataset.edited)title.value=(scheduleDayLabel(chosen).replace(/^Dzień \d+ — /,"")||"Trening");
+  }
+  function googleCalendarUrl(item){
+    const time=String(item.start_time||"18:00").slice(0,5);
+    const start=new Date(item.scheduled_date+"T"+time+":00");
+    const end=new Date(start.getTime()+Number(item.duration_min||90)*60000);
+    const stamp=d=>String(d.getFullYear())+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0")+"T"+String(d.getHours()).padStart(2,"0")+String(d.getMinutes()).padStart(2,"0")+"00";
+    const tz=Intl.DateTimeFormat().resolvedOptions().timeZone||"Europe/Warsaw";
+    const exercises=scheduleExerciseSummary(item.day_of_week);
+    const details=["FORMA • "+scheduleDayLabel(item.day_of_week),exercises?"Plan:\n"+exercises:"",item.notes?"Uwagi: "+item.notes:"","Po treningu zapisz serie i RIR w aplikacji FORMA."].filter(Boolean).join("\n\n");
+    const p=new URLSearchParams({action:"TEMPLATE",text:item.title||scheduleDayLabel(item.day_of_week),dates:stamp(start)+"/"+stamp(end),details:details,ctz:tz});
+    return "https://calendar.google.com/calendar/render?"+p.toString();
+  }
+  function renderTrainingSchedule(){
+    const list=$("#trainingScheduleList");if(!list)return;
+    setScheduleDefaults();
+    const rows=[...(state.trainingSchedule||[])].sort((a,b)=>(a.scheduled_date+" "+a.start_time).localeCompare(b.scheduled_date+" "+b.start_time));
+    const shown=rows.filter(x=>x.scheduled_date>=todayISO||x.status==="planned").slice(0,12);
+    list.innerHTML=shown.map(x=>{
+      const past=x.scheduled_date<todayISO,completed=x.status==="completed";
+      return '<div class="training-schedule-item '+(past?"past":"")+'" data-id="'+x.id+'">'+
+        '<div class="training-schedule-time"><strong>'+formatDate(x.scheduled_date)+' • '+esc(String(x.start_time||"").slice(0,5))+'</strong><small>'+x.duration_min+' min <span class="schedule-status">'+(completed?"wykonany":x.status==="cancelled"?"anulowany":"zaplanowany")+'</span></small></div>'+
+        '<div class="training-schedule-main"><strong>'+esc(x.title||scheduleDayLabel(x.day_of_week))+'</strong><small>'+esc(scheduleDayLabel(x.day_of_week))+(x.notes?" • "+esc(x.notes):"")+'</small></div>'+
+        '<div class="training-schedule-actions"><button class="mini-btn schedule-open" type="button">Otwórz trening</button><button class="mini-btn google-btn schedule-google" type="button">Google Calendar</button><button class="mini-btn schedule-done" type="button">'+(completed?"Przywróć":"Wykonany")+'</button><button class="mini-btn schedule-delete" type="button">Usuń</button></div></div>';
+    }).join("")||'<div class="workout-empty">Nie masz jeszcze zaplanowanych treningów.</div>';
+
+    $(".schedule-google").forEach(b=>b.addEventListener("click",()=>{
+      const item=(state.trainingSchedule||[]).find(x=>x.id===b.closest(".training-schedule-item").dataset.id);if(!item)return;
+      window.open(googleCalendarUrl(item),"_blank","noopener");
+    }));
+    $(".schedule-open").forEach(b=>b.addEventListener("click",()=>{
+      const item=(state.trainingSchedule||[]).find(x=>x.id===b.closest(".training-schedule-item").dataset.id);if(!item)return;
+      $("#jDate").value=item.scheduled_date;go("journal");renderWorkoutModule();$("#workoutDaySelect").value=String(item.day_of_week);renderWorkoutModule();window.scrollTo({top:0,behavior:"smooth"});
+    }));
+    $(".schedule-done").forEach(b=>b.addEventListener("click",async()=>{
+      const id=b.closest(".training-schedule-item").dataset.id,item=(state.trainingSchedule||[]).find(x=>x.id===id);if(!item)return;
+      const next=item.status==="completed"?"planned":"completed";
+      const r=await client.from("training_schedule").update({status:next,updated_at:new Date().toISOString()}).eq("id",id).eq("user_id",currentUser.id);
+      if(r.error){console.error(r.error);toast("Nie udało się zmienić statusu");return;}
+      item.status=next;saveCache();renderTrainingSchedule();toast(next==="completed"?"Trening oznaczony jako wykonany":"Trening przywrócony");
+    }));
+    $(".schedule-delete").forEach(b=>b.addEventListener("click",async()=>{
+      const id=b.closest(".training-schedule-item").dataset.id;if(!confirm("Usunąć ten zaplanowany trening?"))return;
+      const r=await client.from("training_schedule").delete().eq("id",id).eq("user_id",currentUser.id);
+      if(r.error){console.error(r.error);toast("Nie udało się usunąć terminu");return;}
+      state.trainingSchedule=(state.trainingSchedule||[]).filter(x=>x.id!==id);saveCache();renderTrainingSchedule();toast("Termin usunięty");
+    }));
+  }
+  async function saveTrainingSchedule(){
+    if(!currentUser)return;
+    const day=Number($("#scheduleDay").value),date=$("#scheduleDate").value,time=$("#scheduleTime").value||"18:00",duration=Number($("#scheduleDuration").value||90);
+    if(!date){$("#trainingScheduleMessage").textContent="Wybierz datę.";return;}
+    const payload={user_id:currentUser.id,scheduled_date:date,start_time:time,duration_min:duration,day_of_week:day,title:$("#scheduleTitle").value.trim()||scheduleDayLabel(day),notes:$("#scheduleNotes").value.trim(),status:"planned",updated_at:new Date().toISOString()};
+    $("#trainingScheduleMessage").textContent="Zapisywanie…";
+    const r=await client.from("training_schedule").insert(payload).select("*").single();
+    if(r.error){console.error(r.error);$("#trainingScheduleMessage").textContent="Nie udało się zapisać terminu.";return;}
+    state.trainingSchedule.push(r.data);saveCache();renderTrainingSchedule();$("#scheduleNotes").value="";$("#trainingScheduleMessage").textContent="Trening zaplanowany.";toast("Trening dodany do planu");
+  }
+  $("#saveTrainingSchedule").addEventListener("click",saveTrainingSchedule);
+  $("#scheduleDate").addEventListener("change",()=>{$("#scheduleTitle").dataset.edited="";setScheduleDefaults();});
+  $("#scheduleDay").addEventListener("change",()=>{if(!$("#scheduleTitle").dataset.edited)$("#scheduleTitle").value=scheduleDayLabel($("#scheduleDay").value).replace(/^Dzień \d+ — /,"");});
+  $("#scheduleTitle").addEventListener("input",()=>$("#scheduleTitle").dataset.edited="1");
+
   function renderTraining(){
     $("#trainingProgram").value=state.trainingProgram||"";
+    renderTrainingSchedule();
     renderStructuredPlanEditor();
     $("#trainingWeek").innerHTML=days.map((day,i)=>`<div class="day-card"><h4>${day}</h4><textarea data-day="${day}" data-index="${i+1}" placeholder="Np. Push&#10;Wyciskanie 4×6-8&#10;OHP 3×8...">${esc(state.trainingPlan[day]||"")}</textarea></div>`).join("");
     $$("#trainingWeek textarea").forEach(t=>{let timer;t.addEventListener("input",()=>{state.trainingPlan[t.dataset.day]=t.value;saveCache();clearTimeout(timer);timer=setTimeout(async()=>{await cloud(()=>client.from("training_plan").upsert({user_id:currentUser.id,day_of_week:Number(t.dataset.index),content:t.value,updated_at:new Date().toISOString()},{onConflict:"user_id,day_of_week"}),"Plan zapisany");},650);});});
@@ -1153,8 +1256,8 @@
   function download(filename,text,type){const blob=new Blob([text],{type}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),500);}
   $("#exportJson").addEventListener("click",()=>download("forma-backup.json",JSON.stringify(state,null,2),"application/json"));
   $("#exportCsv").addEventListener("click",()=>{const headers=["date","weight","calories","protein","carbs","fat","steps","sleep","training","duration","cardio","mood","meals","notes"],q=v=>`"${String(v??"").replaceAll('"','""')}"`,rows=[headers.join(";"),...state.entries.sort((a,b)=>a.date.localeCompare(b.date)).map(e=>headers.map(h=>q(e[h])).join(";"))];download("forma-dziennik.csv","\ufeff"+rows.join("\n"),"text/csv;charset=utf-8");});
-  $("#importJson").addEventListener("change",async ev=>{const f=ev.target.files?.[0];if(!f)return;try{const obj=JSON.parse(await f.text());if(!obj||!Array.isArray(obj.entries))throw Error();state={...cloneDefault(),...obj};const ops=[client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"}),...state.entries.map(e=>client.from("daily_entries").upsert(entryToDb(e),{onConflict:"user_id,entry_date"}))];for(let i=0;i<days.length;i++){const content=state.trainingPlan?.[days[i]]||"";if(content)ops.push(client.from("training_plan").upsert({user_id:currentUser.id,day_of_week:i+1,content},{onConflict:"user_id,day_of_week"}));}ops.push(client.from("training_program").upsert({user_id:currentUser.id,content:state.trainingProgram||""},{onConflict:"user_id"}));ops.push(client.from("diet_plan").upsert({user_id:currentUser.id,content:state.dietPlan||""},{onConflict:"user_id"}));const results=await Promise.all(ops);if(results.some(r=>r.error))throw results.find(r=>r.error).error;saveCache();renderAll();toast("Dane zaimportowane do chmury");}catch(err){console.error(err);toast("Nie udało się zaimportować pliku");}finally{ev.target.value=""}});
-  $("#wipeData").addEventListener("click",async()=>{if(!confirm("Na pewno usunąć wszystkie dane FORMA z chmury? Tej operacji nie można cofnąć."))return;const results=await Promise.all([client.from("workout_sessions").delete().eq("user_id",currentUser.id),client.from("meal_preset_items").delete().eq("user_id",currentUser.id),client.from("meal_presets").delete().eq("user_id",currentUser.id),client.from("food_log_items").delete().eq("user_id",currentUser.id),client.from("food_products").delete().eq("user_id",currentUser.id),client.from("training_exercises").delete().eq("user_id",currentUser.id),client.from("diet_week_plan").delete().eq("user_id",currentUser.id),client.from("daily_entries").delete().eq("user_id",currentUser.id),client.from("training_plan").delete().eq("user_id",currentUser.id),client.from("training_program").delete().eq("user_id",currentUser.id),client.from("diet_plan").delete().eq("user_id",currentUser.id),client.from("user_settings").delete().eq("user_id",currentUser.id)]);if(results.some(r=>r.error)){toast("Nie udało się usunąć danych");return;}state=cloneDefault();await client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"});saveCache();renderAll();toast("Dane usunięte");});
+  $("#importJson").addEventListener("change",async ev=>{const f=ev.target.files?.[0];if(!f)return;try{const obj=JSON.parse(await f.text());if(!obj||!Array.isArray(obj.entries))throw Error();state={...cloneDefault(),...obj};const ops=[client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"}),...state.entries.map(e=>client.from("daily_entries").upsert(entryToDb(e),{onConflict:"user_id,entry_date"}))];for(let i=0;i<days.length;i++){const content=state.trainingPlan?.[days[i]]||"";if(content)ops.push(client.from("training_plan").upsert({user_id:currentUser.id,day_of_week:i+1,content},{onConflict:"user_id,day_of_week"}));}ops.push(client.from("training_program").upsert({user_id:currentUser.id,content:state.trainingProgram||""},{onConflict:"user_id"}));ops.push(client.from("diet_plan").upsert({user_id:currentUser.id,content:state.dietPlan||""},{onConflict:"user_id"}));if(Array.isArray(state.trainingSchedule)&&state.trainingSchedule.length){ops.push(client.from("training_schedule").upsert(state.trainingSchedule.map(x=>({...x,user_id:currentUser.id,updated_at:new Date().toISOString()}))));}const results=await Promise.all(ops);if(results.some(r=>r.error))throw results.find(r=>r.error).error;saveCache();renderAll();toast("Dane zaimportowane do chmury");}catch(err){console.error(err);toast("Nie udało się zaimportować pliku");}finally{ev.target.value=""}});
+  $("#wipeData").addEventListener("click",async()=>{if(!confirm("Na pewno usunąć wszystkie dane FORMA z chmury? Tej operacji nie można cofnąć."))return;const results=await Promise.all([client.from("training_schedule").delete().eq("user_id",currentUser.id),client.from("workout_sessions").delete().eq("user_id",currentUser.id),client.from("meal_preset_items").delete().eq("user_id",currentUser.id),client.from("meal_presets").delete().eq("user_id",currentUser.id),client.from("food_log_items").delete().eq("user_id",currentUser.id),client.from("food_products").delete().eq("user_id",currentUser.id),client.from("training_exercises").delete().eq("user_id",currentUser.id),client.from("diet_week_plan").delete().eq("user_id",currentUser.id),client.from("daily_entries").delete().eq("user_id",currentUser.id),client.from("training_plan").delete().eq("user_id",currentUser.id),client.from("training_program").delete().eq("user_id",currentUser.id),client.from("diet_plan").delete().eq("user_id",currentUser.id),client.from("user_settings").delete().eq("user_id",currentUser.id)]);if(results.some(r=>r.error)){toast("Nie udało się usunąć danych");return;}state=cloneDefault();await client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"});saveCache();renderAll();toast("Dane usunięte");});
 
   window.addEventListener("online",()=>{ if(currentUser&&!syncing) loadCloud(); });
   window.addEventListener("offline",()=>setSync(false,"Offline"));
