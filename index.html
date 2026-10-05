@@ -331,24 +331,13 @@
             </div>
 
             <div class="scan-card">
-              <h4>Makro ze zdjęcia</h4>
-              <div class="ai-tools">
-                <select id="aiPhotoMode">
-                  <option value="label">Etykieta produktu</option>
-                  <option value="meal">Gotowy posiłek — estymacja</option>
-                </select>
-                <select id="aiMealTarget">
-                  <option value="breakfast">Dodaj do śniadania</option>
-                  <option value="lunch">Dodaj do obiadu</option>
-                  <option value="dinner">Dodaj do kolacji</option>
-                  <option value="snack">Dodaj do przekąsek</option>
-                </select>
-              </div>
+              <h4>Makro ze zdjęcia etykiety — bezpłatnie</h4>
+              <p class="muted" style="margin:0 0 10px">OCR działa lokalnie w przeglądarce, bez OpenAI API. Najlepiej fotografować samą tabelę wartości odżywczych prosto, z bliska i bez odblasków.</p>
               <div class="form-actions">
                 <label class="file-btn secondary">Wybierz / zrób zdjęcie<input id="aiFoodPhoto" type="file" accept="image/*" capture="environment"></label>
-                <button id="analyzeFoodPhoto" class="primary" type="button">Analizuj zdjęcie</button>
+                <button id="analyzeFoodPhoto" class="primary" type="button">Odczytaj etykietę</button>
               </div>
-              <div id="aiFoodMessage" class="scan-result">Etykieta = odczyt danych. Posiłek = przybliżone rozpoznanie składników i porcji, zawsze do sprawdzenia.</div>
+              <div id="aiFoodMessage" class="scan-result">Odczytamy kcal, białko, węglowodany i tłuszcz na 100 g. Wynik zawsze sprawdź z etykietą przed zapisaniem.</div>
               <div id="aiFoodPreview" class="ai-preview hidden"></div>
             </div>
           </div>
@@ -446,6 +435,7 @@
 
   <div id="toast" class="toast" role="status"></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script>
 (() => {
   const SUPABASE_URL = "https://ymemohuafzogbhgggcvm.supabase.co";
@@ -986,41 +976,124 @@
     if(!(items||[]).length)list.appendChild(makeFoodRow());
     updateFoodSummary();
   }
+  function ocrNumber(s){
+    if(s==null)return null;
+    const v=Number(String(s).replace(/\s/g,"").replace(",",".").replace(/[^0-9.]/g,""));
+    return Number.isFinite(v)?v:null;
+  }
+  function firstGramValue(line){
+    const matches=[...String(line).matchAll(/(\d{1,4}(?:[.,]\d{1,2})?)\s*g\b/gi)];
+    return matches.length?ocrNumber(matches[0][1]):null;
+  }
+  function findNutritionValue(lines, patterns, exclude=[]){
+    for(const line of lines){
+      const low=line.toLowerCase();
+      if(!patterns.some(r=>r.test(low)))continue;
+      if(exclude.some(r=>r.test(low)))continue;
+      const v=firstGramValue(line);
+      if(v!=null)return v;
+      const nums=[...line.matchAll(/(\d{1,4}(?:[.,]\d{1,2})?)/g)].map(m=>ocrNumber(m[1])).filter(v=>v!=null);
+      if(nums.length)return nums[0];
+    }
+    return null;
+  }
+  function parseNutritionOCR(text){
+    const rawLines=String(text||"").split(/\r?\n/).map(x=>x.replace(/\s+/g," ").trim()).filter(Boolean);
+    const lines=rawLines.map(x=>x.replace(/[|]/g,"I"));
+    let kcal=null;
+    for(const line of lines){
+      if(/kcal/i.test(line)){
+        const m=line.match(/(\d{2,4}(?:[.,]\d{1,2})?)\s*kcal/i);
+        if(m){kcal=ocrNumber(m[1]);break;}
+      }
+    }
+    if(kcal==null){
+      const m=String(text).match(/(\d{2,4}(?:[.,]\d{1,2})?)\s*kcal/i);
+      if(m)kcal=ocrNumber(m[1]);
+    }
+    const protein=findNutritionValue(lines,[/\bbiałko\b/i,/\bbialko\b/i,/\bprotein\b/i]);
+    const carbs=findNutritionValue(lines,[/węglowodan/i,/weglowodan/i,/carbohydrat/i],[/cukr/i,/sugar/i]);
+    const fat=findNutritionValue(lines,[/^tłuszcz\b/i,/^tluszcz\b/i,/^fat\b/i,/\bfat\s*[:\-]/i],[/nasycon/i,/saturat/i]);
+    let serving=null;
+    for(const line of lines){
+      if(/porcj|serving/i.test(line)){
+        const m=line.match(/(\d{1,4}(?:[.,]\d{1,2})?)\s*g\b/i);
+        if(m){serving=ocrNumber(m[1]);break;}
+      }
+    }
+    const found=[kcal,protein,carbs,fat].filter(v=>v!=null).length;
+    return {kcal,protein,carbs,fat,serving,found,lines};
+  }
+  async function preprocessForOCR(file,maxSide=2400){
+    const bitmap=await createImageBitmap(file);
+    const scale=Math.min(1,maxSide/Math.max(bitmap.width,bitmap.height));
+    const canvas=document.createElement("canvas");
+    canvas.width=Math.max(1,Math.round(bitmap.width*scale));
+    canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+    const ctx=canvas.getContext("2d",{willReadFrequently:true});
+    ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);
+    const img=ctx.getImageData(0,0,canvas.width,canvas.height),d=img.data;
+    for(let i=0;i<d.length;i+=4){
+      const g=0.299*d[i]+0.587*d[i+1]+0.114*d[i+2];
+      const v=Math.max(0,Math.min(255,(g-128)*1.45+128));
+      d[i]=d[i+1]=d[i+2]=v;
+    }
+    ctx.putImageData(img,0,0);
+    return canvas.toDataURL("image/jpeg",0.92);
+  }
   async function analyzeFoodPhoto(){
-    const file=$("#aiFoodPhoto").files?.[0];if(!file){$("#aiFoodMessage").textContent="Najpierw wybierz albo zrób zdjęcie.";return;}
-    const mode=$("#aiPhotoMode").value,meal=$("#aiMealTarget").value;
-    $("#aiFoodMessage").textContent="Analizuję zdjęcie…";
+    const file=$("#aiFoodPhoto").files?.[0];
+    if(!file){$("#aiFoodMessage").textContent="Najpierw wybierz albo zrób zdjęcie tabeli wartości odżywczych.";return;}
     $("#aiFoodPreview").classList.add("hidden");
     try{
-      const imageDataUrl=await compressImage(file);
-      const {data,error}=await client.functions.invoke("analyze-food-image",{body:{imageDataUrl,mode}});
-      if(error){
-        console.error(error);
-        $("#aiFoodMessage").textContent="Analiza AI wymaga jednorazowej konfiguracji klucza OpenAI API w Supabase. Kod kreskowy działa niezależnie.";
+      if(!window.Tesseract)throw new Error("Biblioteka OCR nie została załadowana");
+      $("#aiFoodMessage").textContent="Przygotowuję zdjęcie…";
+      const image=await preprocessForOCR(file);
+      const worker=await Tesseract.createWorker(["pol","eng"],1,{
+        logger:m=>{
+          if(m.status==="recognizing text"){
+            $("#aiFoodMessage").textContent=`Odczyt etykiety… ${Math.round((m.progress||0)*100)}%`;
+          }else if(m.status){
+            $("#aiFoodMessage").textContent="OCR: "+m.status;
+          }
+        }
+      });
+      const out=await worker.recognize(image);
+      await worker.terminate();
+      const parsed=parseNutritionOCR(out?.data?.text||"");
+      if(parsed.found<2){
+        $("#aiFoodMessage").textContent="Odczyt był zbyt słaby. Zrób zdjęcie bliżej, prostopadle do etykiety i bez odblasków.";
+        $("#aiFoodPreview").innerHTML=`Rozpoznany tekst:<br><pre style="white-space:pre-wrap;margin:7px 0 0">${esc((out?.data?.text||"").slice(0,1200))}</pre>`;
+        $("#aiFoodPreview").classList.remove("hidden");
         return;
       }
-      const r=data?.result;if(!r)throw new Error("Brak wyniku");
-      const conf=Math.round((Number(r.confidence)||0)*100);
-      if(mode==="label"){
-        fillProductForm({name:r.product_name||"",kcal:r.kcal_per_100,protein:r.protein_per_100,carbs:r.carbs_per_100,fat:r.fat_per_100,serving:r.serving_grams});
-        $("#aiFoodMessage").textContent="Dane z etykiety zostały wpisane do formularza produktu. Zweryfikuj je przed zapisaniem.";
-        $("#aiFoodPreview").innerHTML=`Pewność odczytu: <strong>${conf}%</strong><br>${esc(r.note||"")}`;
-      }else{
-        populateMealFromAI(r.items||[],meal);
-        $("#aiFoodMessage").textContent="Składniki zostały dodane do wybranego posiłku jako estymacja. Popraw gramatury przed zapisem.";
-        const total=(r.items||[]).reduce((a,x)=>{const f=Number(x.amount_g||0)/100;a.k+=f*Number(x.kcal_per_100||0);a.p+=f*Number(x.protein_per_100||0);a.c+=f*Number(x.carbs_per_100||0);a.f+=f*Number(x.fat_per_100||0);return a;},{k:0,p:0,c:0,f:0});
-        $("#aiFoodPreview").innerHTML=`Estymacja ze zdjęcia: <strong>${Math.round(total.k)} kcal</strong> • B ${Math.round(total.p)} • W ${Math.round(total.c)} • T ${Math.round(total.f)}<br>Pewność: ${conf}%<br>${esc(r.note||"")}`;
-      }
+      const currentName=$("#fpName").value.trim();
+      fillProductForm({
+        name:currentName,
+        kcal:parsed.kcal,
+        protein:parsed.protein,
+        carbs:parsed.carbs,
+        fat:parsed.fat,
+        serving:parsed.serving
+      });
+      const missing=[];
+      if(parsed.kcal==null)missing.push("kcal");
+      if(parsed.protein==null)missing.push("białko");
+      if(parsed.carbs==null)missing.push("węglowodany");
+      if(parsed.fat==null)missing.push("tłuszcz");
+      $("#aiFoodMessage").textContent=missing.length
+        ? "Część danych odczytana. Uzupełnij brakujące pola z etykiety przed zapisaniem."
+        : "Makro odczytane lokalnie ze zdjęcia. Sprawdź liczby z etykietą i zapisz produkt.";
+      $("#aiFoodPreview").innerHTML=`<strong>Odczyt na 100 g:</strong> ${parsed.kcal??"—"} kcal • B ${parsed.protein??"—"} • W ${parsed.carbs??"—"} • T ${parsed.fat??"—"}${parsed.serving?" • porcja "+parsed.serving+" g":""}<br>${missing.length?"Nie odczytano: "+missing.join(", ")+".<br>":""}<details style="margin-top:7px"><summary>Podgląd tekstu OCR</summary><pre style="white-space:pre-wrap;margin:7px 0 0">${esc((out?.data?.text||"").slice(0,1800))}</pre></details>`;
       $("#aiFoodPreview").classList.remove("hidden");
     }catch(err){
-      console.error(err);$("#aiFoodMessage").textContent="Nie udało się przeanalizować zdjęcia. Spróbuj ponownie na wyraźniejszym zdjęciu.";
+      console.error(err);
+      $("#aiFoodMessage").textContent="Nie udało się uruchomić OCR. Odśwież stronę i spróbuj ponownie na wyraźnym zdjęciu.";
     }
   }
   $("#lookupBarcode").addEventListener("click",lookupBarcode);
   $("#barcodeInput").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();lookupBarcode();}});
   $("#barcodePhoto").addEventListener("change",e=>{const f=e.target.files?.[0];if(f)barcodeFromPhoto(f);});
-  $("#aiPhotoMode").addEventListener("change",()=>{$("#aiMealTarget").classList.toggle("hidden",$("#aiPhotoMode").value!=="meal");});
-  $("#aiMealTarget").classList.add("hidden");
   $("#analyzeFoodPhoto").addEventListener("click",analyzeFoodPhoto);
 
   async function saveFoodProduct(){
