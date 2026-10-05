@@ -913,7 +913,7 @@
     $("#dietPrep").value=row?.prep_note||"";
     $("#dietDayCalories").value=row?.calorie_target??s.calories??"";
     $("#dietDayProtein").value=row?.protein_target_g??s.protein??"";
-    $$$("#dietDayTabs .diet-day-btn").forEach(b=>b.classList.toggle("active",Number(b.dataset.day)===selectedDietDay));
+    $("#dietDayTabs .diet-day-btn").forEach(b=>b.classList.toggle("active",Number(b.dataset.day)===selectedDietDay));
     $("#dietDayMessage").textContent="";
   }
   function renderDiet(){
