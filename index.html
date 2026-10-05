@@ -773,7 +773,7 @@
     $("#dietPrep").value=row?.prep_note||"";
     $("#dietDayCalories").value=row?.calorie_target??s.calories??"";
     $("#dietDayProtein").value=row?.protein_target_g??s.protein??"";
-    $$("#dietDayTabs .diet-day-btn").forEach(b=>b.classList.toggle("active",Number(b.dataset.day)===selectedDietDay));
+    $$$("#dietDayTabs .diet-day-btn").forEach(b=>b.classList.toggle("active",Number(b.dataset.day)===selectedDietDay));
     $("#dietDayMessage").textContent="";
   }
   function renderDiet(){
@@ -787,7 +787,7 @@
     $("#dietWeekLabel").textContent=`${formatDate(week)} – ${formatDate(fmtISO(weekEnd))}`;
     const natural=dateDayNumber(todayISO);if(!selectedDietDay)selectedDietDay=natural;
     $("#dietDayTabs").innerHTML=days.map((d,i)=>`<button type="button" class="diet-day-btn ${selectedDietDay===i+1?"active":""}" data-day="${i+1}">${d.slice(0,3)}<small>${formatDate(fmtISO(new Date(parseDate(week).getTime()+i*86400000)))}</small></button>`).join("");
-    $("#dietDayTabs .diet-day-btn").forEach(b=>b.addEventListener("click",()=>{selectedDietDay=Number(b.dataset.day);renderDietDay();renderFoodLog();}));
+    $$("#dietDayTabs .diet-day-btn").forEach(b=>b.addEventListener("click",()=>{selectedDietDay=Number(b.dataset.day);renderDietDay();renderFoodLog();}));
     renderDietDay();
     renderFoodLog();
     renderFoodProductLibrary();
@@ -852,7 +852,7 @@
   }
   function collectFoodRows(){
     const date=selectedDietDate(),items=[];
-    $("#foodMeals .food-meal-section").forEach(sec=>{
+    $$("#foodMeals .food-meal-section").forEach(sec=>{
       const meal=sec.dataset.meal;
       [...sec.querySelectorAll(".food-row.data")].forEach((row,i)=>{const x=rowToFoodItem(row,meal,i+1,date);if(x)items.push(x);});
     });
@@ -908,7 +908,7 @@
   function renderFoodProductLibrary(){
     const el=$("#savedProductsList");if(!el)return;
     el.innerHTML=(state.foodProducts||[]).map(p=>`<div class="saved-product"><div><strong>${esc(p.name)}</strong><small>${Math.round(p.kcal_per_100)} kcal • B ${p.protein_per_100} • W ${p.carbs_per_100} • T ${p.fat_per_100} /100g${p.serving_grams?" • porcja "+p.serving_grams+" g":""}</small></div><button class="mini-btn delete-product" data-id="${p.id}" type="button">Usuń</button></div>`).join("")||'<div class="muted">Brak zapisanych produktów. Dodaj pierwszy z etykiety.</div>';
-    $(".delete-product").forEach(b=>b.addEventListener("click",async()=>{if(!confirm("Usunąć produkt z biblioteki?"))return;const r=await client.from("food_products").delete().eq("id",b.dataset.id).eq("user_id",currentUser.id);if(r.error){toast("Nie udało się usunąć");return;}await loadCloud();go("diet");renderDiet();}));
+    $$(".delete-product").forEach(b=>b.addEventListener("click",async()=>{if(!confirm("Usunąć produkt z biblioteki?"))return;const r=await client.from("food_products").delete().eq("id",b.dataset.id).eq("user_id",currentUser.id);if(r.error){toast("Nie udało się usunąć");return;}await loadCloud();go("diet");renderDiet();}));
   }
   async function saveMealPresetFromSection(sec){
     const name=prompt("Nazwa zapisanego posiłku, np. Owsianka białkowa");if(!name)return;const meal=sec.dataset.meal;
