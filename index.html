@@ -857,7 +857,7 @@
       if(r.error){console.error(r.error);toast("Nie udało się zmienić statusu");return;}
       item.status=next;saveCache();renderTrainingSchedule();toast(next==="completed"?"Trening oznaczony jako wykonany":"Trening przywrócony");
     }));
-    $(".schedule-delete").forEach(b=>b.addEventListener("click",async()=>{
+    $$(".schedule-delete").forEach(b=>b.addEventListener("click",async()=>{
       const id=b.closest(".training-schedule-item").dataset.id,item=(state.trainingSchedule||[]).find(x=>x.id===id);if(!item)return;
       if(!confirm("Anulować ten zaplanowany trening? Jeśli był zsynchronizowany, przy najbliższej synchronizacji zostanie usunięty także z Google Calendar."))return;
       const r=await client.from("training_schedule").update({status:"cancelled",updated_at:new Date().toISOString()}).eq("id",id).eq("user_id",currentUser.id);
