@@ -842,22 +842,22 @@
         '<div class="training-schedule-actions"><button class="mini-btn schedule-open" type="button">Otwórz trening</button><button class="mini-btn google-btn schedule-google" type="button">Google Calendar</button><button class="mini-btn schedule-done" type="button">'+(completed?"Przywróć":"Wykonany")+'</button><button class="mini-btn schedule-delete" type="button">Usuń</button></div></div>';
     }).join("")||'<div class="workout-empty">Nie masz jeszcze zaplanowanych treningów.</div>';
 
-    $(".schedule-google").forEach(b=>b.addEventListener("click",()=>{
+    $$(".schedule-google").forEach(b=>b.addEventListener("click",()=>{
       const item=(state.trainingSchedule||[]).find(x=>x.id===b.closest(".training-schedule-item").dataset.id);if(!item)return;
       window.open(googleCalendarUrl(item),"_blank","noopener");
     }));
-    $(".schedule-open").forEach(b=>b.addEventListener("click",()=>{
+    $$(".schedule-open").forEach(b=>b.addEventListener("click",()=>{
       const item=(state.trainingSchedule||[]).find(x=>x.id===b.closest(".training-schedule-item").dataset.id);if(!item)return;
       $("#jDate").value=item.scheduled_date;go("journal");renderWorkoutModule();$("#workoutDaySelect").value=String(item.day_of_week);renderWorkoutModule();window.scrollTo({top:0,behavior:"smooth"});
     }));
-    $(".schedule-done").forEach(b=>b.addEventListener("click",async()=>{
+    $$(".schedule-done").forEach(b=>b.addEventListener("click",async()=>{
       const id=b.closest(".training-schedule-item").dataset.id,item=(state.trainingSchedule||[]).find(x=>x.id===id);if(!item)return;
       const next=item.status==="completed"?"planned":"completed";
       const r=await client.from("training_schedule").update({status:next,updated_at:new Date().toISOString()}).eq("id",id).eq("user_id",currentUser.id);
       if(r.error){console.error(r.error);toast("Nie udało się zmienić statusu");return;}
       item.status=next;saveCache();renderTrainingSchedule();toast(next==="completed"?"Trening oznaczony jako wykonany":"Trening przywrócony");
     }));
-    $(".schedule-delete").forEach(b=>b.addEventListener("click",async()=>{
+    $$(".schedule-delete").forEach(b=>b.addEventListener("click",async()=>{
       const id=b.closest(".training-schedule-item").dataset.id;if(!confirm("Usunąć ten zaplanowany trening?"))return;
       const r=await client.from("training_schedule").delete().eq("id",id).eq("user_id",currentUser.id);
       if(r.error){console.error(r.error);toast("Nie udało się usunąć terminu");return;}
@@ -913,7 +913,7 @@
     $("#dietPrep").value=row?.prep_note||"";
     $("#dietDayCalories").value=row?.calorie_target??s.calories??"";
     $("#dietDayProtein").value=row?.protein_target_g??s.protein??"";
-    $("#dietDayTabs .diet-day-btn").forEach(b=>b.classList.toggle("active",Number(b.dataset.day)===selectedDietDay));
+    $$("#dietDayTabs .diet-day-btn").forEach(b=>b.classList.toggle("active",Number(b.dataset.day)===selectedDietDay));
     $("#dietDayMessage").textContent="";
   }
   function renderDiet(){
@@ -927,7 +927,7 @@
     $("#dietWeekLabel").textContent=`${formatDate(week)} – ${formatDate(fmtISO(weekEnd))}`;
     const natural=dateDayNumber(todayISO);if(!selectedDietDay)selectedDietDay=natural;
     $("#dietDayTabs").innerHTML=days.map((d,i)=>`<button type="button" class="diet-day-btn ${selectedDietDay===i+1?"active":""}" data-day="${i+1}">${d.slice(0,3)}<small>${formatDate(fmtISO(new Date(parseDate(week).getTime()+i*86400000)))}</small></button>`).join("");
-    $$("#dietDayTabs .diet-day-btn").forEach(b=>b.addEventListener("click",()=>{selectedDietDay=Number(b.dataset.day);renderDietDay();renderFoodLog();}));
+    $$$("#dietDayTabs .diet-day-btn").forEach(b=>b.addEventListener("click",()=>{selectedDietDay=Number(b.dataset.day);renderDietDay();renderFoodLog();}));
     renderDietDay();
     renderFoodLog();
     renderFoodProductLibrary();
