@@ -217,7 +217,7 @@
             </div>
             <button id="resetPlan" class="secondary">Wyczyść plan</button>
           </div>
-          <p class="muted">Tu możesz wpisać plan, który ustalimy razem. Dane zostają zapisane lokalnie.</p>
+          <p class="muted">Tu możesz wpisać plan, który ustalimy razem. Dane są synchronizowane z chmurą.</p>
           <div id="trainingWeek" class="week-grid"></div>
         </article>
       </section>
@@ -421,7 +421,7 @@
     const email=$("#authEmail").value.trim(), password=$("#authPassword").value;
     if(!email || password.length<6){ $("#authMessage").textContent="Podaj e-mail i hasło min. 6 znaków."; return; }
     $("#authMessage").textContent="Tworzenie konta…";
-    const {data,error}=await client.auth.signUp({email,password});
+    const {data,error}=await client.auth.signUp({email,password,options:{emailRedirectTo:window.location.origin}});
     if(error){ $("#authMessage").textContent=error.message; return; }
     if(data.session){ currentUser=data.user; showAuth(false); await loadCloud(); toast("Konto utworzone"); }
     else $("#authMessage").textContent="Konto utworzone. Sprawdź e-mail i potwierdź rejestrację.";
