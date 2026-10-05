@@ -9,6 +9,7 @@
 *{box-sizing:border-box} :root{--bg:#0b1020;--side:#0f172a;--panel:#121a2d;--panel2:#182238;--line:#27324a;--text:#eef2ff;--muted:#93a0b8;--accent:#5eead4;--accent2:#2dd4bf;--good:#86efac;--bad:#fca5a5;--warning:#fde68a} body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}button,input,select,textarea{font:inherit}.app-shell{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;padding:24px 18px;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column}.brand{display:flex;gap:12px;align-items:center;padding:4px 8px 28px}.brand-mark{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#60a5fa);color:#07111f;display:grid;place-items:center;font-weight:900;font-size:22px}.brand strong{display:block;letter-spacing:.08em}.brand small{display:block;color:var(--muted);margin-top:2px}nav{display:grid;gap:8px}.nav-btn{border:0;background:transparent;color:var(--muted);padding:12px 14px;border-radius:12px;text-align:left;cursor:pointer;display:flex;gap:12px;align-items:center}.nav-btn:hover,.nav-btn.active{background:var(--panel2);color:var(--text)}.nav-btn.active{box-shadow:inset 3px 0 0 var(--accent)}.sidebar-note{margin-top:auto;padding:14px;border:1px solid var(--line);border-radius:14px;display:flex;gap:10px;align-items:center}.sidebar-note small{color:var(--muted);display:block;margin-top:2px}.dot{width:9px;height:9px;border-radius:50%;background:var(--good);box-shadow:0 0 0 4px rgba(134,239,172,.08)}main{padding:28px 32px 56px;min-width:0}.topbar{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:26px}.topbar h1{margin:3px 0 0;font-size:30px}.eyebrow{color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.13em;margin:0}.top-actions{display:flex;gap:10px;align-items:center}.date-chip{border:1px solid var(--line);padding:10px 13px;border-radius:12px;color:var(--muted)}button,.file-btn{cursor:pointer}.primary,.secondary,.danger,.text-btn,.file-btn{border-radius:11px;padding:11px 15px;border:1px solid var(--line)}.primary{background:var(--accent);color:#07111f;border-color:transparent;font-weight:800}.primary:hover{background:var(--accent2)}.secondary,.file-btn{background:var(--panel2);color:var(--text)}.danger{background:transparent;color:var(--bad);border-color:rgba(252,165,165,.35)}.text-btn{background:transparent;color:var(--accent);border-color:transparent}.view{display:none}.view.active{display:block}.hero-card{background:linear-gradient(135deg,#16243d,#142b34);border:1px solid #284553;border-radius:22px;padding:24px 28px;display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:18px}.hero-card h2{margin:7px 0 8px;font-size:25px}.hero-card p:last-child{color:#b6c3d6;margin:0}.hero-ring{position:relative;width:120px;height:120px;flex:0 0 120px}.hero-ring svg{width:120px;height:120px;transform:rotate(-90deg)}.ring-bg,.ring-value{fill:none;stroke-width:10}.ring-bg{stroke:rgba(255,255,255,.09)}.ring-value{stroke:var(--accent);stroke-linecap:round;stroke-dasharray:301.6;stroke-dashoffset:301.6;transition:stroke-dashoffset .4s}.hero-ring>div{position:absolute;inset:0;display:grid;place-content:center;text-align:center}.hero-ring b{font-size:25px}.hero-ring span{display:block;color:var(--muted);font-size:11px}.stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:14px}.stat-card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px}.stat-card{padding:18px}.stat-label{color:var(--muted);font-size:12px}.stat-card strong{display:block;font-size:24px;margin:7px 0 5px}.stat-card small{color:var(--muted)}.dashboard-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,.7fr);gap:14px;margin-bottom:14px}.panel{padding:20px}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.panel-head h3{margin:4px 0 0;font-size:18px}.pill{font-size:12px;color:var(--muted);background:var(--panel2);padding:7px 10px;border-radius:999px}.chart-wrap{position:relative;min-height:260px}.chart-wrap.large{min-height:320px}canvas{display:block;width:100%;height:auto}.empty-chart{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:13px}.progress-list{display:grid;gap:18px}.progress-row>div:first-child{display:flex;justify-content:space-between;gap:10px;margin-bottom:7px;font-size:13px}.progress-row span{color:var(--muted)}.bar{height:8px;border-radius:20px;background:var(--panel2);overflow:hidden}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#60a5fa);border-radius:20px;transition:width .35s}.entries{display:grid;gap:9px}.entry-row,.journal-item{display:grid;grid-template-columns:110px 1fr auto;gap:12px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#10192b}.entry-row .meta,.journal-item .meta{color:var(--muted);font-size:12px}.entry-row strong,.journal-item strong{font-size:14px}.entry-badges{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.badge{padding:5px 8px;border-radius:999px;background:var(--panel2);font-size:11px;color:#c7d2e6}.two-col{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:14px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.form-grid label{display:grid;gap:7px;color:#c7d2e6;font-size:13px}.form-grid input,.form-grid select,.form-grid textarea,.big-note{width:100%;background:#0d1627;border:1px solid var(--line);color:var(--text);border-radius:11px;padding:11px 12px;outline:none}.form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus,.big-note:focus{border-color:var(--accent)}.span-2{grid-column:1/-1}.form-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.message{font-size:12px;color:var(--muted)}.journal-list{display:grid;gap:9px;max-height:760px;overflow:auto;padding-right:3px}.journal-item{grid-template-columns:1fr auto;cursor:pointer}.journal-item:hover{border-color:#3b4968}.journal-item .actions{display:flex;gap:6px}.icon-btn{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:7px 9px}.week-grid{display:grid;grid-template-columns:repeat(7,minmax(150px,1fr));gap:10px;overflow-x:auto;padding-bottom:4px}.day-card{background:#0e1729;border:1px solid var(--line);border-radius:14px;padding:13px;min-width:150px}.day-card h4{margin:0 0 9px}.day-card textarea{width:100%;min-height:190px;resize:vertical;background:transparent;border:0;color:var(--text);outline:none}.muted{color:var(--muted)}.big-note{resize:vertical;min-height:300px}.summary-stack{display:grid;gap:5px}.summary-stack>div{display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid var(--line);padding:13px 2px}.summary-stack span{color:var(--muted)}.stack-actions{display:grid;gap:10px;margin:18px 0}.file-btn{text-align:center}.file-btn input{display:none}.callout{margin-top:20px;border:1px solid #34505b;background:#10252b;border-radius:14px;padding:15px}.callout p{color:#b9c8d0;font-size:13px;line-height:1.55;margin-bottom:0}.toast{position:fixed;right:22px;bottom:22px;background:#edfdf9;color:#07251f;padding:12px 16px;border-radius:12px;font-weight:700;opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:translateY(0)}@media(max-width:1000px){.app-shell{grid-template-columns:82px minmax(0,1fr)}.sidebar{padding:22px 12px}.brand>div:last-child,.nav-btn:not(.active) span+*,.sidebar-note>div:last-child{display:none}.brand{justify-content:center;padding-left:0;padding-right:0}.nav-btn{font-size:0;justify-content:center}.nav-btn span{font-size:19px}.nav-btn.active{font-size:0}.sidebar-note{justify-content:center}.stat-grid{grid-template-columns:repeat(2,1fr)}.dashboard-grid,.two-col{grid-template-columns:1fr}}@media(max-width:650px){.app-shell{display:block}.sidebar{position:fixed;left:0;right:0;bottom:0;top:auto;height:auto;z-index:20;border-right:0;border-top:1px solid var(--line);padding:8px;background:rgba(15,23,42,.98)}.brand,.sidebar-note{display:none}nav{display:grid;grid-template-columns:repeat(6,1fr);gap:3px}.nav-btn,.nav-btn.active{padding:10px 3px;font-size:0;justify-content:center;box-shadow:none}.nav-btn span{font-size:18px}main{padding:20px 14px 88px}.topbar{align-items:flex-start}.top-actions{flex-direction:column;align-items:flex-end}.date-chip{font-size:12px}.hero-card{padding:20px;align-items:flex-start}.hero-card h2{font-size:21px}.hero-ring{width:92px;height:92px;flex-basis:92px}.hero-ring svg{width:92px;height:92px}.hero-ring b{font-size:20px}.stat-grid{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}.span-2{grid-column:auto}.panel{padding:16px}.entry-row{grid-template-columns:1fr}.entry-badges{justify-content:flex-start}.toast{right:14px;bottom:80px;left:14px;text-align:center}}.auth-screen{position:fixed;inset:0;z-index:100;background:rgba(5,10,20,.96);display:grid;place-items:center;padding:18px}.auth-screen.hidden{display:none}.auth-card{width:min(440px,100%);background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:26px}.auth-brand{padding:0 0 24px}.auth-card h1{margin:8px 0 8px;font-size:28px}.auth-form{display:grid;gap:14px;margin-top:20px}.auth-form label{display:grid;gap:7px;color:#c7d2e6;font-size:13px}.auth-form input{width:100%;background:#0d1627;border:1px solid var(--line);color:var(--text);border-radius:11px;padding:12px;outline:none}.auth-form input:focus{border-color:var(--accent)}.auth-actions{display:flex;gap:10px;flex-wrap:wrap}.sync-ok{color:var(--good)!important;border-color:rgba(134,239,172,.25)!important}.sync-bad{color:var(--warning)!important}@media(max-width:650px){#signOutBtn{padding:8px 10px;font-size:12px}.top-actions{max-width:180px}.auth-card{padding:20px}}
 
 .workout-panel{margin-top:14px}.workout-toolbar{display:grid;grid-template-columns:minmax(220px,.55fr) minmax(0,1fr);gap:14px;margin-bottom:16px}.workout-toolbar label,.plan-editor-grid label{display:grid;gap:7px;color:#c7d2e6;font-size:13px}.workout-toolbar select,.plan-editor-grid input,.plan-editor-grid textarea,.plan-editor-grid select,.set-input{width:100%;background:#0d1627;border:1px solid var(--line);color:var(--text);border-radius:9px;padding:9px 10px;outline:none}.workout-exercises{display:grid;gap:12px}.exercise-card{border:1px solid var(--line);border-radius:16px;background:#0e1729;padding:15px}.exercise-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:12px}.exercise-head h4{margin:0 0 4px}.exercise-meta{color:var(--muted);font-size:12px;line-height:1.5}.progression-chip{font-size:12px;line-height:1.35;background:#10252b;border:1px solid #34505b;border-radius:11px;padding:8px 10px;max-width:310px}.set-table{display:grid;gap:7px}.set-row{display:grid;grid-template-columns:44px minmax(90px,1fr) minmax(90px,1fr) minmax(80px,.8fr) 42px;gap:7px;align-items:center}.set-row.header{color:var(--muted);font-size:11px;padding:0 3px}.set-no{text-align:center;color:var(--muted);font-size:12px}.remove-set{border:1px solid var(--line);background:var(--panel2);color:var(--bad);border-radius:8px;padding:9px}.exercise-actions{display:flex;gap:8px;margin-top:9px}.plan-editor-head{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin-bottom:14px}.plan-editor-head label{min-width:220px}.plan-exercises{display:grid;gap:10px}.plan-ex-row{border:1px solid var(--line);border-radius:13px;padding:12px;background:#0e1729}.plan-editor-grid{display:grid;grid-template-columns:minmax(210px,1.7fr) repeat(5,minmax(80px,.6fr));gap:9px}.plan-editor-grid .notes-field{grid-column:1/-1}.plan-row-actions{display:flex;justify-content:flex-end;margin-top:8px}.plan-remove{background:transparent;border:1px solid rgba(252,165,165,.35);color:var(--bad);border-radius:9px;padding:8px 10px}.history-mini{margin-top:9px;color:var(--muted);font-size:12px}.workout-summary{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.workout-summary .badge{font-size:12px}.workout-empty{padding:18px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);text-align:center}@media(max-width:850px){.workout-toolbar{grid-template-columns:1fr}.exercise-head{display:block}.progression-chip{margin-top:10px;max-width:none}.plan-editor-grid{grid-template-columns:1fr 1fr}.plan-editor-grid label:first-child,.plan-editor-grid .notes-field{grid-column:1/-1}}@media(max-width:650px){.set-row{grid-template-columns:32px 1fr 1fr 72px 36px;gap:5px}.set-input{padding:8px 6px}.plan-editor-grid{grid-template-columns:1fr 1fr}.exercise-card{padding:12px}}
+.diet-week-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px}.diet-week-label{color:var(--muted);font-size:13px}.diet-day-tabs{display:grid;grid-template-columns:repeat(7,minmax(90px,1fr));gap:7px;margin-bottom:16px;overflow-x:auto;padding-bottom:3px}.diet-day-btn{border:1px solid var(--line);background:#0e1729;color:var(--muted);border-radius:11px;padding:10px 8px;cursor:pointer;white-space:nowrap}.diet-day-btn.active{background:var(--panel2);color:var(--text);border-color:#3b4968;box-shadow:inset 0 -3px 0 var(--accent)}.diet-day-btn small{display:block;font-size:10px;margin-top:2px;color:var(--muted)}.diet-meal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.diet-meal-card{border:1px solid var(--line);border-radius:14px;background:#0e1729;padding:14px}.diet-meal-card h4{margin:0 0 9px}.diet-meal-card textarea{width:100%;min-height:110px;resize:vertical;background:#0d1627;border:1px solid var(--line);color:var(--text);border-radius:10px;padding:10px;outline:none}.diet-meal-card textarea:focus{border-color:var(--accent)}.diet-targets{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}.diet-targets label{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:12px}.diet-targets input{width:90px;background:#0d1627;border:1px solid var(--line);color:var(--text);border-radius:8px;padding:8px}.diet-prep{grid-column:1/-1}.diet-prep textarea{min-height:80px}@media(max-width:750px){.diet-day-tabs{grid-template-columns:repeat(7,minmax(84px,1fr))}.diet-meal-grid{grid-template-columns:1fr}.diet-prep{grid-column:auto}}
 </style>
 </head>
 <body>
@@ -268,10 +269,35 @@
           <article class="stat-card"><span class="stat-label">Śr. kcal 7 dni</span><strong id="dietAvgKcal">—</strong><small id="dietKcalDelta">—</small></article>
           <article class="stat-card"><span class="stat-label">Śr. białko 7 dni</span><strong id="dietAvgProtein">—</strong><small id="dietProteinDelta">—</small></article>
         </div>
+
         <article class="panel">
-          <div class="panel-head"><div><p class="eyebrow">PLAN ŻYWIENIOWY</p><h3>Notatki i założenia</h3></div></div>
-          <textarea id="dietPlan" class="big-note" rows="16" placeholder="Tutaj możemy trzymać aktualne założenia diety, listę produktów, przykładowe posiłki, rozkład kalorii itd."></textarea>
-          <div class="form-actions"><button id="saveDietPlan" class="primary">Zapisz plan diety</button><span id="dietMessage" class="message"></span></div>
+          <div class="diet-week-head">
+            <div><p class="eyebrow">PLAN NA TYDZIEŃ</p><h3 style="margin:4px 0 0">Posiłki dzień po dniu</h3></div>
+            <div class="diet-week-label" id="dietWeekLabel"></div>
+          </div>
+          <div id="dietDayTabs" class="diet-day-tabs"></div>
+          <div class="diet-targets">
+            <label>Kalorie <input id="dietDayCalories" type="number" min="1000" max="7000"></label>
+            <label>Białko <input id="dietDayProtein" type="number" min="50" max="400"> g</label>
+          </div>
+          <div class="diet-meal-grid">
+            <div class="diet-meal-card"><h4>Śniadanie</h4><textarea id="dietBreakfast"></textarea></div>
+            <div class="diet-meal-card"><h4>Obiad</h4><textarea id="dietLunch"></textarea></div>
+            <div class="diet-meal-card"><h4>Kolacja</h4><textarea id="dietDinner"></textarea></div>
+            <div class="diet-meal-card"><h4>Dodatki / przekąski</h4><textarea id="dietExtras"></textarea></div>
+            <div class="diet-meal-card diet-prep"><h4>Przygotowanie / meal prep</h4><textarea id="dietPrep"></textarea></div>
+          </div>
+          <div class="form-actions" style="margin-top:14px">
+            <button id="saveDietDay" class="primary" type="button">Zapisz ten dzień</button>
+            <button id="copyDietPrevious" class="secondary" type="button">Skopiuj poprzedni dzień</button>
+            <span id="dietDayMessage" class="message"></span>
+          </div>
+        </article>
+
+        <article class="panel" style="margin-top:14px">
+          <div class="panel-head"><div><p class="eyebrow">ZAŁOŻENIA OGÓLNE</p><h3>Dieta 80/20 i zasady masy</h3></div></div>
+          <textarea id="dietPlan" class="big-note" rows="10" placeholder="Tutaj trzymamy ogólne zasady diety, nie plan poszczególnych dni."></textarea>
+          <div class="form-actions"><button id="saveDietPlan" class="primary">Zapisz założenia</button><span id="dietMessage" class="message"></span></div>
         </article>
       </section>
 
@@ -345,7 +371,7 @@
   const CACHE_PREFIX = "forma_cloud_v1_";
   const DEFAULT = {
     settings:{height:null,targetWeight:null,calories:null,protein:null,steps:null,workouts:4,goal:"forma"},
-    entries:[], trainingPlan:{}, trainingProgram:"", dietPlan:"", exercisePlan:[], workoutSessions:[], workoutSets:[]
+    entries:[], trainingPlan:{}, trainingProgram:"", dietPlan:"", dietWeekPlan:[], exercisePlan:[], workoutSessions:[], workoutSets:[]
   };
 
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
@@ -422,17 +448,18 @@
     setSync(true,"Pobieranie danych…");
     const cached=loadCache();
     try{
-      const [sRes,eRes,tRes,pRes,dRes,xRes,wRes,setRes]=await Promise.all([
+      const [sRes,eRes,tRes,pRes,dRes,dwRes,xRes,wRes,setRes]=await Promise.all([
         client.from("user_settings").select("*").eq("user_id",currentUser.id).maybeSingle(),
         client.from("daily_entries").select("*").eq("user_id",currentUser.id).order("entry_date",{ascending:true}),
         client.from("training_plan").select("*").eq("user_id",currentUser.id).order("day_of_week",{ascending:true}),
         client.from("training_program").select("*").eq("user_id",currentUser.id).maybeSingle(),
         client.from("diet_plan").select("*").eq("user_id",currentUser.id).maybeSingle(),
+        client.from("diet_week_plan").select("*").eq("user_id",currentUser.id).order("week_start",{ascending:true}).order("day_of_week",{ascending:true}),
         client.from("training_exercises").select("*").eq("user_id",currentUser.id).eq("active",true).order("day_of_week",{ascending:true}).order("sort_order",{ascending:true}),
         client.from("workout_sessions").select("*").eq("user_id",currentUser.id).order("session_date",{ascending:true}),
         client.from("workout_sets").select("*").eq("user_id",currentUser.id).order("set_number",{ascending:true})
       ]);
-      for(const r of [sRes,eRes,tRes,pRes,dRes,xRes,wRes,setRes]) if(r.error) throw r.error;
+      for(const r of [sRes,eRes,tRes,pRes,dRes,dwRes,xRes,wRes,setRes]) if(r.error) throw r.error;
       state=cloneDefault();
       if(sRes.data) state.settings=settingsFromDb(sRes.data);
       else { state.settings=cached.settings||cloneDefault().settings; await client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"}); }
@@ -440,6 +467,7 @@
       state.trainingPlan={}; (tRes.data||[]).forEach(r=>state.trainingPlan[days[r.day_of_week-1]]=r.content||"");
       state.trainingProgram=pRes.data?.content||"";
       state.dietPlan=dRes.data?.content||"";
+      state.dietWeekPlan=dwRes.data||[];
       state.exercisePlan=xRes.data||[];
       state.workoutSessions=wRes.data||[];
       state.workoutSets=setRes.data||[];
@@ -673,8 +701,58 @@
   $("#saveStructuredPlan").addEventListener("click",saveStructuredPlan);
   $("#saveTrainingProgram").addEventListener("click",async()=>{state.trainingProgram=$("#trainingProgram").value;const ok=await cloud(()=>client.from("training_program").upsert({user_id:currentUser.id,content:state.trainingProgram,updated_at:new Date().toISOString()},{onConflict:"user_id"}));if(ok){saveCache();$("#trainingProgramMessage").textContent="Zapisano w chmurze.";toast("Plan 6 miesięcy zapisany");}});
 
-  function renderDiet(){const s=state.settings,seven=lastNDays(7),ak=avg(seven.filter(e=>e.calories!=null).map(e=>e.calories)),ap=avg(seven.filter(e=>e.protein!=null).map(e=>e.protein));$("#dietKcal").textContent=s.calories||"—";$("#dietProtein").textContent=s.protein||"—";$("#dietAvgKcal").textContent=ak?Math.round(ak):"—";$("#dietAvgProtein").textContent=ap?Math.round(ap):"—";$("#dietKcalDelta").textContent=ak&&s.calories?`${ak>s.calories?"+":""}${Math.round(ak-s.calories)} kcal vs cel`:"—";$("#dietProteinDelta").textContent=ap&&s.protein?`${ap>s.protein?"+":""}${Math.round(ap-s.protein)} g vs cel`:"—";$("#dietPlan").value=state.dietPlan||"";}
-  $("#saveDietPlan").addEventListener("click",async()=>{state.dietPlan=$("#dietPlan").value;const ok=await cloud(()=>client.from("diet_plan").upsert({user_id:currentUser.id,content:state.dietPlan,updated_at:new Date().toISOString()},{onConflict:"user_id"}));if(ok){saveCache();$("#dietMessage").textContent="Zapisano w chmurze.";toast("Plan diety zapisany");}});
+  let selectedDietDay=1;
+  function mondayISO(dateObj=today){
+    const d=new Date(dateObj);d.setHours(12,0,0,0);const wd=d.getDay()||7;d.setDate(d.getDate()-wd+1);return fmtISO(d);
+  }
+  function currentDietWeekStart(){return mondayISO(today);}
+  function dietRow(day){
+    const week=currentDietWeekStart();
+    return (state.dietWeekPlan||[]).find(x=>x.week_start===week&&Number(x.day_of_week)===Number(day))||null;
+  }
+  function renderDietDay(){
+    const row=dietRow(selectedDietDay),s=state.settings;
+    $("#dietBreakfast").value=row?.breakfast||"";
+    $("#dietLunch").value=row?.lunch||"";
+    $("#dietDinner").value=row?.dinner||"";
+    $("#dietExtras").value=row?.extras||"";
+    $("#dietPrep").value=row?.prep_note||"";
+    $("#dietDayCalories").value=row?.calorie_target??s.calories??"";
+    $("#dietDayProtein").value=row?.protein_target_g??s.protein??"";
+    $("#dietDayTabs .diet-day-btn").forEach(b=>b.classList.toggle("active",Number(b.dataset.day)===selectedDietDay));
+    $("#dietDayMessage").textContent="";
+  }
+  function renderDiet(){
+    const s=state.settings,seven=lastNDays(7),ak=avg(seven.filter(e=>e.calories!=null).map(e=>e.calories)),ap=avg(seven.filter(e=>e.protein!=null).map(e=>e.protein));
+    $("#dietKcal").textContent=s.calories||"—";$("#dietProtein").textContent=s.protein||"—";
+    $("#dietAvgKcal").textContent=ak?Math.round(ak):"—";$("#dietAvgProtein").textContent=ap?Math.round(ap):"—";
+    $("#dietKcalDelta").textContent=ak&&s.calories?`${ak>s.calories?"+":""}${Math.round(ak-s.calories)} kcal vs cel`:"—";
+    $("#dietProteinDelta").textContent=ap&&s.protein?`${ap>s.protein?"+":""}${Math.round(ap-s.protein)} g vs cel`:"—";
+    $("#dietPlan").value=state.dietPlan||"";
+    const week=currentDietWeekStart(),weekEnd=parseDate(week);weekEnd.setDate(weekEnd.getDate()+6);
+    $("#dietWeekLabel").textContent=`${formatDate(week)} – ${formatDate(fmtISO(weekEnd))}`;
+    const natural=dateDayNumber(todayISO);if(!selectedDietDay)selectedDietDay=natural;
+    $("#dietDayTabs").innerHTML=days.map((d,i)=>`<button type="button" class="diet-day-btn ${selectedDietDay===i+1?"active":""}" data-day="${i+1}">${d.slice(0,3)}<small>${formatDate(fmtISO(new Date(parseDate(week).getTime()+i*86400000)))}</small></button>`).join("");
+    $("#dietDayTabs .diet-day-btn").forEach(b=>b.addEventListener("click",()=>{selectedDietDay=Number(b.dataset.day);renderDietDay();}));
+    renderDietDay();
+  }
+  $("#saveDietDay").addEventListener("click",async()=>{
+    if(!currentUser)return;
+    const payload={user_id:currentUser.id,week_start:currentDietWeekStart(),day_of_week:selectedDietDay,breakfast:$("#dietBreakfast").value.trim(),lunch:$("#dietLunch").value.trim(),dinner:$("#dietDinner").value.trim(),extras:$("#dietExtras").value.trim(),prep_note:$("#dietPrep").value.trim(),calorie_target:val("#dietDayCalories"),protein_target_g:val("#dietDayProtein"),updated_at:new Date().toISOString()};
+    $("#dietDayMessage").textContent="Zapisywanie…";
+    const ok=await cloud(()=>client.from("diet_week_plan").upsert(payload,{onConflict:"user_id,week_start,day_of_week"}),"Dieta zapisana");
+    if(ok){
+      state.dietWeekPlan=(state.dietWeekPlan||[]).filter(x=>!(x.week_start===payload.week_start&&Number(x.day_of_week)===selectedDietDay));
+      state.dietWeekPlan.push(payload);saveCache();renderDiet();$("#dietDayMessage").textContent="Dzień zapisany.";toast("Plan dnia zapisany");
+    }
+  });
+  $("#copyDietPrevious").addEventListener("click",()=>{
+    if(selectedDietDay<=1){toast("Poniedziałek nie ma poprzedniego dnia w tym tygodniu");return;}
+    const prev=dietRow(selectedDietDay-1);if(!prev){toast("Poprzedni dzień nie ma jeszcze planu");return;}
+    $("#dietBreakfast").value=prev.breakfast||"";$("#dietLunch").value=prev.lunch||"";$("#dietDinner").value=prev.dinner||"";$("#dietExtras").value=prev.extras||"";$("#dietPrep").value=prev.prep_note||"";
+    toast("Skopiowano poprzedni dzień — możesz go teraz zmienić");
+  });
+  $("#saveDietPlan").addEventListener("click",async()=>{state.dietPlan=$("#dietPlan").value;const ok=await cloud(()=>client.from("diet_plan").upsert({user_id:currentUser.id,content:state.dietPlan,updated_at:new Date().toISOString()},{onConflict:"user_id"}));if(ok){saveCache();$("#dietMessage").textContent="Zapisano w chmurze.";toast("Założenia diety zapisane");}});
 
   function renderProgress(){const sorted=[...state.entries].sort((a,b)=>a.date.localeCompare(b.date)).filter(e=>e.weight!=null),first=sorted[0],last=sorted.at(-1),seven=lastNDays(7);$("#firstWeight").textContent=first?first.weight.toFixed(1)+" kg":"—";$("#lastWeight").textContent=last?last.weight.toFixed(1)+" kg":"—";if(first&&last){const d=last.weight-first.weight;$("#totalChange").textContent=(d>0?"+":"")+d.toFixed(1)+" kg"}else $("#totalChange").textContent="—";const sl=avg(seven.filter(e=>e.sleep!=null).map(e=>e.sleep)),st=avg(seven.filter(e=>e.steps!=null).map(e=>e.steps));$("#avgSleep").textContent=sl?sl.toFixed(1)+" h":"—";$("#avgSteps").textContent=st?Math.round(st):"—";}
   function renderSettings(){const s=state.settings;$("#sHeight").value=s.height??"";$("#sTargetWeight").value=s.targetWeight??"";$("#sCalories").value=s.calories??"";$("#sProtein").value=s.protein??"";$("#sSteps").value=s.steps??"";$("#sWorkouts").value=s.workouts??"";$("#sGoal").value=s.goal||"redukcja";}
@@ -689,7 +767,7 @@
   $("#exportJson").addEventListener("click",()=>download("forma-backup.json",JSON.stringify(state,null,2),"application/json"));
   $("#exportCsv").addEventListener("click",()=>{const headers=["date","weight","calories","protein","carbs","fat","steps","sleep","training","duration","cardio","mood","meals","notes"],q=v=>`"${String(v??"").replaceAll('"','""')}"`,rows=[headers.join(";"),...state.entries.sort((a,b)=>a.date.localeCompare(b.date)).map(e=>headers.map(h=>q(e[h])).join(";"))];download("forma-dziennik.csv","\ufeff"+rows.join("\n"),"text/csv;charset=utf-8");});
   $("#importJson").addEventListener("change",async ev=>{const f=ev.target.files?.[0];if(!f)return;try{const obj=JSON.parse(await f.text());if(!obj||!Array.isArray(obj.entries))throw Error();state={...cloneDefault(),...obj};const ops=[client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"}),...state.entries.map(e=>client.from("daily_entries").upsert(entryToDb(e),{onConflict:"user_id,entry_date"}))];for(let i=0;i<days.length;i++){const content=state.trainingPlan?.[days[i]]||"";if(content)ops.push(client.from("training_plan").upsert({user_id:currentUser.id,day_of_week:i+1,content},{onConflict:"user_id,day_of_week"}));}ops.push(client.from("training_program").upsert({user_id:currentUser.id,content:state.trainingProgram||""},{onConflict:"user_id"}));ops.push(client.from("diet_plan").upsert({user_id:currentUser.id,content:state.dietPlan||""},{onConflict:"user_id"}));const results=await Promise.all(ops);if(results.some(r=>r.error))throw results.find(r=>r.error).error;saveCache();renderAll();toast("Dane zaimportowane do chmury");}catch(err){console.error(err);toast("Nie udało się zaimportować pliku");}finally{ev.target.value=""}});
-  $("#wipeData").addEventListener("click",async()=>{if(!confirm("Na pewno usunąć wszystkie dane FORMA z chmury? Tej operacji nie można cofnąć."))return;const results=await Promise.all([client.from("workout_sessions").delete().eq("user_id",currentUser.id),client.from("training_exercises").delete().eq("user_id",currentUser.id),client.from("daily_entries").delete().eq("user_id",currentUser.id),client.from("training_plan").delete().eq("user_id",currentUser.id),client.from("training_program").delete().eq("user_id",currentUser.id),client.from("diet_plan").delete().eq("user_id",currentUser.id),client.from("user_settings").delete().eq("user_id",currentUser.id)]);if(results.some(r=>r.error)){toast("Nie udało się usunąć danych");return;}state=cloneDefault();await client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"});saveCache();renderAll();toast("Dane usunięte");});
+  $("#wipeData").addEventListener("click",async()=>{if(!confirm("Na pewno usunąć wszystkie dane FORMA z chmury? Tej operacji nie można cofnąć."))return;const results=await Promise.all([client.from("workout_sessions").delete().eq("user_id",currentUser.id),client.from("training_exercises").delete().eq("user_id",currentUser.id),client.from("diet_week_plan").delete().eq("user_id",currentUser.id),client.from("daily_entries").delete().eq("user_id",currentUser.id),client.from("training_plan").delete().eq("user_id",currentUser.id),client.from("training_program").delete().eq("user_id",currentUser.id),client.from("diet_plan").delete().eq("user_id",currentUser.id),client.from("user_settings").delete().eq("user_id",currentUser.id)]);if(results.some(r=>r.error)){toast("Nie udało się usunąć danych");return;}state=cloneDefault();await client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"});saveCache();renderAll();toast("Dane usunięte");});
 
   window.addEventListener("online",()=>{ if(currentUser&&!syncing) loadCloud(); });
   window.addEventListener("offline",()=>setSync(false,"Offline"));
