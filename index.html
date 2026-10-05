@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>Forma — trener i dieta</title>
+  <style>
+*{box-sizing:border-box} :root{--bg:#0b1020;--side:#0f172a;--panel:#121a2d;--panel2:#182238;--line:#27324a;--text:#eef2ff;--muted:#93a0b8;--accent:#5eead4;--accent2:#2dd4bf;--good:#86efac;--bad:#fca5a5;--warning:#fde68a} body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}button,input,select,textarea{font:inherit}.app-shell{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;padding:24px 18px;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column}.brand{display:flex;gap:12px;align-items:center;padding:4px 8px 28px}.brand-mark{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--accent),#60a5fa);color:#07111f;display:grid;place-items:center;font-weight:900;font-size:22px}.brand strong{display:block;letter-spacing:.08em}.brand small{display:block;color:var(--muted);margin-top:2px}nav{display:grid;gap:8px}.nav-btn{border:0;background:transparent;color:var(--muted);padding:12px 14px;border-radius:12px;text-align:left;cursor:pointer;display:flex;gap:12px;align-items:center}.nav-btn:hover,.nav-btn.active{background:var(--panel2);color:var(--text)}.nav-btn.active{box-shadow:inset 3px 0 0 var(--accent)}.sidebar-note{margin-top:auto;padding:14px;border:1px solid var(--line);border-radius:14px;display:flex;gap:10px;align-items:center}.sidebar-note small{color:var(--muted);display:block;margin-top:2px}.dot{width:9px;height:9px;border-radius:50%;background:var(--good);box-shadow:0 0 0 4px rgba(134,239,172,.08)}main{padding:28px 32px 56px;min-width:0}.topbar{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:26px}.topbar h1{margin:3px 0 0;font-size:30px}.eyebrow{color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.13em;margin:0}.top-actions{display:flex;gap:10px;align-items:center}.date-chip{border:1px solid var(--line);padding:10px 13px;border-radius:12px;color:var(--muted)}button,.file-btn{cursor:pointer}.primary,.secondary,.danger,.text-btn,.file-btn{border-radius:11px;padding:11px 15px;border:1px solid var(--line)}.primary{background:var(--accent);color:#07111f;border-color:transparent;font-weight:800}.primary:hover{background:var(--accent2)}.secondary,.file-btn{background:var(--panel2);color:var(--text)}.danger{background:transparent;color:var(--bad);border-color:rgba(252,165,165,.35)}.text-btn{background:transparent;color:var(--accent);border-color:transparent}.view{display:none}.view.active{display:block}.hero-card{background:linear-gradient(135deg,#16243d,#142b34);border:1px solid #284553;border-radius:22px;padding:24px 28px;display:flex;justify-content:space-between;gap:18px;align-items:center;margin-bottom:18px}.hero-card h2{margin:7px 0 8px;font-size:25px}.hero-card p:last-child{color:#b6c3d6;margin:0}.hero-ring{position:relative;width:120px;height:120px;flex:0 0 120px}.hero-ring svg{width:120px;height:120px;transform:rotate(-90deg)}.ring-bg,.ring-value{fill:none;stroke-width:10}.ring-bg{stroke:rgba(255,255,255,.09)}.ring-value{stroke:var(--accent);stroke-linecap:round;stroke-dasharray:301.6;stroke-dashoffset:301.6;transition:stroke-dashoffset .4s}.hero-ring>div{position:absolute;inset:0;display:grid;place-content:center;text-align:center}.hero-ring b{font-size:25px}.hero-ring span{display:block;color:var(--muted);font-size:11px}.stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:14px}.stat-card,.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px}.stat-card{padding:18px}.stat-label{color:var(--muted);font-size:12px}.stat-card strong{display:block;font-size:24px;margin:7px 0 5px}.stat-card small{color:var(--muted)}.dashboard-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(300px,.7fr);gap:14px;margin-bottom:14px}.panel{padding:20px}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}.panel-head h3{margin:4px 0 0;font-size:18px}.pill{font-size:12px;color:var(--muted);background:var(--panel2);padding:7px 10px;border-radius:999px}.chart-wrap{position:relative;min-height:260px}.chart-wrap.large{min-height:320px}canvas{display:block;width:100%;height:auto}.empty-chart{position:absolute;inset:0;display:grid;place-items:center;color:var(--muted);font-size:13px}.progress-list{display:grid;gap:18px}.progress-row>div:first-child{display:flex;justify-content:space-between;gap:10px;margin-bottom:7px;font-size:13px}.progress-row span{color:var(--muted)}.bar{height:8px;border-radius:20px;background:var(--panel2);overflow:hidden}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),#60a5fa);border-radius:20px;transition:width .35s}.entries{display:grid;gap:9px}.entry-row,.journal-item{display:grid;grid-template-columns:110px 1fr auto;gap:12px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#10192b}.entry-row .meta,.journal-item .meta{color:var(--muted);font-size:12px}.entry-row strong,.journal-item strong{font-size:14px}.entry-badges{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.badge{padding:5px 8px;border-radius:999px;background:var(--panel2);font-size:11px;color:#c7d2e6}.two-col{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:14px}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.form-grid label{display:grid;gap:7px;color:#c7d2e6;font-size:13px}.form-grid input,.form-grid select,.form-grid textarea,.big-note{width:100%;background:#0d1627;border:1px solid var(--line);color:var(--text);border-radius:11px;padding:11px 12px;outline:none}.form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus,.big-note:focus{border-color:var(--accent)}.span-2{grid-column:1/-1}.form-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.message{font-size:12px;color:var(--muted)}.journal-list{display:grid;gap:9px;max-height:760px;overflow:auto;padding-right:3px}.journal-item{grid-template-columns:1fr auto;cursor:pointer}.journal-item:hover{border-color:#3b4968}.journal-item .actions{display:flex;gap:6px}.icon-btn{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:8px;padding:7px 9px}.week-grid{display:grid;grid-template-columns:repeat(7,minmax(150px,1fr));gap:10px;overflow-x:auto;padding-bottom:4px}.day-card{background:#0e1729;border:1px solid var(--line);border-radius:14px;padding:13px;min-width:150px}.day-card h4{margin:0 0 9px}.day-card textarea{width:100%;min-height:190px;resize:vertical;background:transparent;border:0;color:var(--text);outline:none}.muted{color:var(--muted)}.big-note{resize:vertical;min-height:300px}.summary-stack{display:grid;gap:5px}.summary-stack>div{display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid var(--line);padding:13px 2px}.summary-stack span{color:var(--muted)}.stack-actions{display:grid;gap:10px;margin:18px 0}.file-btn{text-align:center}.file-btn input{display:none}.callout{margin-top:20px;border:1px solid #34505b;background:#10252b;border-radius:14px;padding:15px}.callout p{color:#b9c8d0;font-size:13px;line-height:1.55;margin-bottom:0}.toast{position:fixed;right:22px;bottom:22px;background:#edfdf9;color:#07251f;padding:12px 16px;border-radius:12px;font-weight:700;opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:translateY(0)}@media(max-width:1000px){.app-shell{grid-template-columns:82px minmax(0,1fr)}.sidebar{padding:22px 12px}.brand>div:last-child,.nav-btn:not(.active) span+*,.sidebar-note>div:last-child{display:none}.brand{justify-content:center;padding-left:0;padding-right:0}.nav-btn{font-size:0;justify-content:center}.nav-btn span{font-size:19px}.nav-btn.active{font-size:0}.sidebar-note{justify-content:center}.stat-grid{grid-template-columns:repeat(2,1fr)}.dashboard-grid,.two-col{grid-template-columns:1fr}}@media(max-width:650px){.app-shell{display:block}.sidebar{position:fixed;left:0;right:0;bottom:0;top:auto;height:auto;z-index:20;border-right:0;border-top:1px solid var(--line);padding:8px;background:rgba(15,23,42,.98)}.brand,.sidebar-note{display:none}nav{display:grid;grid-template-columns:repeat(6,1fr);gap:3px}.nav-btn,.nav-btn.active{padding:10px 3px;font-size:0;justify-content:center;box-shadow:none}.nav-btn span{font-size:18px}main{padding:20px 14px 88px}.topbar{align-items:flex-start}.top-actions{flex-direction:column;align-items:flex-end}.date-chip{font-size:12px}.hero-card{padding:20px;align-items:flex-start}.hero-card h2{font-size:21px}.hero-ring{width:92px;height:92px;flex-basis:92px}.hero-ring svg{width:92px;height:92px}.hero-ring b{font-size:20px}.stat-grid{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}.span-2{grid-column:auto}.panel{padding:16px}.entry-row{grid-template-columns:1fr}.entry-badges{justify-content:flex-start}.toast{right:14px;bottom:80px;left:14px;text-align:center}}.auth-screen{position:fixed;inset:0;z-index:100;background:rgba(5,10,20,.96);display:grid;place-items:center;padding:18px}.auth-screen.hidden{display:none}.auth-card{width:min(440px,100%);background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:26px}.auth-brand{padding:0 0 24px}.auth-card h1{margin:8px 0 8px;font-size:28px}.auth-form{display:grid;gap:14px;margin-top:20px}.auth-form label{display:grid;gap:7px;color:#c7d2e6;font-size:13px}.auth-form input{width:100%;background:#0d1627;border:1px solid var(--line);color:var(--text);border-radius:11px;padding:12px;outline:none}.auth-form input:focus{border-color:var(--accent)}.auth-actions{display:flex;gap:10px;flex-wrap:wrap}.sync-ok{color:var(--good)!important;border-color:rgba(134,239,172,.25)!important}.sync-bad{color:var(--warning)!important}@media(max-width:650px){#signOutBtn{padding:8px 10px;font-size:12px}.top-actions{max-width:180px}.auth-card{padding:20px}}
+
+</style>
+</head>
+<body>
+  <div id="authScreen" class="auth-screen">
+    <div class="auth-card">
+      <div class="brand auth-brand"><div class="brand-mark">F</div><div><strong>FORMA</strong><small>trening + dieta</small></div></div>
+      <p class="eyebrow">SYNCHRONIZACJA W CHMURZE</p>
+      <h1>Zaloguj się do FORMY</h1>
+      <p class="muted">To samo konto na telefonie i komputerze = te same dane.</p>
+      <form id="authForm" class="auth-form">
+        <label>E-mail<input id="authEmail" type="email" autocomplete="email" required placeholder="twoj@email.pl"></label>
+        <label>Hasło<input id="authPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="minimum 6 znaków"></label>
+        <div class="auth-actions">
+          <button id="signInBtn" type="submit" class="primary">Zaloguj</button>
+          <button id="signUpBtn" type="button" class="secondary">Utwórz konto</button>
+        </div>
+        <span id="authMessage" class="message"></span>
+      </form>
+    </div>
+  </div>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">F</div>
+        <div>
+          <strong>FORMA</strong>
+          <small>trening + dieta</small>
+        </div>
+      </div>
+
+      <nav id="nav">
+        <button class="nav-btn active" data-view="dashboard"><span>⌂</span> Dashboard</button>
+        <button class="nav-btn" data-view="journal"><span>＋</span> Dziennik</button>
+        <button class="nav-btn" data-view="training"><span>◫</span> Trening</button>
+        <button class="nav-btn" data-view="diet"><span>◉</span> Dieta</button>
+        <button class="nav-btn" data-view="progress"><span>↗</span> Postępy</button>
+        <button class="nav-btn" data-view="settings"><span>⚙</span> Ustawienia</button>
+      </nav>
+
+      <div class="sidebar-note">
+        <div class="dot"></div>
+        <div>
+          <strong>Synchronizacja</strong>
+          <small id="sidebarSync">Supabase</small>
+        </div>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">TWÓJ PANEL</p>
+          <h1 id="pageTitle">Dashboard</h1>
+        </div>
+        <div class="top-actions">
+          <div class="date-chip" id="syncStatus">Offline</div>
+          <div class="date-chip" id="todayLabel"></div>
+          <button id="quickAdd" class="primary">+ Dodaj wpis</button>
+          <button id="signOutBtn" class="secondary" type="button">Wyloguj</button>
+        </div>
+      </header>
+
+      <section class="view active" id="view-dashboard">
+        <div class="hero-card">
+          <div>
+            <p class="eyebrow">CEL</p>
+            <h2 id="heroGoal">Ustaw swój cel w ustawieniach</h2>
+            <p id="heroSub">Wpisuj wagę, posiłki i treningi. Panel policzy trend i realizację tygodnia.</p>
+          </div>
+          <div class="hero-ring">
+            <svg viewBox="0 0 120 120" aria-label="Realizacja tygodnia">
+              <circle cx="60" cy="60" r="48" class="ring-bg"></circle>
+              <circle cx="60" cy="60" r="48" class="ring-value" id="ringValue"></circle>
+            </svg>
+            <div><b id="weekScore">0%</b><span>tygodnia</span></div>
+          </div>
+        </div>
+
+        <div class="stat-grid">
+          <article class="stat-card">
+            <span class="stat-label">Aktualna waga</span>
+            <strong id="statWeight">—</strong>
+            <small id="statWeightTrend">Dodaj pierwszy pomiar</small>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Śr. kcal / 7 dni</span>
+            <strong id="statCalories">—</strong>
+            <small id="statCaloriesTarget">Cel: —</small>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Śr. białko / 7 dni</span>
+            <strong id="statProtein">—</strong>
+            <small id="statProteinTarget">Cel: —</small>
+          </article>
+          <article class="stat-card">
+            <span class="stat-label">Treningi / 7 dni</span>
+            <strong id="statWorkouts">0</strong>
+            <small id="statWorkoutsTarget">Cel: —</small>
+          </article>
+        </div>
+
+        <div class="dashboard-grid">
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">TREND</p>
+                <h3>Waga — ostatnie 30 dni</h3>
+              </div>
+              <span class="pill" id="trendPill">Brak danych</span>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="weightChart" width="800" height="280"></canvas>
+              <div id="chartEmpty" class="empty-chart">Dodaj co najmniej 2 pomiary wagi.</div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">OSTATNIE 7 DNI</p>
+                <h3>Realizacja</h3>
+              </div>
+            </div>
+            <div class="progress-list">
+              <div class="progress-row"><div><span>Kalorie</span><b id="pCaloriesText">—</b></div><div class="bar"><i id="pCalories"></i></div></div>
+              <div class="progress-row"><div><span>Białko</span><b id="pProteinText">—</b></div><div class="bar"><i id="pProtein"></i></div></div>
+              <div class="progress-row"><div><span>Treningi</span><b id="pTrainingText">—</b></div><div class="bar"><i id="pTraining"></i></div></div>
+              <div class="progress-row"><div><span>Kroki</span><b id="pStepsText">—</b></div><div class="bar"><i id="pSteps"></i></div></div>
+            </div>
+          </article>
+        </div>
+
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">OSTATNIE WPISY</p>
+              <h3>Dziennik</h3>
+            </div>
+            <button class="text-btn" data-go="journal">Zobacz wszystkie →</button>
+          </div>
+          <div id="recentEntries" class="entries"></div>
+        </article>
+      </section>
+
+      <section class="view" id="view-journal">
+        <div class="two-col">
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">CODZIENNIE</p>
+                <h3>Dodaj / edytuj wpis</h3>
+              </div>
+            </div>
+            <form id="journalForm" class="form-grid">
+              <label>Data<input id="jDate" type="date" required></label>
+              <label>Waga [kg]<input id="jWeight" type="number" min="30" max="300" step="0.1" placeholder="np. 86,4"></label>
+              <label>Kalorie [kcal]<input id="jCalories" type="number" min="0" max="10000" placeholder="np. 2450"></label>
+              <label>Białko [g]<input id="jProtein" type="number" min="0" max="500" placeholder="np. 180"></label>
+              <label>Węglowodany [g]<input id="jCarbs" type="number" min="0" max="1000"></label>
+              <label>Tłuszcze [g]<input id="jFat" type="number" min="0" max="500"></label>
+              <label>Kroki<input id="jSteps" type="number" min="0" max="100000" placeholder="np. 9000"></label>
+              <label>Sen [h]<input id="jSleep" type="number" min="0" max="24" step="0.1" placeholder="np. 7,5"></label>
+              <label>Trening
+                <select id="jTraining">
+                  <option value="">Brak</option>
+                  <option>Push</option><option>Pull</option><option>Legs</option>
+                  <option>Góra</option><option>Dół</option><option>Full body</option>
+                  <option>Cardio</option><option>Inny</option>
+                </select>
+              </label>
+              <label>Czas treningu [min]<input id="jDuration" type="number" min="0" max="600"></label>
+              <label>Cardio [min]<input id="jCardio" type="number" min="0" max="600"></label>
+              <label>Samopoczucie
+                <select id="jMood">
+                  <option value="">—</option><option>1 — bardzo słabo</option><option>2 — słabo</option>
+                  <option>3 — normalnie</option><option>4 — dobrze</option><option>5 — bardzo dobrze</option>
+                </select>
+              </label>
+              <label class="span-2">Posiłki / co jadłem<textarea id="jMeals" rows="4" placeholder="Możesz wpisać produkty, porcje albo całe posiłki…"></textarea></label>
+              <label class="span-2">Notatka treningowa<textarea id="jNotes" rows="4" placeholder="Ćwiczenia, ciężary, serie, powtórzenia, RPE, regeneracja…"></textarea></label>
+              <div class="span-2 form-actions">
+                <button class="primary" type="submit">Zapisz dzień</button>
+                <button class="secondary" type="button" id="clearJournal">Wyczyść</button>
+                <span id="journalMessage" class="message"></span>
+              </div>
+            </form>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">HISTORIA</p>
+                <h3>Ostatnie wpisy</h3>
+              </div>
+            </div>
+            <div id="journalList" class="journal-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-training">
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">PLAN TYGODNIA</p>
+              <h3>Trening</h3>
+            </div>
+            <button id="resetPlan" class="secondary">Wyczyść plan</button>
+          </div>
+          <p class="muted">Tu możesz wpisać plan, który ustalimy razem. Dane zostają zapisane lokalnie.</p>
+          <div id="trainingWeek" class="week-grid"></div>
+        </article>
+      </section>
+
+      <section class="view" id="view-diet">
+        <div class="stat-grid">
+          <article class="stat-card"><span class="stat-label">Cel kalorii</span><strong id="dietKcal">—</strong><small>kcal / dzień</small></article>
+          <article class="stat-card"><span class="stat-label">Cel białka</span><strong id="dietProtein">—</strong><small>g / dzień</small></article>
+          <article class="stat-card"><span class="stat-label">Śr. kcal 7 dni</span><strong id="dietAvgKcal">—</strong><small id="dietKcalDelta">—</small></article>
+          <article class="stat-card"><span class="stat-label">Śr. białko 7 dni</span><strong id="dietAvgProtein">—</strong><small id="dietProteinDelta">—</small></article>
+        </div>
+        <article class="panel">
+          <div class="panel-head"><div><p class="eyebrow">PLAN ŻYWIENIOWY</p><h3>Notatki i założenia</h3></div></div>
+          <textarea id="dietPlan" class="big-note" rows="16" placeholder="Tutaj możemy trzymać aktualne założenia diety, listę produktów, przykładowe posiłki, rozkład kalorii itd."></textarea>
+          <div class="form-actions"><button id="saveDietPlan" class="primary">Zapisz plan diety</button><span id="dietMessage" class="message"></span></div>
+        </article>
+      </section>
+
+      <section class="view" id="view-progress">
+        <div class="dashboard-grid">
+          <article class="panel">
+            <div class="panel-head"><div><p class="eyebrow">30 DNI</p><h3>Waga</h3></div></div>
+            <div class="chart-wrap large"><canvas id="progressChart" width="800" height="340"></canvas><div id="progressEmpty" class="empty-chart">Brak wystarczających danych.</div></div>
+          </article>
+          <article class="panel">
+            <div class="panel-head"><div><p class="eyebrow">PODSUMOWANIE</p><h3>Zmiana</h3></div></div>
+            <div class="summary-stack">
+              <div><span>Pierwszy pomiar</span><b id="firstWeight">—</b></div>
+              <div><span>Ostatni pomiar</span><b id="lastWeight">—</b></div>
+              <div><span>Zmiana</span><b id="totalChange">—</b></div>
+              <div><span>Śr. sen / 7 dni</span><b id="avgSleep">—</b></div>
+              <div><span>Śr. kroki / 7 dni</span><b id="avgSteps">—</b></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="two-col">
+          <article class="panel">
+            <div class="panel-head"><div><p class="eyebrow">PROFIL</p><h3>Twoje cele</h3></div></div>
+            <form id="settingsForm" class="form-grid">
+              <label>Wzrost [cm]<input id="sHeight" type="number" min="120" max="230"></label>
+              <label>Waga docelowa [kg]<input id="sTargetWeight" type="number" min="30" max="300" step="0.1"></label>
+              <label>Cel kalorii [kcal]<input id="sCalories" type="number" min="1000" max="7000"></label>
+              <label>Cel białka [g]<input id="sProtein" type="number" min="50" max="400"></label>
+              <label>Cel kroków<input id="sSteps" type="number" min="1000" max="50000"></label>
+              <label>Treningi / tydzień<input id="sWorkouts" type="number" min="1" max="14"></label>
+              <label class="span-2">Główny cel
+                <select id="sGoal">
+                  <option value="redukcja">Redukcja tkanki tłuszczowej</option>
+                  <option value="masa">Budowanie masy mięśniowej</option>
+                  <option value="utrzymanie">Utrzymanie / rekompozycja</option>
+                  <option value="forma">Ogólna poprawa formy</option>
+                </select>
+              </label>
+              <div class="span-2 form-actions"><button class="primary" type="submit">Zapisz ustawienia</button><span id="settingsMessage" class="message"></span></div>
+            </form>
+          </article>
+
+          <article class="panel">
+            <div class="panel-head"><div><p class="eyebrow">DANE</p><h3>Kopia zapasowa</h3></div></div>
+            <p class="muted">Eksportuj dane przed zmianą telefonu, przeglądarki albo komputera.</p>
+            <div class="stack-actions">
+              <button id="exportJson" class="secondary">Eksport JSON</button>
+              <button id="exportCsv" class="secondary">Eksport CSV</button>
+              <label class="file-btn secondary">Import JSON<input id="importJson" type="file" accept="application/json"></label>
+              <button id="wipeData" class="danger">Usuń wszystkie dane</button>
+            </div>
+            <div class="callout">
+              <strong>FORMA Cloud</strong>
+              <p>Dane są synchronizowane z Supabase. Możesz zalogować się tym samym kontem na telefonie i komputerze.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+(() => {
+  const SUPABASE_URL = "https://ymemohuafzogbhgggcvm.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_-3RrLnYXbVyGL7QeKgsEwg_ynhEAi7f";
+  const CACHE_PREFIX = "forma_cloud_v1_";
+  const DEFAULT = {
+    settings:{height:185,targetWeight:84,calories:2500,protein:180,steps:8000,workouts:4,goal:"redukcja"},
+    entries:[], trainingPlan:{}, dietPlan:""
+  };
+
+  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+  });
+
+  let state = structuredClone(DEFAULT);
+  let currentUser = null;
+  let syncing = false;
+
+  const $ = s => document.querySelector(s);
+  const $$ = s => [...document.querySelectorAll(s)];
+  const today = new Date();
+  const todayISO = fmtISO(today);
+  const days=["Poniedziałek","Wtorek","Środa","Czwartek","Piątek","Sobota","Niedziela"];
+
+  function fmtISO(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
+  function parseDate(s){ return new Date(`${s}T12:00:00`); }
+  function cloneDefault(){ return structuredClone(DEFAULT); }
+  function cacheKey(){ return currentUser ? CACHE_PREFIX + currentUser.id : null; }
+  function saveCache(){ try{ const k=cacheKey(); if(k) localStorage.setItem(k, JSON.stringify(state)); }catch{} }
+  function loadCache(){ try{ const k=cacheKey(); const raw=k&&localStorage.getItem(k); return raw ? {...cloneDefault(),...JSON.parse(raw)} : cloneDefault(); }catch{ return cloneDefault(); } }
+  function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1800); }
+  function n(v){ const x=Number(v); return Number.isFinite(x)?x:null; }
+  function val(id){ const v=$(id).value.trim(); return v===""?null:n(v); }
+  function avg(arr){ return arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:null; }
+  function esc(v){ return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
+  function lastNDays(daysCount){
+    const cutoff=new Date(today); cutoff.setHours(0,0,0,0); cutoff.setDate(cutoff.getDate()-(daysCount-1));
+    return state.entries.filter(e=>parseDate(e.date)>=cutoff && parseDate(e.date)<=new Date(todayISO+"T23:59:59")).sort((a,b)=>a.date.localeCompare(b.date));
+  }
+  function goalLabel(g){ return ({redukcja:"Redukcja tkanki tłuszczowej",masa:"Budowanie masy mięśniowej",utrzymanie:"Utrzymanie / rekompozycja",forma:"Ogólna poprawa formy"})[g]||"Cel treningowy"; }
+  function formatDate(s){ return parseDate(s).toLocaleDateString("pl-PL",{day:"2-digit",month:"short"}); }
+  function setSync(ok, text){
+    const el=$("#syncStatus"); if(!el) return;
+    el.textContent=text;
+    el.classList.toggle("sync-ok",!!ok);
+    el.classList.toggle("sync-bad",!ok);
+    $("#sidebarSync").textContent = currentUser ? (ok?"Online • Supabase":"Tryb lokalny") : "Supabase";
+  }
+  async function cloud(task, successText="Zsynchronizowano"){
+    if(!currentUser) return false;
+    try{
+      syncing=true; setSync(true,"Synchronizacja…");
+      const result=await task();
+      if(result?.error) throw result.error;
+      saveCache(); setSync(true,successText); return true;
+    }catch(err){
+      console.error(err); setSync(false,"Błąd synchronizacji"); toast("Nie udało się zsynchronizować danych"); return false;
+    }finally{ syncing=false; }
+  }
+
+  function settingsToDb(){ const s=state.settings; return {
+    user_id:currentUser.id,height_cm:s.height,target_weight_kg:s.targetWeight,calorie_target:s.calories,
+    protein_target_g:s.protein,steps_target:s.steps,workouts_per_week:s.workouts,goal:s.goal,updated_at:new Date().toISOString()
+  }; }
+  function settingsFromDb(r){ return {
+    height:r.height_cm==null?null:Number(r.height_cm),targetWeight:r.target_weight_kg==null?null:Number(r.target_weight_kg),
+    calories:r.calorie_target,protein:r.protein_target_g,steps:r.steps_target,workouts:r.workouts_per_week,goal:r.goal||"redukcja"
+  }; }
+  function entryToDb(e){ return {
+    user_id:currentUser.id,entry_date:e.date,weight_kg:e.weight,calories:e.calories,protein_g:e.protein,carbs_g:e.carbs,fat_g:e.fat,
+    steps:e.steps,sleep_hours:e.sleep,training_type:e.training||null,training_duration_min:e.duration,cardio_min:e.cardio,mood:e.mood||null,
+    meals:e.meals||null,notes:e.notes||null,updated_at:new Date().toISOString()
+  }; }
+  function entryFromDb(r){ return {
+    date:r.entry_date,weight:r.weight_kg==null?null:Number(r.weight_kg),calories:r.calories,protein:r.protein_g,carbs:r.carbs_g,fat:r.fat_g,
+    steps:r.steps,sleep:r.sleep_hours==null?null:Number(r.sleep_hours),training:r.training_type||"",duration:r.training_duration_min,
+    cardio:r.cardio_min,mood:r.mood||"",meals:r.meals||"",notes:r.notes||""
+  }; }
+
+  async function loadCloud(){
+    if(!currentUser) return;
+    setSync(true,"Pobieranie danych…");
+    const cached=loadCache();
+    try{
+      const [sRes,eRes,tRes,dRes]=await Promise.all([
+        client.from("user_settings").select("*").eq("user_id",currentUser.id).maybeSingle(),
+        client.from("daily_entries").select("*").eq("user_id",currentUser.id).order("entry_date",{ascending:true}),
+        client.from("training_plan").select("*").eq("user_id",currentUser.id).order("day_of_week",{ascending:true}),
+        client.from("diet_plan").select("*").eq("user_id",currentUser.id).maybeSingle()
+      ]);
+      for(const r of [sRes,eRes,tRes,dRes]) if(r.error) throw r.error;
+      state=cloneDefault();
+      if(sRes.data) state.settings=settingsFromDb(sRes.data);
+      else { state.settings=cached.settings||cloneDefault().settings; await client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"}); }
+      state.entries=(eRes.data||[]).map(entryFromDb);
+      state.trainingPlan={}; (tRes.data||[]).forEach(r=>state.trainingPlan[days[r.day_of_week-1]]=r.content||"");
+      state.dietPlan=dRes.data?.content||"";
+      saveCache(); renderAll(); setSync(true,"Online • zsynchronizowano");
+    }catch(err){
+      console.error(err); state=cached; renderAll(); setSync(false,"Offline • dane z pamięci");
+    }
+  }
+
+  function showAuth(show){ $("#authScreen").classList.toggle("hidden",!show); }
+  async function initAuth(){
+    const {data:{session}}=await client.auth.getSession();
+    currentUser=session?.user||null;
+    if(currentUser){ showAuth(false); await loadCloud(); }
+    else { showAuth(true); setSync(false,"Niezalogowany"); }
+  }
+
+  $("#authForm").addEventListener("submit", async ev=>{
+    ev.preventDefault();
+    $("#authMessage").textContent="Logowanie…";
+    const {data,error}=await client.auth.signInWithPassword({email:$("#authEmail").value.trim(),password:$("#authPassword").value});
+    if(error){ $("#authMessage").textContent=error.message; return; }
+    currentUser=data.user; $("#authMessage").textContent=""; showAuth(false); await loadCloud(); toast("Zalogowano");
+  });
+  $("#signUpBtn").addEventListener("click", async ()=>{
+    const email=$("#authEmail").value.trim(), password=$("#authPassword").value;
+    if(!email || password.length<6){ $("#authMessage").textContent="Podaj e-mail i hasło min. 6 znaków."; return; }
+    $("#authMessage").textContent="Tworzenie konta…";
+    const {data,error}=await client.auth.signUp({email,password});
+    if(error){ $("#authMessage").textContent=error.message; return; }
+    if(data.session){ currentUser=data.user; showAuth(false); await loadCloud(); toast("Konto utworzone"); }
+    else $("#authMessage").textContent="Konto utworzone. Sprawdź e-mail i potwierdź rejestrację.";
+  });
+  $("#signOutBtn").addEventListener("click", async ()=>{ await client.auth.signOut(); currentUser=null; state=cloneDefault(); renderAll(); showAuth(true); setSync(false,"Niezalogowany"); });
+  client.auth.onAuthStateChange(async (event,session)=>{
+    if(event==="SIGNED_IN" && session?.user && currentUser?.id!==session.user.id){ currentUser=session.user; showAuth(false); await loadCloud(); }
+    if(event==="SIGNED_OUT"){ currentUser=null; showAuth(true); }
+  });
+
+  $("#todayLabel").textContent = today.toLocaleDateString("pl-PL",{weekday:"short",day:"2-digit",month:"short"});
+  $("#jDate").value=todayISO;
+
+  const titles={dashboard:"Dashboard",journal:"Dziennik",training:"Trening",diet:"Dieta",progress:"Postępy",settings:"Ustawienia"};
+  function go(view){
+    $$(".view").forEach(v=>v.classList.remove("active")); $("#view-"+view).classList.add("active");
+    $$(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.view===view)); $("#pageTitle").textContent=titles[view];
+    if(view==="progress"||view==="dashboard") drawAllCharts();
+  }
+  $$(".nav-btn").forEach(b=>b.addEventListener("click",()=>go(b.dataset.view)));
+  $$('[data-go]').forEach(b=>b.addEventListener("click",()=>go(b.dataset.go)));
+  $("#quickAdd").addEventListener("click",()=>go("journal"));
+
+  function renderDashboard(){
+    const s=state.settings; const sorted=[...state.entries].sort((a,b)=>a.date.localeCompare(b.date)); const weighted=sorted.filter(e=>e.weight!=null); const last=weighted.at(-1);
+    const seven=lastNDays(7); const kcal=seven.filter(e=>e.calories!=null).map(e=>e.calories); const protein=seven.filter(e=>e.protein!=null).map(e=>e.protein);
+    const steps=seven.filter(e=>e.steps!=null).map(e=>e.steps); const workouts=seven.filter(e=>e.training).length;
+    $("#heroGoal").textContent=goalLabel(s.goal)+(s.targetWeight?` • cel ${s.targetWeight} kg`:"");
+    $("#statWeight").textContent=last?`${last.weight.toFixed(1)} kg`:"—";
+    if(weighted.length>=2){const d=last.weight-weighted.at(-2).weight;$("#statWeightTrend").textContent=(d>0?"+":"")+d.toFixed(1)+" kg od poprzedniego";} else $("#statWeightTrend").textContent="Dodaj kolejne pomiary";
+    const avgK=avg(kcal),avgP=avg(protein),avgS=avg(steps);
+    $("#statCalories").textContent=avgK?`${Math.round(avgK)} kcal`:"—"; $("#statProtein").textContent=avgP?`${Math.round(avgP)} g`:"—"; $("#statWorkouts").textContent=String(workouts);
+    $("#statCaloriesTarget").textContent=`Cel: ${s.calories||"—"} kcal`; $("#statProteinTarget").textContent=`Cel: ${s.protein||"—"} g`; $("#statWorkoutsTarget").textContent=`Cel: ${s.workouts||"—"} / tydz.`;
+    const kcalScore=avgK&&s.calories?Math.max(0,1-Math.abs(avgK-s.calories)/s.calories):0, pScore=avgP&&s.protein?Math.min(avgP/s.protein,1):0,
+      wScore=s.workouts?Math.min(workouts/s.workouts,1):0, stScore=avgS&&s.steps?Math.min(avgS/s.steps,1):0;
+    const score=Math.round(((kcalScore+pScore+wScore+stScore)/4)*100); $("#weekScore").textContent=score+"%"; $("#ringValue").style.strokeDashoffset=301.6*(1-score/100);
+    setProgress("pCalories","pCaloriesText",kcalScore*100,avgK?`${Math.round(avgK)} / ${s.calories}`:"—");
+    setProgress("pProtein","pProteinText",pScore*100,avgP?`${Math.round(avgP)} / ${s.protein} g`:"—"); setProgress("pTraining","pTrainingText",wScore*100,`${workouts} / ${s.workouts}`);
+    setProgress("pSteps","pStepsText",stScore*100,avgS?`${Math.round(avgS)} / ${s.steps}`:"—");
+    $("#recentEntries").innerHTML=[...sorted].reverse().slice(0,5).map(e=>`<div class="entry-row"><div><strong>${formatDate(e.date)}</strong><div class="meta">${e.weight!=null?e.weight.toFixed(1)+" kg":"bez wagi"}</div></div><div><strong>${esc(e.training||"Dzień bez treningu")}</strong><div class="meta">${e.calories!=null?e.calories+" kcal":"brak kalorii"}${e.protein!=null?" • "+e.protein+" g białka":""}</div></div><div class="entry-badges">${e.steps!=null?`<span class="badge">${e.steps} kroków</span>`:""}${e.sleep!=null?`<span class="badge">${e.sleep} h snu</span>`:""}</div></div>`).join("")||`<div class="muted">Brak wpisów. Zacznij od dzisiejszego dnia.</div>`;
+    if(weighted.length>=2){const d=weighted.at(-1).weight-weighted[0].weight;$("#trendPill").textContent=`${d>0?"+":""}${d.toFixed(1)} kg`;} else $("#trendPill").textContent="Brak danych";
+  }
+  function setProgress(bar,text,percent,label){$("#"+bar).style.width=Math.max(0,Math.min(100,percent||0))+"%";$("#"+text).textContent=label;}
+
+  function renderJournal(){
+    const sorted=[...state.entries].sort((a,b)=>b.date.localeCompare(a.date));
+    $("#journalList").innerHTML=sorted.map(e=>`<div class="journal-item" data-date="${e.date}"><div><strong>${formatDate(e.date)} ${e.training?`• ${esc(e.training)}`:""}</strong><div class="meta">${e.weight!=null?e.weight.toFixed(1)+" kg • ":""}${e.calories!=null?e.calories+" kcal • ":""}${e.protein!=null?e.protein+" g białka":""}</div></div><div class="actions"><button class="icon-btn edit" data-date="${e.date}">Edytuj</button><button class="icon-btn delete" data-date="${e.date}">×</button></div></div>`).join("")||`<div class="muted">Brak wpisów.</div>`;
+    $$(".edit").forEach(b=>b.addEventListener("click",ev=>{ev.stopPropagation();loadEntry(b.dataset.date)}));
+    $$(".delete").forEach(b=>b.addEventListener("click",async ev=>{ev.stopPropagation();const date=b.dataset.date;if(!confirm(`Usunąć wpis z ${date}?`))return;const ok=await cloud(()=>client.from("daily_entries").delete().eq("user_id",currentUser.id).eq("entry_date",date));if(ok){state.entries=state.entries.filter(e=>e.date!==date);saveCache();renderAll();toast("Wpis usunięty");}}));
+  }
+  function loadEntry(date){ const e=state.entries.find(x=>x.date===date); if(!e)return; const map={jDate:"date",jWeight:"weight",jCalories:"calories",jProtein:"protein",jCarbs:"carbs",jFat:"fat",jSteps:"steps",jSleep:"sleep",jTraining:"training",jDuration:"duration",jCardio:"cardio",jMood:"mood",jMeals:"meals",jNotes:"notes"}; Object.entries(map).forEach(([id,k])=>$("#"+id).value=e[k]??""); go("journal"); $("#journalMessage").textContent="Wczytano wpis do edycji."; }
+  $("#journalForm").addEventListener("submit",async ev=>{
+    ev.preventDefault(); if(!currentUser)return;
+    const entry={date:$("#jDate").value,weight:val("#jWeight"),calories:val("#jCalories"),protein:val("#jProtein"),carbs:val("#jCarbs"),fat:val("#jFat"),steps:val("#jSteps"),sleep:val("#jSleep"),training:$("#jTraining").value,duration:val("#jDuration"),cardio:val("#jCardio"),mood:$("#jMood").value,meals:$("#jMeals").value.trim(),notes:$("#jNotes").value.trim()};
+    $("#journalMessage").textContent="Zapisywanie…"; const ok=await cloud(()=>client.from("daily_entries").upsert(entryToDb(entry),{onConflict:"user_id,entry_date"}));
+    if(ok){state.entries=state.entries.filter(e=>e.date!==entry.date);state.entries.push(entry);saveCache();renderAll();$("#journalMessage").textContent="Zapisano w chmurze.";toast("Dzień zapisany");}
+  });
+  $("#clearJournal").addEventListener("click",()=>{["#jWeight","#jCalories","#jProtein","#jCarbs","#jFat","#jSteps","#jSleep","#jDuration","#jCardio","#jMeals","#jNotes"].forEach(id=>$(id).value="");$("#jTraining").value="";$("#jMood").value="";$("#jDate").value=todayISO;$("#journalMessage").textContent="";});
+
+  function renderTraining(){
+    $("#trainingWeek").innerHTML=days.map((day,i)=>`<div class="day-card"><h4>${day}</h4><textarea data-day="${day}" data-index="${i+1}" placeholder="Np. Push&#10;Wyciskanie 4×6-8&#10;OHP 3×8...">${esc(state.trainingPlan[day]||"")}</textarea></div>`).join("");
+    $$("#trainingWeek textarea").forEach(t=>{let timer;t.addEventListener("input",()=>{state.trainingPlan[t.dataset.day]=t.value;saveCache();clearTimeout(timer);timer=setTimeout(async()=>{await cloud(()=>client.from("training_plan").upsert({user_id:currentUser.id,day_of_week:Number(t.dataset.index),content:t.value,updated_at:new Date().toISOString()},{onConflict:"user_id,day_of_week"}),"Plan zapisany");},650);});});
+  }
+  $("#resetPlan").addEventListener("click",async()=>{if(!confirm("Wyczyścić cały plan treningowy?"))return;const ok=await cloud(()=>client.from("training_plan").delete().eq("user_id",currentUser.id));if(ok){state.trainingPlan={};saveCache();renderTraining();toast("Plan wyczyszczony");}});
+
+  function renderDiet(){const s=state.settings,seven=lastNDays(7),ak=avg(seven.filter(e=>e.calories!=null).map(e=>e.calories)),ap=avg(seven.filter(e=>e.protein!=null).map(e=>e.protein));$("#dietKcal").textContent=s.calories||"—";$("#dietProtein").textContent=s.protein||"—";$("#dietAvgKcal").textContent=ak?Math.round(ak):"—";$("#dietAvgProtein").textContent=ap?Math.round(ap):"—";$("#dietKcalDelta").textContent=ak&&s.calories?`${ak>s.calories?"+":""}${Math.round(ak-s.calories)} kcal vs cel`:"—";$("#dietProteinDelta").textContent=ap&&s.protein?`${ap>s.protein?"+":""}${Math.round(ap-s.protein)} g vs cel`:"—";$("#dietPlan").value=state.dietPlan||"";}
+  $("#saveDietPlan").addEventListener("click",async()=>{state.dietPlan=$("#dietPlan").value;const ok=await cloud(()=>client.from("diet_plan").upsert({user_id:currentUser.id,content:state.dietPlan,updated_at:new Date().toISOString()},{onConflict:"user_id"}));if(ok){saveCache();$("#dietMessage").textContent="Zapisano w chmurze.";toast("Plan diety zapisany");}});
+
+  function renderProgress(){const sorted=[...state.entries].sort((a,b)=>a.date.localeCompare(b.date)).filter(e=>e.weight!=null),first=sorted[0],last=sorted.at(-1),seven=lastNDays(7);$("#firstWeight").textContent=first?first.weight.toFixed(1)+" kg":"—";$("#lastWeight").textContent=last?last.weight.toFixed(1)+" kg":"—";if(first&&last){const d=last.weight-first.weight;$("#totalChange").textContent=(d>0?"+":"")+d.toFixed(1)+" kg"}else $("#totalChange").textContent="—";const sl=avg(seven.filter(e=>e.sleep!=null).map(e=>e.sleep)),st=avg(seven.filter(e=>e.steps!=null).map(e=>e.steps));$("#avgSleep").textContent=sl?sl.toFixed(1)+" h":"—";$("#avgSteps").textContent=st?Math.round(st):"—";}
+  function renderSettings(){const s=state.settings;$("#sHeight").value=s.height??"";$("#sTargetWeight").value=s.targetWeight??"";$("#sCalories").value=s.calories??"";$("#sProtein").value=s.protein??"";$("#sSteps").value=s.steps??"";$("#sWorkouts").value=s.workouts??"";$("#sGoal").value=s.goal||"redukcja";}
+  $("#settingsForm").addEventListener("submit",async ev=>{ev.preventDefault();state.settings={height:val("#sHeight"),targetWeight:val("#sTargetWeight"),calories:val("#sCalories"),protein:val("#sProtein"),steps:val("#sSteps"),workouts:val("#sWorkouts"),goal:$("#sGoal").value};const ok=await cloud(()=>client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"}));if(ok){saveCache();renderAll();$("#settingsMessage").textContent="Zapisano w chmurze.";toast("Ustawienia zapisane");}});
+
+  function drawChart(canvasId,emptyId){const canvas=$(canvasId),empty=$(emptyId);if(!canvas)return;const all=[...state.entries].filter(e=>e.weight!=null).sort((a,b)=>a.date.localeCompare(b.date));const cutoff=new Date(today);cutoff.setDate(cutoff.getDate()-29);const data=all.filter(e=>parseDate(e.date)>=cutoff);if(data.length<2){empty.style.display="grid";canvas.style.visibility="hidden";return}empty.style.display="none";canvas.style.visibility="visible";const ctx=canvas.getContext("2d"),dpr=window.devicePixelRatio||1,cssW=canvas.parentElement.clientWidth,cssH=canvasId==="#progressChart"?320:260;canvas.width=Math.max(600,cssW)*dpr;canvas.height=cssH*dpr;canvas.style.width="100%";canvas.style.height=cssH+"px";ctx.scale(dpr,dpr);const W=canvas.width/dpr,H=canvas.height/dpr,p={l:46,r:16,t:18,b:34},vals=data.map(x=>x.weight),min=Math.min(...vals),max=Math.max(...vals),spread=Math.max(1,max-min),yMin=min-spread*.25,yMax=max+spread*.25;ctx.clearRect(0,0,W,H);ctx.font="12px system-ui";ctx.fillStyle="#93a0b8";ctx.strokeStyle="#27324a";ctx.lineWidth=1;for(let i=0;i<5;i++){const y=p.t+(H-p.t-p.b)*i/4;ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(W-p.r,y);ctx.stroke();ctx.fillText((yMax-(yMax-yMin)*i/4).toFixed(1),6,y+4)}const x=i=>p.l+(W-p.l-p.r)*(i/(data.length-1)),y=v=>p.t+(H-p.t-p.b)*(1-(v-yMin)/(yMax-yMin));ctx.beginPath();ctx.strokeStyle="#5eead4";ctx.lineWidth=3;data.forEach((e,i)=>i?ctx.lineTo(x(i),y(e.weight)):ctx.moveTo(x(i),y(e.weight)));ctx.stroke();data.forEach((e,i)=>{ctx.beginPath();ctx.arc(x(i),y(e.weight),4,0,Math.PI*2);ctx.fillStyle="#5eead4";ctx.fill()});ctx.fillStyle="#93a0b8";[0,Math.floor((data.length-1)/2),data.length-1].forEach(i=>ctx.fillText(formatDate(data[i].date),Math.max(2,Math.min(W-75,x(i)-28)),H-9));}
+  function drawAllCharts(){requestAnimationFrame(()=>{drawChart("#weightChart","#chartEmpty");drawChart("#progressChart","#progressEmpty")});}
+  function renderAll(){renderDashboard();renderJournal();renderTraining();renderDiet();renderProgress();renderSettings();drawAllCharts();}
+  window.addEventListener("resize",drawAllCharts);
+
+  function download(filename,text,type){const blob=new Blob([text],{type}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),500);}
+  $("#exportJson").addEventListener("click",()=>download("forma-backup.json",JSON.stringify(state,null,2),"application/json"));
+  $("#exportCsv").addEventListener("click",()=>{const headers=["date","weight","calories","protein","carbs","fat","steps","sleep","training","duration","cardio","mood","meals","notes"],q=v=>`"${String(v??"").replaceAll('"','""')}"`,rows=[headers.join(";"),...state.entries.sort((a,b)=>a.date.localeCompare(b.date)).map(e=>headers.map(h=>q(e[h])).join(";"))];download("forma-dziennik.csv","\ufeff"+rows.join("\n"),"text/csv;charset=utf-8");});
+  $("#importJson").addEventListener("change",async ev=>{const f=ev.target.files?.[0];if(!f)return;try{const obj=JSON.parse(await f.text());if(!obj||!Array.isArray(obj.entries))throw Error();state={...cloneDefault(),...obj};const ops=[client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"}),...state.entries.map(e=>client.from("daily_entries").upsert(entryToDb(e),{onConflict:"user_id,entry_date"}))];for(let i=0;i<days.length;i++){const content=state.trainingPlan?.[days[i]]||"";if(content)ops.push(client.from("training_plan").upsert({user_id:currentUser.id,day_of_week:i+1,content},{onConflict:"user_id,day_of_week"}));}ops.push(client.from("diet_plan").upsert({user_id:currentUser.id,content:state.dietPlan||""},{onConflict:"user_id"}));const results=await Promise.all(ops);if(results.some(r=>r.error))throw results.find(r=>r.error).error;saveCache();renderAll();toast("Dane zaimportowane do chmury");}catch(err){console.error(err);toast("Nie udało się zaimportować pliku");}finally{ev.target.value=""}});
+  $("#wipeData").addEventListener("click",async()=>{if(!confirm("Na pewno usunąć wszystkie dane FORMA z chmury? Tej operacji nie można cofnąć."))return;const results=await Promise.all([client.from("daily_entries").delete().eq("user_id",currentUser.id),client.from("training_plan").delete().eq("user_id",currentUser.id),client.from("diet_plan").delete().eq("user_id",currentUser.id),client.from("user_settings").delete().eq("user_id",currentUser.id)]);if(results.some(r=>r.error)){toast("Nie udało się usunąć danych");return;}state=cloneDefault();await client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"});saveCache();renderAll();toast("Dane usunięte");});
+
+  window.addEventListener("online",()=>{ if(currentUser&&!syncing) loadCloud(); });
+  window.addEventListener("offline",()=>setSync(false,"Offline"));
+
+  renderAll();
+  initAuth();
+})();
+
+</script>
+</body>
+</html>
