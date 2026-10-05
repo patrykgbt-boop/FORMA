@@ -23,6 +23,7 @@
         <div class="auth-actions">
           <button id="signInBtn" type="submit" class="primary">Zaloguj</button>
           <button id="signUpBtn" type="button" class="secondary">Utwórz konto</button>
+          <button id="resendBtn" type="button" class="text-btn">Wyślij ponownie link aktywacyjny</button>
         </div>
         <span id="authMessage" class="message"></span>
       </form>
@@ -426,6 +427,18 @@
     if(data.session){ currentUser=data.user; showAuth(false); await loadCloud(); toast("Konto utworzone"); }
     else $("#authMessage").textContent="Konto utworzone. Sprawdź e-mail i potwierdź rejestrację.";
   });
+  $("#resendBtn").addEventListener("click", async ()=>{
+    const email=$("#authEmail").value.trim();
+    if(!email){ $("#authMessage").textContent="Najpierw wpisz adres e-mail."; return; }
+    $("#authMessage").textContent="Wysyłanie nowego linku…";
+    const {error}=await client.auth.resend({type:"signup",email,options:{emailRedirectTo:window.location.origin}});
+    $("#authMessage").textContent=error?error.message:"Nowy link aktywacyjny został wysłany. Użyj najnowszej wiadomości.";
+  });
+  const hashParams=new URLSearchParams(window.location.hash.replace(/^#/,""));
+  if(hashParams.get("error_code")){
+    const desc=hashParams.get("error_description")||"Link aktywacyjny jest nieprawidłowy lub wygasł.";
+    setTimeout(()=>{ const m=$("#authMessage"); if(m) m.textContent=decodeURIComponent(desc.replace(/\+/g," ")); },0);
+  }
   $("#signOutBtn").addEventListener("click", async ()=>{ await client.auth.signOut(); currentUser=null; state=cloneDefault(); renderAll(); showAuth(true); setSync(false,"Niezalogowany"); });
   client.auth.onAuthStateChange(async (event,session)=>{
     if(event==="SIGNED_IN" && session?.user && currentUser?.id!==session.user.id){ currentUser=session.user; showAuth(false); await loadCloud(); }
