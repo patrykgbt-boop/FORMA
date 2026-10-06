@@ -1092,7 +1092,7 @@
   function findSavedProduct(name){return (state.foodProducts||[]).find(p=>p.name.trim().toLowerCase()===String(name||"").trim().toLowerCase())||null;}
   function makeFoodRow(item={}){
     const row=document.createElement("div");row.className="food-row data";row.dataset.id=item.id||"";
-    row.innerHTML=`<input class="fi-name food-name" list="foodProductsDatalist" placeholder="produkt" value="${esc(item.product_name||"")}"><input class="fi-amount" type="number" step="0.1" min="0" placeholder="g" value="${item.amount_g??""}"><input class="fi-kcal" type="number" step="0.1" min="0" placeholder="kcal/100" value="${item.kcal_per_100??""}"><input class="fi-protein" type="number" step="0.1" min="0" placeholder="B/100" value="${item.protein_per_100??""}"><input class="fi-carbs" type="number" step="0.1" min="0" placeholder="W/100" value="${item.carbs_per_100??""}"><input class="fi-fat" type="number" step="0.1" min="0" placeholder="T/100" value="${item.fat_per_100??""}"><div class="food-total">0 kcal<br>0 B • 0 W • 0 T</div><button class="food-remove" type="button">×</button>`;
+    row.innerHTML=`<input class="fi-name food-name" list="foodProductsDatalist" placeholder="wybierz / wpisz produkt" value="${esc(item.product_name||"")}"><input class="fi-amount" type="number" step="0.1" min="0" placeholder="g" value="${item.amount_g??""}"><input class="fi-kcal" type="number" step="0.1" min="0" placeholder="kcal/100" value="${item.kcal_per_100??""}"><input class="fi-protein" type="number" step="0.1" min="0" placeholder="B/100" value="${item.protein_per_100??""}"><input class="fi-carbs" type="number" step="0.1" min="0" placeholder="W/100" value="${item.carbs_per_100??""}"><input class="fi-fat" type="number" step="0.1" min="0" placeholder="T/100" value="${item.fat_per_100??""}"><div class="food-total">0 kcal<br>0 B • 0 W • 0 T</div><button class="food-remove" type="button">×</button>`;
     const name=row.querySelector(".fi-name");
     function applySaved(){
       const p=findSavedProduct(name.value);if(!p)return;
@@ -1138,7 +1138,7 @@
   function renderFoodLog(){
     const box=$("#foodMeals");if(!box)return;const date=selectedDietDate();
     $("#foodLogTitle").textContent=`Dziennik posiłków — ${formatDate(date)}`;
-    $("#foodProductsDatalist").innerHTML=(state.foodProducts||[]).map(p=>`<option value="${esc(p.name)}"></option>`).join("");
+    $("#foodProductsDatalist").innerHTML=(state.foodProducts||[]).map(p=>`<option value="${esc(p.name)}" label="${Math.round(Number(p.kcal_per_100)||0)} kcal • B ${Number(p.protein_per_100)||0} • W ${Number(p.carbs_per_100)||0} • T ${Number(p.fat_per_100)||0} /100 g"></option>`).join("");
     box.innerHTML="";
     foodMealTypes.forEach(([key,label])=>{
       const items=foodItemsFor(date,key),tot=mealTotals(items),sec=document.createElement("div");sec.className="food-meal-section";sec.dataset.meal=key;
