@@ -1049,7 +1049,7 @@
     const box=$("#promoStores");if(!box)return;
     const stores=(state.promotionStores||[]).sort((a,b)=>Number(a.sort_order)-Number(b.sort_order));
     box.innerHTML=stores.map(s=>'<label class="promo-store-toggle"><input type="checkbox" data-store="'+esc(s.store_name)+'" '+(s.enabled?"checked":"")+'>'+esc(s.store_name)+'</label>').join("")||'<span class="muted">Brak skonfigurowanych sklepów.</span>';
-    $("#promoStores input[data-store]").forEach(ch=>ch.addEventListener("change",async()=>{
+    $$("#promoStores input[data-store]").forEach(ch=>ch.addEventListener("change",async()=>{
       const store=ch.dataset.store,row=(state.promotionStores||[]).find(x=>x.store_name===store);if(!row)return;
       const prev=!!row.enabled,next=!!ch.checked;row.enabled=next;renderShoppingList();
       const r=await client.from("promotion_store_preferences").update({enabled:next,updated_at:new Date().toISOString()}).eq("user_id",currentUser.id).eq("store_name",store);
