@@ -1101,7 +1101,7 @@
         rows.map(({item,best})=>'<label class="store-basket-item '+(item.checked?"checked":"")+'" data-id="'+item.id+'"><input class="store-shopping-check" type="checkbox" '+(item.checked?"checked":"")+'><div class="store-basket-name">'+esc(item.item_name)+'<span class="store-basket-meta">'+esc(item.quantity_text||"")+(best?.loyalty_required?" • karta/aplikacja":"")+'</span></div><div class="store-basket-price">'+(best?esc(best.price_text||(best.price_value!=null?String(best.price_value)+" zł":"promocja")):"—")+'</div></label>').join("")+
       '</div>';
     }).join("");
-    $(".store-shopping-check").forEach(ch=>ch.addEventListener("change",async()=>{
+    $$(".store-shopping-check").forEach(ch=>ch.addEventListener("change",async()=>{
       const row=ch.closest(".store-basket-item"),id=row.dataset.id,item=(state.shoppingList||[]).find(x=>x.id===id);if(!item)return;
       const prev=!!item.checked,next=!!ch.checked;item.checked=next;
       const r=await client.from("shopping_list_items").update({checked:next,updated_at:new Date().toISOString()}).eq("id",id).eq("user_id",currentUser.id);
@@ -1140,7 +1140,7 @@
       else saveCache();
     }));
     renderStoreShoppingLists();
-    $(".shopping-delete").forEach(btn=>btn.addEventListener("click",async()=>{
+    $$(".shopping-delete").forEach(btn=>btn.addEventListener("click",async()=>{
       const row=btn.closest(".shopping-item"),id=row.dataset.id,item=(state.shoppingList||[]).find(x=>x.id===id);if(!item)return;
       const r=await client.from("shopping_list_items").delete().eq("id",id).eq("user_id",currentUser.id);
       if(r.error){console.error(r.error);toast("Nie udało się usunąć produktu");return;}
