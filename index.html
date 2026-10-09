@@ -32,6 +32,7 @@
 .strength-main-lifts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}.strength-lift-card{border:1px solid var(--line);border-radius:10px;background:#0c1525;padding:10px}.strength-lift-card span{display:block;color:var(--muted);font-size:10px}.strength-lift-card strong{display:block;font-size:17px;margin:5px 0 2px}.strength-lift-card small{color:var(--muted);font-size:10px}.strength-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}.strength-stats>div{border:1px solid var(--line);border-radius:10px;padding:10px}.strength-stats span{display:block;color:var(--muted);font-size:10px}.strength-stats strong{display:block;margin-top:5px;font-size:15px}.strength-note{margin:8px 0 0}.strength-chart-wrap{margin-top:8px}
 @media(max-width:900px){.today-hub-grid,.strength-main-lifts,.strength-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.pantry-add{grid-template-columns:1fr 90px 80px 100px}.pantry-add button{grid-column:1/-1}.pantry-row{grid-template-columns:minmax(120px,1fr) 90px 75px;}.pantry-row .pantry-threshold,.pantry-row .pantry-status,.pantry-row .pantry-actions{grid-column:auto}}
 @media(max-width:560px){.today-hub-grid,.strength-main-lifts,.strength-stats{grid-template-columns:1fr}.pantry-add{grid-template-columns:1fr 1fr}.pantry-add #pantryName{grid-column:1/-1}.pantry-row{grid-template-columns:1fr 78px 70px}.pantry-row .pantry-name{grid-column:1/-1}.pantry-row .pantry-threshold{grid-column:1/2}.pantry-row .pantry-actions{grid-column:2/-1;justify-self:end}}
+.meal-card-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}.meal-card-head h4{margin:0}.meal-recipe-btn{padding:6px 9px;font-size:10px}.meal-recipe-panel{margin-top:9px;border:1px solid var(--line);border-radius:10px;background:#0b1424;padding:10px}.meal-recipe-panel.hidden{display:none}.recipe-title{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.recipe-title strong{font-size:13px}.recipe-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.recipe-chip{font-size:9px;border:1px solid var(--line);border-radius:999px;padding:3px 6px;color:var(--muted)}.recipe-block{margin-top:10px}.recipe-block b{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#8eead9;margin-bottom:4px}.recipe-text{white-space:pre-wrap;font-size:11px;line-height:1.5;color:#d9e1ee}.recipe-empty{font-size:11px;color:var(--muted);line-height:1.45}
 </style>
 </head>
 <body>
@@ -361,10 +362,26 @@
             <label>Białko <input id="dietDayProtein" type="number" min="50" max="400"> g</label>
           </div>
           <div class="diet-meal-grid">
-            <div class="diet-meal-card"><h4>Śniadanie</h4><textarea id="dietBreakfast"></textarea></div>
-            <div class="diet-meal-card"><h4>Obiad</h4><textarea id="dietLunch"></textarea></div>
-            <div class="diet-meal-card"><h4>Kolacja</h4><textarea id="dietDinner"></textarea></div>
-            <div class="diet-meal-card"><h4>Dodatki / przekąski</h4><textarea id="dietExtras"></textarea></div>
+            <div class="diet-meal-card" data-meal-card="breakfast">
+              <div class="meal-card-head"><h4>Śniadanie</h4><button class="meal-recipe-btn secondary" data-recipe-meal="breakfast" type="button">Przepis</button></div>
+              <textarea id="dietBreakfast"></textarea>
+              <div id="recipe-breakfast" class="meal-recipe-panel hidden"></div>
+            </div>
+            <div class="diet-meal-card" data-meal-card="lunch">
+              <div class="meal-card-head"><h4>Obiad</h4><button class="meal-recipe-btn secondary" data-recipe-meal="lunch" type="button">Przepis</button></div>
+              <textarea id="dietLunch"></textarea>
+              <div id="recipe-lunch" class="meal-recipe-panel hidden"></div>
+            </div>
+            <div class="diet-meal-card" data-meal-card="dinner">
+              <div class="meal-card-head"><h4>Kolacja</h4><button class="meal-recipe-btn secondary" data-recipe-meal="dinner" type="button">Przepis</button></div>
+              <textarea id="dietDinner"></textarea>
+              <div id="recipe-dinner" class="meal-recipe-panel hidden"></div>
+            </div>
+            <div class="diet-meal-card" data-meal-card="extras">
+              <div class="meal-card-head"><h4>Dodatki / przekąski</h4><button class="meal-recipe-btn secondary" data-recipe-meal="extras" type="button">Przepis</button></div>
+              <textarea id="dietExtras"></textarea>
+              <div id="recipe-extras" class="meal-recipe-panel hidden"></div>
+            </div>
             <div class="diet-meal-card diet-prep"><h4>Przygotowanie / meal prep</h4><textarea id="dietPrep"></textarea></div>
           </div>
           <div class="form-actions" style="margin-top:14px">
@@ -612,7 +629,7 @@
   const CACHE_PREFIX = "forma_cloud_v1_";
   const DEFAULT = {
     settings:{height:null,targetWeight:null,calories:null,protein:null,carbs:null,fat:null,steps:null,workouts:4,goal:"forma"},
-    entries:[], trainingPlan:{}, trainingProgram:"", dietPlan:"", dietWeekPlan:[], shoppingList:[], shoppingPromotions:[], promotionStores:[], pantryInventory:[], weeklyReviews:[], exercisePlan:[], workoutSessions:[], workoutSets:[], trainingSchedule:[], foodProducts:[], foodLogItems:[], mealPresets:[], mealPresetItems:[]
+    entries:[], trainingPlan:{}, trainingProgram:"", dietPlan:"", dietWeekPlan:[], dietRecipes:[], shoppingList:[], shoppingPromotions:[], promotionStores:[], pantryInventory:[], weeklyReviews:[], exercisePlan:[], workoutSessions:[], workoutSets:[], trainingSchedule:[], foodProducts:[], foodLogItems:[], mealPresets:[], mealPresetItems:[]
   };
 
   const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
@@ -691,13 +708,14 @@
     setSync(true,"Pobieranie danych…");
     const cached=loadCache();
     try{
-      const [sRes,eRes,tRes,pRes,dRes,dwRes,slRes,spRes,psRes,piRes,wrRes,xRes,wRes,setRes,tsRes,fpRes,flRes,mpRes,mpiRes]=await Promise.all([
+      const [sRes,eRes,tRes,pRes,dRes,dwRes,drRes,slRes,spRes,psRes,piRes,wrRes,xRes,wRes,setRes,tsRes,fpRes,flRes,mpRes,mpiRes]=await Promise.all([
         client.from("user_settings").select("*").eq("user_id",currentUser.id).maybeSingle(),
         client.from("daily_entries").select("*").eq("user_id",currentUser.id).order("entry_date",{ascending:true}),
         client.from("training_plan").select("*").eq("user_id",currentUser.id).order("day_of_week",{ascending:true}),
         client.from("training_program").select("*").eq("user_id",currentUser.id).maybeSingle(),
         client.from("diet_plan").select("*").eq("user_id",currentUser.id).maybeSingle(),
         client.from("diet_week_plan").select("*").eq("user_id",currentUser.id).order("week_start",{ascending:true}).order("day_of_week",{ascending:true}),
+        client.from("diet_recipes").select("*").eq("user_id",currentUser.id).order("week_start",{ascending:true}).order("day_of_week",{ascending:true}).order("meal_type",{ascending:true}),
         client.from("shopping_list_items").select("*").eq("user_id",currentUser.id).order("week_start",{ascending:true}).order("sort_order",{ascending:true}),
         client.from("shopping_promotions").select("*").eq("user_id",currentUser.id).order("week_start",{ascending:true}).order("is_best",{ascending:false}).order("price_value",{ascending:true}),
         client.from("promotion_store_preferences").select("*").eq("user_id",currentUser.id).order("sort_order",{ascending:true}),
@@ -712,7 +730,7 @@
         client.from("meal_presets").select("*").eq("user_id",currentUser.id).order("name",{ascending:true}),
         client.from("meal_preset_items").select("*").eq("user_id",currentUser.id).order("sort_order",{ascending:true})
       ]);
-      for(const r of [sRes,eRes,tRes,pRes,dRes,dwRes,slRes,spRes,psRes,piRes,wrRes,xRes,wRes,setRes,tsRes,fpRes,flRes,mpRes,mpiRes]) if(r.error) throw r.error;
+      for(const r of [sRes,eRes,tRes,pRes,dRes,dwRes,drRes,slRes,spRes,psRes,piRes,wrRes,xRes,wRes,setRes,tsRes,fpRes,flRes,mpRes,mpiRes]) if(r.error) throw r.error;
       state=cloneDefault();
       if(sRes.data) state.settings=settingsFromDb(sRes.data);
       else { state.settings=cached.settings||cloneDefault().settings; await client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"}); }
@@ -721,6 +739,7 @@
       state.trainingProgram=pRes.data?.content||"";
       state.dietPlan=dRes.data?.content||"";
       state.dietWeekPlan=dwRes.data||[];
+      state.dietRecipes=drRes.data||[];
       state.shoppingList=slRes.data||[];
       state.shoppingPromotions=spRes.data||[];
       state.promotionStores=psRes.data||[];
@@ -1106,6 +1125,31 @@
     const week=currentDietWeekStart();
     return (state.dietWeekPlan||[]).find(x=>x.week_start===week&&Number(x.day_of_week)===Number(day))||null;
   }
+  function dietRecipeFor(mealType){
+    const week=currentDietWeekStart();
+    return (state.dietRecipes||[]).find(x=>x.week_start===week&&Number(x.day_of_week)===Number(selectedDietDay)&&x.meal_type===mealType)||null;
+  }
+  function renderMealRecipes(){
+    ["breakfast","lunch","dinner","extras"].forEach(meal=>{
+      const panel=$("#recipe-"+meal),btn=document.querySelector('[data-recipe-meal="'+meal+'"]');if(!panel||!btn)return;
+      const r=dietRecipeFor(meal);
+      btn.textContent=r?"Przepis ✓":"Przepis";
+      if(!r){
+        panel.innerHTML='<div class="recipe-empty">Przepis nie został jeszcze wygenerowany dla tego posiłku. Automatyczny plan sobotni będzie tworzył instrukcję, składniki, czas i porcje razem z menu.</div>';
+        return;
+      }
+      const meta=[];
+      if(r.prep_minutes)meta.push('<span class="recipe-chip">⏱ '+esc(r.prep_minutes)+' min</span>');
+      if(r.servings)meta.push('<span class="recipe-chip">'+esc(r.servings)+' por.</span>');
+      if(r.kcal_estimate)meta.push('<span class="recipe-chip">~'+esc(r.kcal_estimate)+' kcal/por.</span>');
+      if(r.protein_g_estimate)meta.push('<span class="recipe-chip">~'+esc(r.protein_g_estimate)+' g B/por.</span>');
+      panel.innerHTML='<div class="recipe-title"><strong>'+esc(r.recipe_name||"Przepis")+'</strong></div>'+
+        (meta.length?'<div class="recipe-meta">'+meta.join("")+'</div>':'')+
+        '<div class="recipe-block"><b>Składniki</b><div class="recipe-text">'+esc(r.ingredients||"Brak listy składników.")+'</div></div>'+
+        '<div class="recipe-block"><b>Przygotowanie</b><div class="recipe-text">'+esc(r.instructions||"Brak instrukcji.")+'</div></div>'+
+        (r.notes?'<div class="recipe-block"><b>Wskazówki</b><div class="recipe-text">'+esc(r.notes)+'</div></div>':'');
+    });
+  }
   function renderDietDay(){
     const row=dietRow(selectedDietDay),s=state.settings;
     $("#dietBreakfast").value=row?.breakfast||"";
@@ -1117,6 +1161,7 @@
     $("#dietDayProtein").value=row?.protein_target_g??s.protein??"";
     $$("#dietDayTabs .diet-day-btn").forEach(b=>b.classList.toggle("active",Number(b.dataset.day)===selectedDietDay));
     $("#dietDayMessage").textContent="";
+    renderMealRecipes();
   }
   function renderDiet(){
     const s=state.settings,seven=lastNDays(7),ak=avg(seven.filter(e=>e.calories!=null).map(e=>e.calories)),ap=avg(seven.filter(e=>e.protein!=null).map(e=>e.protein));
@@ -1136,6 +1181,13 @@
     renderFoodLog();
     renderFoodProductLibrary();
   }
+
+  $$(".meal-recipe-btn").forEach(btn=>btn.addEventListener("click",()=>{
+    const meal=btn.dataset.recipeMeal,panel=$("#recipe-"+meal);if(!panel)return;
+    const opening=panel.classList.contains("hidden");
+    $$(".meal-recipe-panel").forEach(x=>x.classList.add("hidden"));
+    if(opening)panel.classList.remove("hidden");
+  }));
 
   $("#dietWeekPrev").addEventListener("click",()=>{selectedDietWeekOffset=Math.max(-8,selectedDietWeekOffset-1);renderDiet();});
   $("#dietWeekNext").addEventListener("click",()=>{selectedDietWeekOffset=Math.min(12,selectedDietWeekOffset+1);renderDiet();});
@@ -1752,8 +1804,8 @@
   function download(filename,text,type){const blob=new Blob([text],{type}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),500);}
   $("#exportJson").addEventListener("click",()=>download("forma-backup.json",JSON.stringify(state,null,2),"application/json"));
   $("#exportCsv").addEventListener("click",()=>{const headers=["date","weight","calories","protein","carbs","fat","steps","sleep","training","duration","cardio","mood","meals","notes"],q=v=>`"${String(v??"").replaceAll('"','""')}"`,rows=[headers.join(";"),...state.entries.sort((a,b)=>a.date.localeCompare(b.date)).map(e=>headers.map(h=>q(e[h])).join(";"))];download("forma-dziennik.csv","\ufeff"+rows.join("\n"),"text/csv;charset=utf-8");});
-  $("#importJson").addEventListener("change",async ev=>{const f=ev.target.files?.[0];if(!f)return;try{const obj=JSON.parse(await f.text());if(!obj||!Array.isArray(obj.entries))throw Error();state={...cloneDefault(),...obj};const ops=[client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"}),...state.entries.map(e=>client.from("daily_entries").upsert(entryToDb(e),{onConflict:"user_id,entry_date"}))];for(let i=0;i<days.length;i++){const content=state.trainingPlan?.[days[i]]||"";if(content)ops.push(client.from("training_plan").upsert({user_id:currentUser.id,day_of_week:i+1,content},{onConflict:"user_id,day_of_week"}));}ops.push(client.from("training_program").upsert({user_id:currentUser.id,content:state.trainingProgram||""},{onConflict:"user_id"}));ops.push(client.from("diet_plan").upsert({user_id:currentUser.id,content:state.dietPlan||""},{onConflict:"user_id"}));if(Array.isArray(state.trainingSchedule)&&state.trainingSchedule.length){ops.push(client.from("training_schedule").upsert(state.trainingSchedule.map(x=>({...x,user_id:currentUser.id,updated_at:new Date().toISOString()}))));}if(Array.isArray(state.shoppingList)&&state.shoppingList.length){ops.push(client.from("shopping_list_items").upsert(state.shoppingList.map(x=>({...x,user_id:currentUser.id,updated_at:new Date().toISOString()}))));}if(Array.isArray(state.shoppingPromotions)&&state.shoppingPromotions.length){ops.push(client.from("shopping_promotions").upsert(state.shoppingPromotions.map(x=>({...x,user_id:currentUser.id,updated_at:new Date().toISOString()})),{onConflict:"user_id,shopping_item_id,store_name"}));}if(Array.isArray(state.promotionStores)&&state.promotionStores.length){ops.push(client.from("promotion_store_preferences").upsert(state.promotionStores.map(x=>({...x,user_id:currentUser.id,updated_at:new Date().toISOString()})),{onConflict:"user_id,store_name"}));}if(Array.isArray(state.pantryInventory)&&state.pantryInventory.length){ops.push(client.from("pantry_inventory").upsert(state.pantryInventory.map(x=>({...x,user_id:currentUser.id,updated_at:new Date().toISOString()})),{onConflict:"user_id,product_name"}));}if(Array.isArray(state.weeklyReviews)&&state.weeklyReviews.length){ops.push(client.from("weekly_progress_reviews").upsert(state.weeklyReviews.map(x=>({...x,user_id:currentUser.id,updated_at:new Date().toISOString()})),{onConflict:"user_id,week_start"}));}const results=await Promise.all(ops);if(results.some(r=>r.error))throw results.find(r=>r.error).error;saveCache();renderAll();toast("Dane zaimportowane do chmury");}catch(err){console.error(err);toast("Nie udało się zaimportować pliku");}finally{ev.target.value=""}});
-  $("#wipeData").addEventListener("click",async()=>{if(!confirm("Na pewno usunąć wszystkie dane FORMA z chmury? Tej operacji nie można cofnąć."))return;const results=await Promise.all([client.from("shopping_promotions").delete().eq("user_id",currentUser.id),client.from("promotion_store_preferences").delete().eq("user_id",currentUser.id),client.from("pantry_inventory").delete().eq("user_id",currentUser.id),client.from("weekly_progress_reviews").delete().eq("user_id",currentUser.id),client.from("shopping_list_items").delete().eq("user_id",currentUser.id),client.from("training_schedule").delete().eq("user_id",currentUser.id),client.from("workout_sessions").delete().eq("user_id",currentUser.id),client.from("meal_preset_items").delete().eq("user_id",currentUser.id),client.from("meal_presets").delete().eq("user_id",currentUser.id),client.from("food_log_items").delete().eq("user_id",currentUser.id),client.from("food_products").delete().eq("user_id",currentUser.id),client.from("training_exercises").delete().eq("user_id",currentUser.id),client.from("diet_week_plan").delete().eq("user_id",currentUser.id),client.from("daily_entries").delete().eq("user_id",currentUser.id),client.from("training_plan").delete().eq("user_id",currentUser.id),client.from("training_program").delete().eq("user_id",currentUser.id),client.from("diet_plan").delete().eq("user_id",currentUser.id),client.from("user_settings").delete().eq("user_id",currentUser.id)]);if(results.some(r=>r.error)){toast("Nie udało się usunąć danych");return;}state=cloneDefault();await client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"});saveCache();renderAll();toast("Dane usunięte");});
+  $("#importJson").addEventListener("change",async ev=>{const f=ev.target.files?.[0];if(!f)return;try{const obj=JSON.parse(await f.text());if(!obj||!Array.isArray(obj.entries))throw Error();state={...cloneDefault(),...obj};const ops=[client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"}),...state.entries.map(e=>client.from("daily_entries").upsert(entryToDb(e),{onConflict:"user_id,entry_date"}))];for(let i=0;i<days.length;i++){const content=state.trainingPlan?.[days[i]]||"";if(content)ops.push(client.from("training_plan").upsert({user_id:currentUser.id,day_of_week:i+1,content},{onConflict:"user_id,day_of_week"}));}ops.push(client.from("training_program").upsert({user_id:currentUser.id,content:state.trainingProgram||""},{onConflict:"user_id"}));ops.push(client.from("diet_plan").upsert({user_id:currentUser.id,content:state.dietPlan||""},{onConflict:"user_id"}));if(Array.isArray(state.trainingSchedule)&&state.trainingSchedule.length){ops.push(client.from("training_schedule").upsert(state.trainingSchedule.map(x=>({...x,user_id:currentUser.id,updated_at:new Date().toISOString()}))));}if(Array.isArray(state.dietRecipes)&&state.dietRecipes.length){ops.push(client.from("diet_recipes").upsert(state.dietRecipes.map(x=>({...x,user_id:currentUser.id,updated_at:new Date().toISOString()})),{onConflict:"user_id,week_start,day_of_week,meal_type"}));}if(Array.isArray(state.shoppingList)&&state.shoppingList.length){ops.push(client.from("shopping_list_items").upsert(state.shoppingList.map(x=>({...x,user_id:currentUser.id,updated_at:new Date().toISOString()}))));}if(Array.isArray(state.shoppingPromotions)&&state.shoppingPromotions.length){ops.push(client.from("shopping_promotions").upsert(state.shoppingPromotions.map(x=>({...x,user_id:currentUser.id,updated_at:new Date().toISOString()})),{onConflict:"user_id,shopping_item_id,store_name"}));}if(Array.isArray(state.promotionStores)&&state.promotionStores.length){ops.push(client.from("promotion_store_preferences").upsert(state.promotionStores.map(x=>({...x,user_id:currentUser.id,updated_at:new Date().toISOString()})),{onConflict:"user_id,store_name"}));}if(Array.isArray(state.pantryInventory)&&state.pantryInventory.length){ops.push(client.from("pantry_inventory").upsert(state.pantryInventory.map(x=>({...x,user_id:currentUser.id,updated_at:new Date().toISOString()})),{onConflict:"user_id,product_name"}));}if(Array.isArray(state.weeklyReviews)&&state.weeklyReviews.length){ops.push(client.from("weekly_progress_reviews").upsert(state.weeklyReviews.map(x=>({...x,user_id:currentUser.id,updated_at:new Date().toISOString()})),{onConflict:"user_id,week_start"}));}const results=await Promise.all(ops);if(results.some(r=>r.error))throw results.find(r=>r.error).error;saveCache();renderAll();toast("Dane zaimportowane do chmury");}catch(err){console.error(err);toast("Nie udało się zaimportować pliku");}finally{ev.target.value=""}});
+  $("#wipeData").addEventListener("click",async()=>{if(!confirm("Na pewno usunąć wszystkie dane FORMA z chmury? Tej operacji nie można cofnąć."))return;const results=await Promise.all([client.from("shopping_promotions").delete().eq("user_id",currentUser.id),client.from("promotion_store_preferences").delete().eq("user_id",currentUser.id),client.from("pantry_inventory").delete().eq("user_id",currentUser.id),client.from("weekly_progress_reviews").delete().eq("user_id",currentUser.id),client.from("shopping_list_items").delete().eq("user_id",currentUser.id),client.from("training_schedule").delete().eq("user_id",currentUser.id),client.from("workout_sessions").delete().eq("user_id",currentUser.id),client.from("meal_preset_items").delete().eq("user_id",currentUser.id),client.from("meal_presets").delete().eq("user_id",currentUser.id),client.from("food_log_items").delete().eq("user_id",currentUser.id),client.from("food_products").delete().eq("user_id",currentUser.id),client.from("training_exercises").delete().eq("user_id",currentUser.id),client.from("diet_recipes").delete().eq("user_id",currentUser.id),client.from("diet_week_plan").delete().eq("user_id",currentUser.id),client.from("daily_entries").delete().eq("user_id",currentUser.id),client.from("training_plan").delete().eq("user_id",currentUser.id),client.from("training_program").delete().eq("user_id",currentUser.id),client.from("diet_plan").delete().eq("user_id",currentUser.id),client.from("user_settings").delete().eq("user_id",currentUser.id)]);if(results.some(r=>r.error)){toast("Nie udało się usunąć danych");return;}state=cloneDefault();await client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"});saveCache();renderAll();toast("Dane usunięte");});
 
   window.addEventListener("online",()=>{ if(currentUser&&!syncing) loadCloud(); });
   window.addEventListener("offline",()=>setSync(false,"Offline"));
