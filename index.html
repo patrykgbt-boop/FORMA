@@ -34,6 +34,7 @@
 @media(max-width:560px){.today-hub-grid,.strength-main-lifts,.strength-stats{grid-template-columns:1fr}.pantry-add{grid-template-columns:1fr 1fr}.pantry-add #pantryName{grid-column:1/-1}.pantry-row{grid-template-columns:1fr 78px 70px}.pantry-row .pantry-name{grid-column:1/-1}.pantry-row .pantry-threshold{grid-column:1/2}.pantry-row .pantry-actions{grid-column:2/-1;justify-self:end}}
 .meal-card-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}.meal-card-head h4{margin:0}.meal-recipe-btn{padding:6px 9px;font-size:10px}.meal-recipe-panel{margin-top:9px;border:1px solid var(--line);border-radius:10px;background:#0b1424;padding:10px}.meal-recipe-panel.hidden{display:none}.recipe-title{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.recipe-title strong{font-size:13px}.recipe-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.recipe-chip{font-size:9px;border:1px solid var(--line);border-radius:999px;padding:3px 6px;color:var(--muted)}.recipe-block{margin-top:10px}.recipe-block b{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#8eead9;margin-bottom:4px}.recipe-text{white-space:pre-wrap;font-size:11px;line-height:1.5;color:#d9e1ee}.recipe-empty{font-size:11px;color:var(--muted);line-height:1.45}
 .exercise-description{margin:0 0 12px;padding:10px 12px;background:#111f32;border:1px solid #31505b;border-radius:10px}.exercise-description summary{cursor:pointer;font-size:12px;font-weight:700;color:#8eead9;list-style-position:inside}.exercise-description summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.exercise-description p{margin:8px 0 0;color:#d9e1ee;font-size:12px;line-height:1.6}.plan-editor-grid .description-field{grid-column:1/-1}
+.exercise-variant-label{display:grid;gap:6px;color:var(--muted);font-size:12px;margin-bottom:12px}.exercise-variant-input{width:100%;background:#0d1627;border:1px solid var(--line);color:var(--text);border-radius:9px;padding:9px 10px;outline:none}.exercise-variant-input:focus{border-color:var(--accent)}
 </style>
 </head>
 <body>
@@ -886,9 +887,9 @@
   function dateDayNumber(date){const d=parseDate(date).getDay();return d===0?7:d;}
   function sessionFor(date,day){return (state.workoutSessions||[]).find(s=>s.session_date===date&&Number(s.day_of_week)===Number(day));}
   function sessionSets(sessionId,exerciseId){return (state.workoutSets||[]).filter(s=>s.session_id===sessionId&&s.exercise_id===exerciseId).sort((a,b)=>a.set_number-b.set_number);}
-  function recentPerformances(exerciseId,beforeDate){
+  function recentPerformances(exerciseId,beforeDate,variantName){
     return (state.workoutSessions||[]).filter(s=>s.session_date<beforeDate).sort((a,b)=>b.session_date.localeCompare(a.session_date)).map(s=>{
-      const sets=sessionSets(s.id,exerciseId).filter(x=>x.reps!=null);
+      const sets=sessionSets(s.id,exerciseId).filter(x=>x.reps!=null&&x.exercise_name===(variantName||x.exercise_name));
       return sets.length?{session:s,sets}:null;
     }).filter(Boolean).slice(0,2);
   }
@@ -905,10 +906,10 @@
     const base=work[0].weight_kg==null?null:Number(work[0].weight_kg);
     return {allTop,allMin,base};
   }
-  function progressionFor(ex,date){
-    const prev=recentPerformances(ex.id,date), step=Number(ex.progression_step_kg||2.5);
+  function progressionFor(ex,date,variantName=ex.name){
+    const prev=recentPerformances(ex.id,date,variantName), step=Number(ex.progression_step_kg||2.5);
     if(!prev.length){
-      return {weight:ex.start_weight_kg==null?null:Number(ex.start_weight_kg),message:"Pierwsza sesja — ustal bazę",previous:"Brak wcześniejszego wyniku"};
+      return {weight:variantName!==ex.name||ex.start_weight_kg==null?null:Number(ex.start_weight_kg),message:variantName!==ex.name?"Inny wariant — ustal ciężar na tej maszynie":"Pierwsza sesja — ustal bazę",previous:"Brak wcześniejszego wyniku dla tego wariantu"};
     }
     const p1=evaluatePerformance(ex,prev[0].sets),p2=prev[1]?evaluatePerformance(ex,prev[1].sets):null;
     let weight=p1.base, message="Utrzymaj ciężar i dodaj powtórzenia";
@@ -937,13 +938,14 @@
     if(!exercises.length){container.innerHTML='<div class="workout-empty">Brak ćwiczeń w tym dniu. Dodaj je w zakładce Trening.</div>';return;}
     container.innerHTML="";
     exercises.forEach(ex=>{
-      const progression=progressionFor(ex,date);const existing=session?sessionSets(session.id,ex.id):[];
+      const existing=session?sessionSets(session.id,ex.id):[];const variantName=existing[0]?.exercise_name||ex.name;let progression=progressionFor(ex,date,variantName);
       const card=document.createElement("div");card.className="exercise-card";card.dataset.exid=ex.id;card.dataset.name=ex.name;card.dataset.recweight=progression.weight??"";
-      card.innerHTML=`<div class="exercise-head"><div><h4>${esc(ex.name)}</h4><div class="exercise-meta">Plan: ${ex.target_sets}×${ex.rep_min}${ex.rep_max!==ex.rep_min?"–"+ex.rep_max:""} • krok ${ex.progression_step_kg} kg${ex.notes?"<br>"+esc(ex.notes):""}</div></div><div class="progression-chip"><strong>${esc(progression.message)}</strong><br><span class="muted">Sugerowany ciężar: ${progression.weight==null?"ustal na treningu":progression.weight+" kg"}</span></div></div>${ex.description?'<details class="exercise-description"><summary>Jak wykonać ćwiczenie?</summary><p>'+esc(ex.description)+'</p></details>':''}<div class="set-table"><div class="set-row header"><div>#</div><div>Ciężar</div><div>Powt.</div><div>RIR</div><div></div></div><div class="set-rows"></div></div><div class="exercise-actions"><button class="secondary add-set" type="button">+ seria</button></div><div class="history-mini">Poprzednio: ${esc(progression.previous)}</div>`;
+      card.innerHTML=`<div class="exercise-head"><div><h4>${esc(ex.name)}</h4><div class="exercise-meta">Plan: ${ex.target_sets}×${ex.rep_min}${ex.rep_max!==ex.rep_min?"–"+ex.rep_max:""} • krok ${ex.progression_step_kg} kg${ex.notes?"<br>"+esc(ex.notes):""}</div></div><div class="progression-chip"><strong>${esc(progression.message)}</strong><br><span class="muted">Sugerowany ciężar: ${progression.weight==null?"ustal na treningu":progression.weight+" kg"}</span></div></div>${ex.description?'<details class="exercise-description"><summary>Jak wykonać ćwiczenie?</summary><p>'+esc(ex.description)+'</p></details>':''}<label class="exercise-variant-label">Wykonany wariant / maszyna<input class="exercise-variant-input" type="text" value="${esc(variantName)}" placeholder="np. Life Fitness Pulldown"></label><div class="set-table"><div class="set-row header"><div>#</div><div>Ciężar</div><div>Powt.</div><div>RIR</div><div></div></div><div class="set-rows"></div></div><div class="exercise-actions"><button class="secondary add-set" type="button">+ seria</button></div><div class="history-mini">Poprzednio: ${esc(progression.previous)}</div>`;
       const rows=card.querySelector(".set-rows");
       if(existing.length) existing.forEach((s,i)=>rows.appendChild(makeSetRow(i+1,s.weight_kg==null?"":Number(s.weight_kg),s.reps??"",s.rir??"")));
       else for(let i=1;i<=Number(ex.target_sets);i++) rows.appendChild(makeSetRow(i,progression.weight??"","",""));
       card.querySelector(".add-set").addEventListener("click",()=>rows.appendChild(makeSetRow(rows.children.length+1,progression.weight??"","","")));
+       card.querySelector(".exercise-variant-input").addEventListener("change",ev=>{const variant=ev.target.value.trim()||ex.name;progression=progressionFor(ex,date,variant);card.dataset.recweight=progression.weight??"";card.querySelector(".progression-chip").innerHTML="<strong>"+esc(progression.message)+"</strong><br><span class=\"muted\">Sugerowany ciężar: "+(progression.weight==null?"ustal na treningu":progression.weight+" kg")+"</span>";card.querySelector(".history-mini").textContent="Poprzednio: "+progression.previous;});
       container.appendChild(card);
     });
     $("#workoutMessage").textContent=session?"Wczytano zapisany trening z tego dnia. Możesz go edytować.":"";
@@ -952,7 +954,7 @@
     if(!currentUser)return;
     const date=$("#jDate").value||todayISO,day=Number($("#workoutDaySelect").value);
     $("#workoutMessage").textContent="Zapisywanie treningu…";
-    const sessionPayload={user_id:currentUser.id,session_date:date,day_of_week:day,duration_min:val("#jDuration"),mood:$("#jMood").value||null,notes:$("#jNotes").value.trim(),completed_at:new Date().toISOString(),updated_at:new Date().toISOString()};
+    const sessionPayload={user_id:currentUser.id,session_date:date,day_of_week:day,duration_min:val("#jDuration"),mood:$("#jMood").value||null,notes:$("#jNotes").value.trim()||sessionFor(date,day)?.notes||"",completed_at:new Date().toISOString(),updated_at:new Date().toISOString()};
     const sRes=await client.from("workout_sessions").upsert(sessionPayload,{onConflict:"user_id,session_date,day_of_week"}).select("*").single();
     if(sRes.error){console.error(sRes.error);$("#workoutMessage").textContent="Błąd zapisu sesji.";return;}
     const sessionId=sRes.data.id;
@@ -963,7 +965,7 @@
       [...card.querySelectorAll(".set-row.data")].forEach((row,i)=>{
         const w=row.querySelector(".set-weight").value,r=row.querySelector(".set-reps").value,rir=row.querySelector(".set-rir").value;
         if(w===""&&r===""&&rir==="")return;
-        payload.push({session_id:sessionId,user_id:currentUser.id,exercise_id:card.dataset.exid,exercise_name:card.dataset.name,set_number:i+1,weight_kg:w===""?null:Number(w),reps:r===""?null:Number(r),rir:rir===""?null:Number(rir),updated_at:new Date().toISOString()});
+        payload.push({session_id:sessionId,user_id:currentUser.id,exercise_id:card.dataset.exid,exercise_name:card.querySelector(".exercise-variant-input")?.value.trim()||card.dataset.name,set_number:i+1,weight_kg:w===""?null:Number(w),reps:r===""?null:Number(r),rir:rir===""?null:Number(rir),updated_at:new Date().toISOString()});
       });
     });
     if(payload.length){const ins=await client.from("workout_sets").insert(payload);if(ins.error){console.error(ins.error);$("#workoutMessage").textContent="Błąd zapisu serii.";return;}}
