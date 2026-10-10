@@ -35,7 +35,7 @@
 .meal-card-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}.meal-card-head h4{margin:0}.meal-recipe-btn{padding:6px 9px;font-size:10px}.meal-recipe-panel{margin-top:9px;border:1px solid var(--line);border-radius:10px;background:#0b1424;padding:10px}.meal-recipe-panel.hidden{display:none}.recipe-title{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.recipe-title strong{font-size:13px}.recipe-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.recipe-chip{font-size:9px;border:1px solid var(--line);border-radius:999px;padding:3px 6px;color:var(--muted)}.recipe-block{margin-top:10px}.recipe-block b{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#8eead9;margin-bottom:4px}.recipe-text{white-space:pre-wrap;font-size:11px;line-height:1.5;color:#d9e1ee}.recipe-empty{font-size:11px;color:var(--muted);line-height:1.45}
 .exercise-description{margin:0 0 12px;padding:10px 12px;background:#111f32;border:1px solid #31505b;border-radius:10px}.exercise-description summary{cursor:pointer;font-size:12px;font-weight:700;color:#8eead9;list-style-position:inside}.exercise-description summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.exercise-description p{margin:8px 0 0;color:#d9e1ee;font-size:12px;line-height:1.6}.plan-editor-grid .description-field{grid-column:1/-1}
 .exercise-variant-label{display:grid;gap:6px;color:var(--muted);font-size:12px;margin-bottom:12px}.exercise-variant-input{width:100%;background:#0d1627;border:1px solid var(--line);color:var(--text);border-radius:9px;padding:9px 10px;outline:none}.exercise-variant-input:focus{border-color:var(--accent)}
-</style>
+.workout-rest-options{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 16px;padding:12px;border-radius:12px;background:#0e1729;border:1px solid var(--line)}.workout-rest-options label{display:flex;align-items:center;gap:7px;font-size:12px;color:#c7d2e6}.workout-rest-options select{padding:7px 8px;border-radius:8px;background:#0d1627;border:1px solid var(--line);color:var(--text)}.workout-rest-options input[type=checkbox]{accent-color:var(--accent);width:16px;height:16px}.workout-rest-options .rest-info{flex-basis:100%;font-size:11px;color:var(--muted)}.rest-timer{position:fixed;right:22px;bottom:20px;z-index:40;background:#0e2230;border:1px solid #3b8d85;box-shadow:0 14px 45px rgba(0,0,0,.55);border-radius:17px;padding:15px 16px;width:min(420px,calc(100vw - 28px))}.rest-timer-head{display:flex;align-items:center;gap:12px;justify-content:space-between}.rest-timer-head strong{font-size:12px;color:#8eead9;letter-spacing:.05em}.rest-timer-time{font-size:33px;font-weight:850;letter-spacing:.03em;font-variant-numeric:tabular-nums}.rest-timer-target{font-size:12px;line-height:1.5;color:#d9e1ee;margin:3px 0 10px}.rest-timer-track{height:6px;border-radius:999px;background:#29444a;overflow:hidden;margin:0 0 12px}.rest-timer-track>div{height:100%;width:0;background:var(--accent);transition:width .2s linear}.rest-timer-buttons{display:flex;gap:7px;flex-wrap:wrap}.rest-timer-buttons button{flex:1;min-width:72px;padding:9px 8px;border:1px solid #34505b;border-radius:9px;background:#182f38;color:var(--text);font-weight:700;font-size:12px}.rest-timer-buttons button:disabled{opacity:.5;cursor:not-allowed}.rest-timer-buttons button.rest-done{background:var(--accent);color:#07111f;border-color:transparent}.rest-timer.rest-complete{border-color:#59c58e}.plan-editor-grid{grid-template-columns:minmax(190px,1.5fr) repeat(6,minmax(70px,.6fr))}@media(max-width:950px){.plan-editor-grid{grid-template-columns:1fr 1fr}.plan-editor-grid label:first-child,.plan-editor-grid .notes-field,.plan-editor-grid .description-field{grid-column:1/-1}}@media(max-width:650px){.rest-timer{right:12px;bottom:calc(82px + env(safe-area-inset-bottom));padding:12px;width:calc(100vw - 24px)}.rest-timer-time{font-size:27px}.rest-timer-buttons button{min-width:64px;padding:8px 6px}.workout-rest-options{gap:8px}}\n</style>
 </head>
 <body>
   <div id="authScreen" class="auth-screen">
@@ -278,7 +278,28 @@
             </label>
             <div class="callout" style="margin:0"><strong>Zasada</strong><p style="margin-top:5px">Wpisz ciężar, powtórzenia i opcjonalnie RIR. Po zapisaniu aplikacja pokaże poprzedni wynik i zasugeruje ciężar na kolejną sesję.</p></div>
           </div>
-          <div id="workoutExercises" class="workout-exercises"></div>
+          <div class="workout-rest-options">
+             <label><input type="checkbox" id="autoRestEnabled" checked> Automatyczne odliczanie po serii</label>
+             <label>Między ćwiczeniami
+               <select id="restExerciseSeconds" aria-label="Przerwa między ćwiczeniami">
+                 <option value="120">2:00</option><option value="150">2:30</option><option value="180" selected>3:00</option><option value="240">4:00</option><option value="300">5:00</option>
+               </select>
+             </label>
+             <label><input type="checkbox" id="restSoundEnabled" checked> Sygnał dźwiękowy</label>
+             <div class="rest-info">Timer ruszy po wpisaniu powtórzeń. Przerwę dla każdego ćwiczenia zmienisz w Trening → Struktura treningu.</div>
+           </div>
+           <div id="workoutExercises" class="workout-exercises"></div>
+           <div id="restTimer" class="rest-timer hidden" role="timer" aria-label="Timer przerwy treningowej">
+             <div class="rest-timer-head"><strong id="restStatus">Odpoczynek</strong><span class="rest-timer-time" id="restTimeRemaining">00:00</span></div>
+             <div id="restTargetLabel" class="rest-timer-target" aria-live="polite"></div>
+             <div class="rest-timer-track"><div id="restProgress"></div></div>
+             <div class="rest-timer-buttons">
+               <button type="button" id="restPause">Pauza</button>
+               <button type="button" id="restPlus">+30 s</button>
+               <button type="button" id="restDone" class="rest-done">Gotowe</button>
+               <button type="button" id="restClose">Anuluj</button>
+             </div>
+           </div>
           <div class="form-actions" style="margin-top:16px">
             <button id="saveDetailedWorkout" class="primary" type="button">Zapisz trening</button>
             <span id="workoutMessage" class="message"></span>
@@ -939,10 +960,10 @@
     container.innerHTML="";
     exercises.forEach(ex=>{
       const existing=session?sessionSets(session.id,ex.id):[];const variantName=existing[0]?.exercise_name||ex.name;let progression=progressionFor(ex,date,variantName);
-      const card=document.createElement("div");card.className="exercise-card";card.dataset.exid=ex.id;card.dataset.name=ex.name;card.dataset.recweight=progression.weight??"";
-      card.innerHTML=`<div class="exercise-head"><div><h4>${esc(ex.name)}</h4><div class="exercise-meta">Plan: ${ex.target_sets}×${ex.rep_min}${ex.rep_max!==ex.rep_min?"–"+ex.rep_max:""} • krok ${ex.progression_step_kg} kg${ex.notes?"<br>"+esc(ex.notes):""}</div></div><div class="progression-chip"><strong>${esc(progression.message)}</strong><br><span class="muted">Sugerowany ciężar: ${progression.weight==null?"ustal na treningu":progression.weight+" kg"}</span></div></div>${ex.description?'<details class="exercise-description"><summary>Jak wykonać ćwiczenie?</summary><p>'+esc(ex.description)+'</p></details>':''}<label class="exercise-variant-label">Wykonany wariant / maszyna<input class="exercise-variant-input" type="text" value="${esc(variantName)}" placeholder="np. Life Fitness Pulldown"></label><div class="set-table"><div class="set-row header"><div>#</div><div>Ciężar</div><div>Powt.</div><div>RIR</div><div></div></div><div class="set-rows"></div></div><div class="exercise-actions"><button class="secondary add-set" type="button">+ seria</button></div><div class="history-mini">Poprzednio: ${esc(progression.previous)}</div>`;
+      const card=document.createElement("div");card.className="exercise-card";card.dataset.exid=ex.id;card.dataset.name=ex.name;card.dataset.recweight=progression.weight??"";card.dataset.restseconds=ex.rest_seconds??120;
+      card.innerHTML=`<div class="exercise-head"><div><h4>${esc(ex.name)}</h4><div class="exercise-meta">Plan: ${ex.target_sets}×${ex.rep_min}${ex.rep_max!==ex.rep_min?"–"+ex.rep_max:""} • krok ${ex.progression_step_kg} kg • przerwa ${ex.rest_seconds??120} s${ex.notes?"<br>"+esc(ex.notes):""}</div></div><div class="progression-chip"><strong>${esc(progression.message)}</strong><br><span class="muted">Sugerowany ciężar: ${progression.weight==null?"ustal na treningu":progression.weight+" kg"}</span></div></div>${ex.description?'<details class="exercise-description"><summary>Jak wykonać ćwiczenie?</summary><p>'+esc(ex.description)+'</p></details>':''}<label class="exercise-variant-label">Wykonany wariant / maszyna<input class="exercise-variant-input" type="text" value="${esc(variantName)}" placeholder="np. Life Fitness Pulldown"></label><div class="set-table"><div class="set-row header"><div>#</div><div>Ciężar</div><div>Powt.</div><div>RIR</div><div></div></div><div class="set-rows"></div></div><div class="exercise-actions"><button class="secondary add-set" type="button">+ seria</button></div><div class="history-mini">Poprzednio: ${esc(progression.previous)}</div>`;
       const rows=card.querySelector(".set-rows");
-      if(existing.length) existing.forEach((s,i)=>rows.appendChild(makeSetRow(i+1,s.weight_kg==null?"":Number(s.weight_kg),s.reps??"",s.rir??"")));
+      if(existing.length) existing.forEach((s,i)=>{const row=makeSetRow(i+1,s.weight_kg==null?"":Number(s.weight_kg),s.reps??"",s.rir??"");row.dataset.restStarted="1";rows.appendChild(row);});
       else for(let i=1;i<=Number(ex.target_sets);i++) rows.appendChild(makeSetRow(i,progression.weight??"","",""));
       card.querySelector(".add-set").addEventListener("click",()=>rows.appendChild(makeSetRow(rows.children.length+1,progression.weight??"","","")));
        card.querySelector(".exercise-variant-input").addEventListener("change",ev=>{const variant=ev.target.value.trim()||ex.name;progression=progressionFor(ex,date,variant);card.dataset.recweight=progression.weight??"";card.querySelector(".progression-chip").innerHTML="<strong>"+esc(progression.message)+"</strong><br><span class=\"muted\">Sugerowany ciężar: "+(progression.weight==null?"ustal na treningu":progression.weight+" kg")+"</span>";card.querySelector(".history-mini").textContent="Poprzednio: "+progression.previous;});
@@ -977,7 +998,7 @@
   function planDayOptionLabel(d){return workoutDayLabels[d]||days[d-1];}
   function makePlanExerciseRow(ex={}){
     const row=document.createElement("div");row.className="plan-ex-row";row.dataset.id=ex.id||"";
-    row.innerHTML=`<div class="plan-editor-grid"><label>Nazwa<input class="pe-name" value="${esc(ex.name||"")}" placeholder="np. Wyciskanie sztangi"></label><label>Serie<input class="pe-sets" type="number" min="1" max="10" value="${ex.target_sets??3}"></label><label>Powt. min<input class="pe-min" type="number" min="1" max="50" value="${ex.rep_min??8}"></label><label>Powt. max<input class="pe-max" type="number" min="1" max="50" value="${ex.rep_max??12}"></label><label>Start kg<input class="pe-start" type="number" step="0.5" min="0" value="${ex.start_weight_kg??""}"></label><label>Krok kg<input class="pe-step" type="number" step="0.5" min="0.5" value="${ex.progression_step_kg??2.5}"></label><label class="notes-field">Uwagi / progresja<textarea class="pe-notes" rows="2">${esc(ex.notes||"")}</textarea></label><label class="description-field">Krótki opis ćwiczenia<textarea class="pe-description" rows="2" placeholder="Pozycja, ruch i najważniejsza wskazówka…">${esc(ex.description||"")}</textarea></label></div><div class="plan-row-actions"><button class="plan-remove" type="button">Usuń ćwiczenie</button></div>`;
+    row.innerHTML=`<div class="plan-editor-grid"><label>Nazwa<input class="pe-name" value="${esc(ex.name||"")}" placeholder="np. Wyciskanie sztangi"></label><label>Serie<input class="pe-sets" type="number" min="1" max="10" value="${ex.target_sets??3}"></label><label>Powt. min<input class="pe-min" type="number" min="1" max="50" value="${ex.rep_min??8}"></label><label>Powt. max<input class="pe-max" type="number" min="1" max="50" value="${ex.rep_max??12}"></label><label>Przerwa [s]<input class="pe-rest" type="number" min="30" max="600" step="15" value="${ex.rest_seconds??120}"></label><label>Start kg<input class="pe-start" type="number" step="0.5" min="0" value="${ex.start_weight_kg??""}"></label><label>Krok kg<input class="pe-step" type="number" step="0.5" min="0.5" value="${ex.progression_step_kg??2.5}"></label><label class="notes-field">Uwagi / progresja<textarea class="pe-notes" rows="2">${esc(ex.notes||"")}</textarea></label><label class="description-field">Krótki opis ćwiczenia<textarea class="pe-description" rows="2" placeholder="Pozycja, ruch i najważniejsza wskazówka…">${esc(ex.description||"")}</textarea></label></div><div class="plan-row-actions"><button class="plan-remove" type="button">Usuń ćwiczenie</button></div>`;
     row.querySelector(".plan-remove").addEventListener("click",()=>row.remove());return row;
   }
   function renderStructuredPlanEditor(){
@@ -989,7 +1010,7 @@
   }
   async function saveStructuredPlan(){
     if(!currentUser)return;const day=Number($("#planDaySelect").value),rows=[...$("#structuredPlanRows").querySelectorAll(".plan-ex-row")];
-    const parsed=rows.map((row,i)=>({id:row.dataset.id||null,user_id:currentUser.id,day_of_week:day,sort_order:i+1,name:row.querySelector(".pe-name").value.trim(),target_sets:Number(row.querySelector(".pe-sets").value||3),rep_min:Number(row.querySelector(".pe-min").value||8),rep_max:Number(row.querySelector(".pe-max").value||12),start_weight_kg:row.querySelector(".pe-start").value===""?null:Number(row.querySelector(".pe-start").value),progression_step_kg:Number(row.querySelector(".pe-step").value||2.5),notes:row.querySelector(".pe-notes").value.trim(),description:row.querySelector(".pe-description").value.trim(),active:true,updated_at:new Date().toISOString()})).filter(x=>x.name);
+    const parsed=rows.map((row,i)=>({id:row.dataset.id||null,user_id:currentUser.id,day_of_week:day,sort_order:i+1,name:row.querySelector(".pe-name").value.trim(),target_sets:Number(row.querySelector(".pe-sets").value||3),rep_min:Number(row.querySelector(".pe-min").value||8),rep_max:Number(row.querySelector(".pe-max").value||12),start_weight_kg:row.querySelector(".pe-start").value===""?null:Number(row.querySelector(".pe-start").value),progression_step_kg:Number(row.querySelector(".pe-step").value||2.5),rest_seconds:Math.min(600,Math.max(30,Number(row.querySelector(".pe-rest").value)||120)),notes:row.querySelector(".pe-notes").value.trim(),description:row.querySelector(".pe-description").value.trim(),active:true,updated_at:new Date().toISOString()})).filter(x=>x.name);
     $("#structuredPlanMessage").textContent="Zapisywanie…";
     const existing=(state.exercisePlan||[]).filter(x=>Number(x.day_of_week)===day);const keep=new Set(parsed.filter(x=>x.id).map(x=>x.id));const removed=existing.filter(x=>!keep.has(x.id)).map(x=>x.id);
     const ops=[];
@@ -1860,5 +1881,6 @@
 })();
 
 </script>
+<script src="/rest-timer.js" defer></script>
 </body>
 </html>
