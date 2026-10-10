@@ -1,6 +1,6 @@
-const SHELL_CACHE="forma-shell-v3";
-const RUNTIME_CACHE="forma-runtime-v3";
-const SHELL=["/","/manifest.webmanifest","/icon-192.png","/icon-512.png","/apple-touch-icon.png"];
+const SHELL_CACHE="forma-shell-v4";
+const RUNTIME_CACHE="forma-runtime-v4";
+const SHELL=["/","/manifest.webmanifest","/icon-192.png","/icon-512.png","/apple-touch-icon.png","/rest-timer.js"];
 const OPTIONAL_CDN=[
   "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2",
   "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"
