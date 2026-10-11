@@ -36,6 +36,7 @@
 .exercise-description{margin:0 0 12px;padding:10px 12px;background:#111f32;border:1px solid #31505b;border-radius:10px}.exercise-description summary{cursor:pointer;font-size:12px;font-weight:700;color:#8eead9;list-style-position:inside}.exercise-description summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.exercise-description p{margin:8px 0 0;color:#d9e1ee;font-size:12px;line-height:1.6}.plan-editor-grid .description-field{grid-column:1/-1}
 .exercise-variant-label{display:grid;gap:6px;color:var(--muted);font-size:12px;margin-bottom:12px}.exercise-variant-input{width:100%;background:#0d1627;border:1px solid var(--line);color:var(--text);border-radius:9px;padding:9px 10px;outline:none}.exercise-variant-input:focus{border-color:var(--accent)}
 .workout-rest-options{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 16px;padding:12px;border-radius:12px;background:#0e1729;border:1px solid var(--line)}.workout-rest-options label{display:flex;align-items:center;gap:7px;font-size:12px;color:#c7d2e6}.workout-rest-options select{padding:7px 8px;border-radius:8px;background:#0d1627;border:1px solid var(--line);color:var(--text)}.workout-rest-options input[type=checkbox]{accent-color:var(--accent);width:16px;height:16px}.workout-rest-options .rest-info{flex-basis:100%;font-size:11px;color:var(--muted)}.rest-timer{position:fixed;right:22px;bottom:20px;z-index:40;background:#0e2230;border:1px solid #3b8d85;box-shadow:0 14px 45px rgba(0,0,0,.55);border-radius:17px;padding:15px 16px;width:min(420px,calc(100vw - 28px))}.rest-timer-head{display:flex;align-items:center;gap:12px;justify-content:space-between}.rest-timer-head strong{font-size:12px;color:#8eead9;letter-spacing:.05em}.rest-timer-time{font-size:33px;font-weight:850;letter-spacing:.03em;font-variant-numeric:tabular-nums}.rest-timer-target{font-size:12px;line-height:1.5;color:#d9e1ee;margin:3px 0 10px}.rest-timer-track{height:6px;border-radius:999px;background:#29444a;overflow:hidden;margin:0 0 12px}.rest-timer-track>div{height:100%;width:0;background:var(--accent);transition:width .2s linear}.rest-timer-buttons{display:flex;gap:7px;flex-wrap:wrap}.rest-timer-buttons button{flex:1;min-width:72px;padding:9px 8px;border:1px solid #34505b;border-radius:9px;background:#182f38;color:var(--text);font-weight:700;font-size:12px}.rest-timer-buttons button:disabled{opacity:.5;cursor:not-allowed}.rest-timer-buttons button.rest-done{background:var(--accent);color:#07111f;border-color:transparent}.rest-timer.rest-complete{border-color:#59c58e}.plan-editor-grid{grid-template-columns:minmax(190px,1.5fr) repeat(6,minmax(70px,.6fr))}@media(max-width:950px){.plan-editor-grid{grid-template-columns:1fr 1fr}.plan-editor-grid label:first-child,.plan-editor-grid .notes-field,.plan-editor-grid .description-field{grid-column:1/-1}}@media(max-width:650px){.rest-timer{right:12px;bottom:calc(82px + env(safe-area-inset-bottom));padding:12px;width:calc(100vw - 24px)}.rest-timer-time{font-size:27px}.rest-timer-buttons button{min-width:64px;padding:8px 6px}.workout-rest-options{gap:8px}}
+.rest-push-controls{flex-basis:100%;display:flex;flex-direction:column;gap:8px;padding-top:10px;margin-top:2px;border-top:1px solid var(--line)}.rest-push-controls .rest-push-buttons{display:flex;gap:8px;flex-wrap:wrap}.rest-push-controls button{border:1px solid #3b8d85;background:#163c41;color:#e0fffb;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:700;cursor:pointer}.rest-push-controls button:disabled{opacity:.5;cursor:default}.rest-push-controls small{color:var(--muted);font-size:11px;line-height:1.45}
 </style>
 </head>
 <body>
@@ -288,6 +289,13 @@
              </label>
              <label><input type="checkbox" id="restSoundEnabled" checked> Sygnał dźwiękowy</label>
              <div class="rest-info">Timer ruszy po wpisaniu powtórzeń. Przerwę dla każdego ćwiczenia zmienisz w Trening → Struktura treningu.</div>
+             <div class="rest-push-controls">
+               <div class="rest-push-buttons">
+                 <button id="restPushToggle" type="button" disabled>Przygotowywanie powiadomień…</button>
+                 <button id="restPushTest" type="button" class="hidden">Wyślij test powiadomienia</button>
+               </div>
+               <small id="restPushStatus" role="status" aria-live="polite">Powiadomienia działają na ekranie blokady po włączeniu zgody w iOS. Opóźnienie dostarczenia zależy od systemu i sieci.</small>
+             </div>
            </div>
            <div id="workoutExercises" class="workout-exercises"></div>
            <div id="restTimer" class="rest-timer hidden" role="timer" aria-label="Timer przerwy treningowej">
@@ -660,6 +668,14 @@
     auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
   });
 
+  window.FORMA_PUSH_API_URL = SUPABASE_URL + "/functions/v1/forma-rest-push";
+  window.FORMA_PUSH_API_KEY = SUPABASE_KEY;
+  window.FORMA_PUSH_AUTH = async () => {
+    const { data, error } = await client.auth.getSession();
+    if (error) throw error;
+    return data.session?.access_token || null;
+  };
+
   let state = structuredClone(DEFAULT);
   let currentUser = null;
   let syncing = false;
@@ -819,8 +835,9 @@
     const desc=hashParams.get("error_description")||"Link aktywacyjny jest nieprawidłowy lub wygasł.";
     setTimeout(()=>{ const m=$("#authMessage"); if(m) m.textContent=decodeURIComponent(desc.replace(/\+/g," ")); },0);
   }
-  $("#signOutBtn").addEventListener("click", async ()=>{ await client.auth.signOut(); currentUser=null; state=cloneDefault(); renderAll(); showAuth(true); setSync(false,"Niezalogowany"); });
+  $("#signOutBtn").addEventListener("click", async ()=>{ if(window.FORMA_REST_PUSH?.isEnabled?.()){try{await window.FORMA_REST_PUSH.disable();}catch(err){console.warn("Could not revoke push subscription before sign out:",err);}} await client.auth.signOut(); currentUser=null; state=cloneDefault(); renderAll(); showAuth(true); setSync(false,"Niezalogowany"); });
   client.auth.onAuthStateChange(async (event,session)=>{
+    window.dispatchEvent(new Event("forma:auth"));
     if(event==="SIGNED_IN" && session?.user && currentUser?.id!==session.user.id){ currentUser=session.user; showAuth(false); await loadCloud(); }
     if(event==="SIGNED_OUT"){ currentUser=null; showAuth(true); }
   });
@@ -1882,6 +1899,7 @@
 })();
 
 </script>
+<script src="/push-rest.js" defer></script>
 <script src="/rest-timer.js" defer></script>
 </body>
 </html>
