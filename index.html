@@ -837,7 +837,7 @@
   }
   $("#signOutBtn").addEventListener("click", async ()=>{ if(window.FORMA_REST_PUSH?.isEnabled?.()){try{await window.FORMA_REST_PUSH.disable();}catch(err){console.warn("Could not revoke push subscription before sign out:",err);}} await client.auth.signOut(); currentUser=null; state=cloneDefault(); renderAll(); showAuth(true); setSync(false,"Niezalogowany"); });
   client.auth.onAuthStateChange(async (event,session)=>{
-    window.dispatchEvent(new Event("forma:auth"));
+    setTimeout(()=>window.dispatchEvent(new Event("forma:auth")),0);
     if(event==="SIGNED_IN" && session?.user && currentUser?.id!==session.user.id){ currentUser=session.user; showAuth(false); await loadCloud(); }
     if(event==="SIGNED_OUT"){ currentUser=null; showAuth(true); }
   });
