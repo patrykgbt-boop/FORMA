@@ -191,6 +191,10 @@ async function processSupplementRemindersDue() {
     .select("user_id,scheduled_date,start_time,status").gte("scheduled_date",dayBefore)
     .lte("scheduled_date",dayAfter).eq("status","planned").limit(500);
   if(trainingError) throw trainingError;
+  const {data:completed,error:checkError}=await db.from("forma_supplement_checkins")
+    .select("reminder_id,local_date").gte("local_date",dayBefore).lte("local_date",dayAfter).limit(1000);
+  if(checkError) throw checkError;
+  const checked=new Set((completed||[]).map(x=>x.reminder_id+"|"+x.local_date));
   const {data:subscriptions,error:subError}=await db.from("forma_push_subscriptions")
     .select("user_id,device_id,endpoint,p256dh,auth_secret").limit(500);
   if(subError) throw subError;
@@ -200,7 +204,7 @@ async function processSupplementRemindersDue() {
       (trainings||[]).filter(t=>t.user_id===rem.user_id);
     for(const item of possibilities){
       const task=supplementDeadline(rem,item,nowLocal);
-      if(!task) continue;
+      if(!task || checked.has(rem.id+"|"+task.key.slice(0,10))) continue;
       for(const sub of subscriptions||[]){
         if(sub.user_id!==rem.user_id) continue;
         // Group supplements with the same minute into one notification.
