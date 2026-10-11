@@ -191,6 +191,10 @@
   });
   window.FORMA_REST_PUSH = {
     isEnabled: () => enabled,
+    testMealPrep() {
+      if (!enabled) return Promise.reject(new Error("Włącz najpierw powiadomienia w tle w FORMIE."));
+      return call("test-meal-prep");
+    },
     schedule(dueAt, label, timerId) {
       if (!enabled) return Promise.resolve({ scheduled: false });
       return queue(async () => {
