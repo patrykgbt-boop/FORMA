@@ -23,7 +23,7 @@
       .formatToParts(new Date()).reduce((a,p)=>{if(p.type!=="literal")a[p.type]=p.value;return a;},{});
     return parts.year+"-"+parts.month+"-"+parts.day;
   }
-  const safeReminderIds=new Set(["creatine","vitamin_d3","citrulline"]);
+  const safeReminderIds=new Set(["creatine","vitamin_d3","citrulline","magnesium"]);
   function trainingToday(){
     const date=localISO(),c=ctx();
     return (c?.schedule||[]).find(e=>e.scheduled_date===date&&e.status!=="cancelled");
@@ -56,7 +56,7 @@
     const canCheck = r.enabled && isToday && canUse;
     const controls = canUse ?
       '<label class="supp-control"><input type="checkbox" class="supp-enabled" data-id="'+r.id+'" '+(r.enabled?'checked':'')+'> Włącz przypomnienie</label>' :
-      '<span class="supp-hold">Wstrzymane — wymaga sprawdzenia składu</span>';
+      '<span class="supp-hold">Wstrzymane — nie zalecamy rutynowo</span>';
     const timeEdit=r.reminder_type==="daily"?
       '<label class="supp-time-field">Godzina <input type="time" class="supp-time" data-id="'+r.id+'" value="'+safe(timeString(r.remind_time))+'" '+(r.enabled?'':'disabled')+'></label>' :
       '<label class="supp-time-field">Minut przed treningiem <select class="supp-lead" data-id="'+r.id+'" '+(r.enabled?'':'disabled')+'>'+
