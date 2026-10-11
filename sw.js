@@ -1,6 +1,6 @@
-const SHELL_CACHE="forma-shell-v10";
-const RUNTIME_CACHE="forma-runtime-v10";
-const SHELL=["/","/manifest.webmanifest","/icon-192.png","/icon-512.png","/apple-touch-icon.png","/rest-timer.js","/push-rest.js","/supplements.js"];
+const SHELL_CACHE="forma-shell-v11";
+const RUNTIME_CACHE="forma-runtime-v11";
+const SHELL=["/","/manifest.webmanifest","/icon-192.png","/icon-512.png","/apple-touch-icon.png","/rest-timer.js","/push-rest.js","/supplements.js","/meal-prep.js"];
 const OPTIONAL_CDN=[
   "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2",
   "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"
@@ -84,7 +84,7 @@ self.addEventListener("push", event => {
     body,
     icon: "/icon-192.png",
     badge: "/icon-192.png",
-    tag: payload.type === "rest-test" ? "forma-rest-test" : payload.type === "supplements" ? "forma-supplements" : "forma-rest-timer",
+    tag: payload.type === "rest-test" ? "forma-rest-test" : payload.type === "supplements" ? "forma-supplements" : payload.type?.startsWith("meal-prep") ? "forma-meal-prep" : "forma-rest-timer",
     data: { url: "/", timerId: payload.timerId || null },
     vibrate: [160, 80, 160],
     timestamp: Date.now(),
