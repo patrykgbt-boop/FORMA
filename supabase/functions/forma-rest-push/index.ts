@@ -150,6 +150,14 @@ async function handleRequest(req: Request) {
     if (!body || typeof body !== "object" || Array.isArray(body)) throw new Error("Invalid JSON");
   } catch { return output({ error: "Invalid JSON body" }, 400); }
 
+  if (body.action === "bootstrap") {
+    const internal = req.headers.get("X-Forma-Worker") || "";
+    const config = await configRow();
+    if (!equalSecret(internal, config.cron_token)) return output({ error: "Unauthorized" }, 401);
+    const publicKey = await webpush.exportApplicationServerKey(await vapidPair());
+    return output({ ready: true, publicKey });
+  }
+
   if (body.action === "tick") {
     const internal = req.headers.get("X-Forma-Worker") || "";
     const config = await configRow();
