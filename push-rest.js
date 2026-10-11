@@ -53,6 +53,7 @@
     if (!token) throw new Error("Zaloguj się do FORMY.");
     const res = await fetch(window.FORMA_PUSH_API_URL, {
       method: "POST",
+      keepalive: true,
       headers: {
         "Authorization": "Bearer " + token,
         "apikey": window.FORMA_PUSH_API_KEY,
