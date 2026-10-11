@@ -253,6 +253,141 @@ async function processSupplementRemindersDue() {
   return {scheduled:attempted,delivered,failed};
 }
 
+
+// Evening meal-prep reminders are based on tomorrow's actual menu and recipes.
+function localDayPlan(local: Date) {
+  const tomorrow=new Date(local.getTime()+86400000);
+  const yesterday=new Date(local.getTime()-86400000);
+  const iso=(date:Date)=>date.toISOString().slice(0,10);
+  const mon=(date:Date)=>{
+    const d=new Date(date.getTime());
+    d.setUTCDate(d.getUTCDate()-((d.getUTCDay()+6)%7));
+    return iso(d);
+  };
+  return {
+    today:iso(local),tomorrow:iso(tomorrow),tomorrowMonday:mon(tomorrow),
+    tomorrowDow:(tomorrow.getUTCDay()||7),
+    previous:iso(local),previousMonday:mon(local),previousDow:local.getUTCDay()||7,
+  };
+}
+function mealTitle(text:unknown):string {
+  return String(text||"").split(":")[0].replace(/\s+/g," ").trim().slice(0,90);
+}
+function breakfastPrep(name:string,recipe:Record<string,any>|undefined,mode:string){
+  if(!name)return {needs:false,label:"Śniadanie nie zaplanowane"};
+  const x=name.toLocaleLowerCase("pl-PL");
+  if(mode==="never")return {needs:false,label:"Zrób rano: "+name};
+  if(mode==="always")return {needs:true,label:"Przygotuj na jutro: "+name};
+  if(/owsian|pudding|chia|ryżank/.test(x))
+    return {needs:true,label:"Przygotuj dziś bazę: "+name+" (owoce dodaj rano)"};
+  if(/gofr|plack|naleśnik/.test(x))
+    return {needs:true,label:"Upiecz dziś: "+name+"; jutro podgrzej"};
+  if(/kanap/.test(x)&&/jaj/.test(x))
+    return {needs:true,label:"Ugotuj dziś jajka do kanapek; pieczywo i warzywa złóż rano"};
+  if(/kanap|jajecznic|omlet|jogurt|skyr|granola|shake|smoothie|koktajl/.test(x))
+    return {needs:false,label:"Szybkie śniadanie rano: "+name};
+  if(recipe && Number(recipe.prep_minutes)<=10)
+    return {needs:false,label:"Szybkie śniadanie rano: "+name};
+  return {needs:true,label:"Przygotuj dziś składniki śniadania: "+name};
+}
+function lunchPrep(name:string,recipe:Record<string,any>|undefined,previousName:string) {
+  if(!name)return {needs:false,label:"Obiad nie zaplanowany"};
+  const note=String(recipe?.notes||"").toLocaleLowerCase("pl-PL");
+  if(/na świeżo|świeżo w/.test(note))
+    return {needs:true,label:"Przygotuj dziś składniki: "+name+" (dokończ świeżo jutro)"};
+  if(previousName&&previousName.toLocaleLowerCase("pl-PL")===name.toLocaleLowerCase("pl-PL"))
+    return {needs:true,label:"Zapakuj drugą, wcześniej przygotowaną porcję: "+name+" (jeśli nie gotowa, ugotuj jedną)"};
+  const servings=Math.floor(Number(recipe?.servings||1));
+  if(servings>1)return {needs:true,label:"Ugotuj dziś "+servings+" porcje: "+name};
+  return {needs:true,label:"Ugotuj dziś obiad: "+name};
+}
+async function mealPrepSources(todayLocal:Date){
+  const date=localDayPlan(todayLocal);
+  const [day,prev,recipes]=await Promise.all([
+    db.from("diet_week_plan").select("user_id,breakfast,lunch,week_start,day_of_week")
+      .eq("week_start",date.tomorrowMonday).eq("day_of_week",date.tomorrowDow).limit(500),
+    db.from("diet_week_plan").select("user_id,lunch")
+      .eq("week_start",date.previousMonday).eq("day_of_week",date.previousDow).limit(500),
+    db.from("diet_recipes").select("user_id,meal_type,recipe_name,notes,prep_minutes,servings,ingredients,instructions")
+      .eq("week_start",date.tomorrowMonday).eq("day_of_week",date.tomorrowDow)
+      .in("meal_type",["breakfast","lunch"]).limit(1000),
+  ]);
+  if(day.error||prev.error||recipes.error)throw day.error||prev.error||recipes.error;
+  const menus=new Map((day.data||[]).map(x=>[x.user_id,x]));
+  const previous=new Map((prev.data||[]).map(x=>[x.user_id,mealTitle(x.lunch)]));
+  const byUser=new Map<string,Record<string,any>>();
+  for(const r of recipes.data||[]){
+    const current=byUser.get(r.user_id)||{};
+    current[r.meal_type]=r;
+    byUser.set(r.user_id,current);
+  }
+  return {date,menus,previous,byUser};
+}
+function mealPrepDetails(userId:string,breakfastMode:string,
+ data:Awaited<ReturnType<typeof mealPrepSources>>){
+  const menu=data.menus.get(userId);
+  const recipes=data.byUser.get(userId)||{};
+  const breakfast=mealTitle(recipes.breakfast?.recipe_name||menu?.breakfast);
+  const lunch=mealTitle(recipes.lunch?.recipe_name||menu?.lunch);
+  const bf=breakfastPrep(breakfast,recipes.breakfast,breakfastMode);
+  const ln=lunchPrep(lunch,recipes.lunch,data.previous.get(userId)||"");
+  return {
+    breakfast:bf,lunch:ln,date:data.date.tomorrow,hasMenu:!!menu,
+  };
+}
+async function processMealPrepDue() {
+  const nowLocal=warsawClock();
+  const hhmm=nowLocal.toISOString().slice(11,16);
+  const {data:settings,error:settingErr}=await db.from("forma_meal_prep_settings")
+    .select("user_id,enabled,remind_time,breakfast_mode").eq("enabled",true).limit(500);
+  if(settingErr)throw settingErr;
+  const due=(settings||[]).filter(x=>String(x.remind_time).slice(0,5)===hhmm);
+  if(!due.length)return {due:0,sent:0,failed:0};
+  const source=await mealPrepSources(nowLocal);
+  const {data:checks,error:checkErr}=await db.from("forma_meal_prep_checkins")
+    .select("user_id,target_date,meal_type").eq("target_date",source.date.tomorrow).limit(1000);
+  if(checkErr)throw checkErr;
+  const checked=new Set((checks||[]).map(x=>x.user_id+"|"+x.meal_type));
+  const {data:subs,error:subErr}=await db.from("forma_push_subscriptions")
+    .select("user_id,device_id,endpoint,p256dh,auth_secret").limit(500);
+  if(subErr)throw subErr;
+  let sent=0,failed=0;
+  for(const pref of due){
+    const detail=mealPrepDetails(pref.user_id,pref.breakfast_mode,source);
+    const todo=[];
+    if(detail.breakfast.needs&&!checked.has(pref.user_id+"|breakfast"))todo.push("Śniadanie: "+detail.breakfast.label);
+    if(detail.lunch.needs&&!checked.has(pref.user_id+"|lunch"))todo.push("Obiad: "+detail.lunch.label);
+    if(!todo.length && detail.hasMenu) continue;
+    const body=(todo.length?todo.join(" • "):
+      "Brak jadłospisu na jutro — uzupełnij śniadanie i obiad w FORMIE.").slice(0,215);
+    for(const sub of (subs||[]).filter(x=>x.user_id===pref.user_id)){
+      const {data:claim,error:claimErr}=await db.from("forma_meal_prep_deliveries").upsert(
+       {user_id:pref.user_id,device_id:sub.device_id,prep_date:source.date.today,status:"sending"},
+       {onConflict:"user_id,device_id,prep_date",ignoreDuplicates:true}
+      ).select("id").maybeSingle();
+      if(claimErr){console.error("Meal prep claim failure",claimErr.message);continue;}
+      if(!claim)continue;
+      try{
+        await sendPush(sub,{
+          type:"meal-prep",title:"FORMA • Przygotowania na jutro",body,
+          url:"/",targetDate:source.date.tomorrow,
+        });
+        await db.from("forma_meal_prep_deliveries").update({status:"sent",completed_at:new Date().toISOString()})
+          .eq("id",claim.id);
+        sent++;
+      }catch(e){
+        const message=e instanceof Error?e.message:"Push delivery failed";
+        console.error("Meal prep push delivery failed",message);
+        await db.from("forma_meal_prep_deliveries")
+          .update({status:"failed",completed_at:new Date().toISOString(),error_message:message.slice(0,180)})
+          .eq("id",claim.id);
+        failed++;
+      }
+    }
+  }
+  return {due:due.length,sent,failed};
+}
+
 async function handleRequest(req: Request) {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
   if (req.method !== "POST") return output({ error: "Method not allowed" }, 405);
@@ -276,7 +411,8 @@ async function handleRequest(req: Request) {
     if (!equalSecret(internal, config.cron_token)) return output({ error: "Unauthorized" }, 401);
     const rest = await processDue();
     const supplements=await processSupplementRemindersDue();
-    return output({rest,supplements});
+    const mealPrep=await processMealPrepDue();
+    return output({rest,supplements,mealPrep});
   }
 
   const user = await authenticatedUser(req);
@@ -285,6 +421,29 @@ async function handleRequest(req: Request) {
   if (body.action === "config") {
     const publicKey = await webpush.exportApplicationServerKey(await vapidPair());
     return output({ publicKey });
+  }
+
+  // Manual test is user-initiated: no background reminder is dispatched unless
+  // the recipient explicitly taps "Test" on their own subscribed device.
+  if(body.action==="test-meal-prep"){
+    const deviceId=deviceIdFrom(body);
+    if(!deviceId)return output({error:"Invalid device ID"},400);
+    const {data:sub}=await db.from("forma_push_subscriptions").select("endpoint,p256dh,auth_secret")
+      .eq("user_id",user.id).eq("device_id",deviceId).maybeSingle();
+    if(!sub)return output({error:"No Web Push subscription on this device"},409);
+    const {data:settings}=await db.from("forma_meal_prep_settings")
+      .select("breakfast_mode").eq("user_id",user.id).maybeSingle();
+    const source=await mealPrepSources(warsawClock());
+    const details=mealPrepDetails(user.id,settings?.breakfast_mode||"auto",source);
+    const labels=[];
+    if(details.breakfast.needs) labels.push("Śniadanie: "+details.breakfast.label);
+    if(details.lunch.needs) labels.push("Obiad: "+details.lunch.label);
+    await sendPush(sub,{
+      type:"meal-prep-test",title:"FORMA • Test przygotowań na jutro",
+      body:(labels.length?labels.join(" • "):"Sprawdź plan przygotowań jutra w FORMIE.").slice(0,215),
+      url:"/",targetDate:details.date,
+    });
+    return output({sent:true,targetDate:details.date});
   }
 
   const deviceId = deviceIdFrom(body);
