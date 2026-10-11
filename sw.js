@@ -1,6 +1,6 @@
-const SHELL_CACHE="forma-shell-v4";
-const RUNTIME_CACHE="forma-runtime-v4";
-const SHELL=["/","/manifest.webmanifest","/icon-192.png","/icon-512.png","/apple-touch-icon.png","/rest-timer.js"];
+const SHELL_CACHE="forma-shell-v5";
+const RUNTIME_CACHE="forma-runtime-v5";
+const SHELL=["/","/manifest.webmanifest","/icon-192.png","/icon-512.png","/apple-touch-icon.png","/rest-timer.js","/push-rest.js"];
 const OPTIONAL_CDN=[
   "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2",
   "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"
@@ -70,4 +70,38 @@ self.addEventListener("fetch",event=>{
       return fresh;
     })());
   }
+});
+
+
+// Web Push notifications are delivered by the operating system even while
+// FORMA's page is suspended or the iPhone is locked.
+self.addEventListener("push", event => {
+  let payload = {};
+  try { payload = event.data ? event.data.json() : {}; } catch {}
+  const title = typeof payload.title === "string" ? payload.title.slice(0, 100) : "FORMA • Koniec przerwy";
+  const body = typeof payload.body === "string" ? payload.body.slice(0, 220) : "Możesz rozpocząć kolejną serię.";
+  event.waitUntil(self.registration.showNotification(title, {
+    body,
+    icon: "/icon-192.png",
+    badge: "/icon-192.png",
+    tag: payload.type === "rest-test" ? "forma-rest-test" : "forma-rest-timer",
+    data: { url: "/", timerId: payload.timerId || null },
+    vibrate: [160, 80, 160],
+    timestamp: Date.now(),
+  }));
+});
+
+self.addEventListener("notificationclick", event => {
+  event.notification.close();
+  event.waitUntil((async () => {
+    const allClients = await self.clients.matchAll({ type: "window", includeUncontrolled: true });
+    const visibleApp = allClients.find(client => {
+      try { return new URL(client.url).origin === self.location.origin; } catch { return false; }
+    });
+    if (visibleApp) {
+      await visibleApp.focus();
+      return;
+    }
+    await self.clients.openWindow("/");
+  })());
 });
