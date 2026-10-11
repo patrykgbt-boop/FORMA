@@ -107,6 +107,7 @@
           localStorage.getItem(ENABLED_KEY) === "1") {
         await call("register", { subscription: subscription.toJSON() });
         enabled = true;
+        window.dispatchEvent(new Event("forma:push-enabled"));
         setMessage("Powiadomienia aktywne: FORMA przypomni o końcu przerwy także po zablokowaniu ekranu.");
       } else {
         enabled = false;
@@ -144,6 +145,7 @@
       await call("register", { subscription: subscription.toJSON() });
       enabled = true;
       localStorage.setItem(ENABLED_KEY, "1");
+      window.dispatchEvent(new Event("forma:push-enabled"));
       setMessage("Włączone! Po ukończeniu serii możesz zablokować ekran. Aby sprawdzić dostarczanie, wybierz „Wyślij test”.");
     } catch (err) {
       console.error("FORMA push enable:", err);
