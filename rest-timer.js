@@ -116,6 +116,16 @@
     closeButton.textContent = finished ? "Zamknij" : "Anuluj";
     panel.classList.toggle("rest-complete", finished);
   }
+  function cancelRemote(timerId = rest.timerId) {
+    if (timerId) window.FORMA_REST_PUSH?.cancel(timerId);
+  }
+  function scheduleRemote() {
+    if (rest.state !== "running" || remainingNow() <= 0) return;
+    const previous = rest.timerId;
+    rest.timerId = crypto.randomUUID();
+    cancelRemote(previous);
+    window.FORMA_REST_PUSH?.schedule(rest.deadline, rest.label, rest.timerId);
+  }
   function stopInterval() {
     if (intervalId !== null) {
       clearInterval(intervalId);
@@ -141,16 +151,19 @@
     intervalId = setInterval(tick, 250);
   }
   function startRest(seconds, label) {
+    cancelRemote();
     const duration = Math.min(600, Math.max(30, Number(seconds) || 120)) * 1000;
     rest = {
       state: "running", deadline: Date.now() + duration, remaining: duration,
-      duration, label, startedAt: Date.now()
+      duration, label, startedAt: Date.now(), timerId: null
     };
+    scheduleRemote();
     storeRest();
     paint();
     startTicker();
   }
   function clearRest() {
+    cancelRemote();
     stopInterval();
     rest.state = "idle";
     storeRest();
@@ -173,6 +186,7 @@
     const name = card.dataset.name || "ćwiczenie";
     row.dataset.restStarted = "1";
     if (lastSet && !nextCard) {
+      cancelRemote();
       rest = {state: "finished", deadline: 0, remaining: 0, duration: 0,
         label: "Wszystkie zaplanowane ćwiczenia zakończone", startedAt: Date.now()};
       stopInterval();
@@ -229,27 +243,39 @@
     if (rest.state === "running") {
       rest.remaining = remainingNow();
       rest.state = "paused";
+      cancelRemote();
+      rest.timerId = null;
       stopInterval();
     } else if (rest.state === "paused") {
       rest.deadline = Date.now() + rest.remaining;
       rest.state = "running";
+      scheduleRemote();
       startTicker();
     }
     storeRest();
     paint();
   });
   plusButton.addEventListener("click", () => {
-    if (rest.state === "running") rest.deadline += 30000;
+    if (rest.state === "running") {
+      rest.deadline += 30000;
+      scheduleRemote();
+    }
     if (rest.state === "paused") rest.remaining += 30000;
     if (rest.state === "running" || rest.state === "paused") rest.duration += 30000;
     storeRest();
     paint();
   });
-  doneButton.addEventListener("click", () => completeRest(false));
+  doneButton.addEventListener("click", () => { cancelRemote(); completeRest(false); });
   closeButton.addEventListener("click", clearRest);
   ["workoutDaySelect", "jDate", "saveDetailedWorkout", "signOutBtn"].forEach((id) => {
     const node = $(id);
     if (node) node.addEventListener(id === "saveDetailedWorkout" || id === "signOutBtn" ? "click" : "change", clearRest);
+  });
+  window.addEventListener("forma:push-enabled", () => {
+    if (rest.state === "running" && remainingNow() > 0) {
+      scheduleRemote();
+      storeRest();
+    }
   });
   document.addEventListener("visibilitychange", tick);
   window.addEventListener("pageshow", tick);
