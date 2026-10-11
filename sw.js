@@ -1,5 +1,5 @@
-const SHELL_CACHE="forma-shell-v8";
-const RUNTIME_CACHE="forma-runtime-v8";
+const SHELL_CACHE="forma-shell-v9";
+const RUNTIME_CACHE="forma-runtime-v9";
 const SHELL=["/","/manifest.webmanifest","/icon-192.png","/icon-512.png","/apple-touch-icon.png","/rest-timer.js","/push-rest.js","/supplements.js"];
 const OPTIONAL_CDN=[
   "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2",
