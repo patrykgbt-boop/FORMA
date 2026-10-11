@@ -23,7 +23,7 @@
       .formatToParts(new Date()).reduce((a,p)=>{if(p.type!=="literal")a[p.type]=p.value;return a;},{});
     return parts.year+"-"+parts.month+"-"+parts.day;
   }
-  const safeReminderIds=new Set(["creatine","vitamin_d3","citrulline","magnesium"]);
+  const safeReminderIds=new Set(["creatine","vitamin_d3","citrulline","magnesium","collagen","biotin"]);
   function trainingToday(){
     const date=localISO(),c=ctx();
     return (c?.schedule||[]).find(e=>e.scheduled_date===date&&e.status!=="cancelled");
@@ -54,6 +54,7 @@
       next ? "Przed treningiem "+preWorkoutTime(next,r.lead_minutes) :
         "Automatycznie przed zaplanowanym treningiem";
     const canCheck = r.enabled && isToday && canUse;
+    const caution=r.slug==="biotin" ? '<div class="supp-hold">Wysoka dawka biotyny (2500 µg) i cynk 15 mg. Przeczytaj wskazówki przed włączeniem.</div>' : "";
     const controls = canUse ?
       '<label class="supp-control"><input type="checkbox" class="supp-enabled" data-id="'+r.id+'" '+(r.enabled?'checked':'')+'> Włącz przypomnienie</label>' :
       '<span class="supp-hold">Wstrzymane — nie zalecamy rutynowo</span>';
@@ -63,7 +64,7 @@
       [30,45,60,75].map(v=>'<option value="'+v+'" '+(Number(r.lead_minutes)===v?'selected':'')+'>'+v+'</option>').join('')+'</select></label>';
     return '<div class="supp-row '+(!r.enabled?'supp-off':'')+'" data-id="'+r.id+'">'+
       '<div class="supp-main"><div class="supp-title">'+safe(r.title)+'</div><div class="supp-dose">'+safe(r.dose_text)+'</div>'+
-      '<div class="supp-when">'+safe(schedule)+'</div>'+
+      '<div class="supp-when">'+safe(schedule)+'</div>'+caution+
       '<details class="supp-note"><summary>Wskazówki i uwagi</summary><p>'+safe(r.note)+'</p></details></div>'+
       '<div class="supp-controls"><label class="supp-check"><input type="checkbox" class="supp-taken" data-id="'+r.id+'" '+(checked?'checked':'')+' '+(!canCheck?'disabled':'')+'> '+
       (checked?'Przyjęte':'Oznacz jako przyjęte')+'</label>'+controls+(canUse?timeEdit:'')+'</div></div>';
@@ -146,7 +147,29 @@
     const r=reminders.find(x=>x.id===id);
     if(!r)return;
     if(e.classList.contains("supp-taken"))setTaken(r,e.checked);
-    if(e.classList.contains("supp-enabled") && safeReminderIds.has(r.slug))updateReminder(r,{enabled:e.checked});
+    if(e.classList.contains("supp-enabled") && safeReminderIds.has(r.slug)){
+      if(e.checked && ["collagen","vitamin_d3"].includes(r.slug)){
+        const otherSlug=r.slug==="collagen"?"vitamin_d3":"collagen";
+        const other=reminders.find(x=>x.slug===otherSlug);
+        if(other?.enabled){
+          window.alert("Zawiera tę samą witaminę D3 2000 IU. Najpierw wyłącz przypomnienie o "+
+            (otherSlug==="collagen"?"Collagen+":"osobnej D3")+", aby nie łączyć pełnych porcji.");
+          render();
+          return;
+        }
+      }
+      if(e.checked && r.slug==="biotin"){
+        const agreed=window.confirm(
+          "Biotin+ (1 tabletka): 2500 µg biotyny, 15 mg cynku, 100 µg selenu i 600 µg kwasu foliowego. "+
+          "Bez niedoboru nie ma pewnego efektu dla skóry i włosów. "+
+          "Limit EFSA na cynk to 25 mg dziennie ŁĄCZNIE z dietą. "+
+          "Biotyna może zaburzać wyniki niektórych badań krwi (np. tarczycy i troponiny). "+
+          "Nie łącz z innym cynkiem ani ZMB. Czy świadomie chcesz włączyć codzienne przypomnienie?"
+        );
+        if(!agreed){render();return;}
+      }
+      updateReminder(r,{enabled:e.checked});
+    }
     if(e.classList.contains("supp-time") && safeReminderIds.has(r.slug) && /^\d\d:\d\d$/.test(e.value))updateReminder(r,{remind_time:e.value});
     if(e.classList.contains("supp-lead") && safeReminderIds.has(r.slug))updateReminder(r,{lead_minutes:Number(e.value)});
   });
