@@ -141,6 +141,114 @@ async function processDue() {
   }
   return { processed: (due || []).length, sent, failed };
 }
+
+// Supplement reminders are independent of the short rest-timer job queue.
+// Workouts are read from FORMA's scheduled training dates so changes to the
+// workout day/time automatically move the pre-workout reminder.
+function warsawClock() {
+  const formatter = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/Warsaw", year: "numeric",month: "2-digit",day: "2-digit",
+    hour: "2-digit",minute: "2-digit",second: "2-digit",hourCycle: "h23",
+  });
+  const p: Record<string,string> = {};
+  for(const part of formatter.formatToParts(new Date())) {
+    if(part.type !== "literal") p[part.type] = part.value;
+  }
+  return new Date(Date.UTC(Number(p.year),Number(p.month)-1,Number(p.day),
+    Number(p.hour),Number(p.minute),Number(p.second)));
+}
+function supplementDeadline(rem: Record<string,any>, training: Record<string,any> | null,
+ nowLocal: Date): {key:string,due:number,description:string} | null {
+  let target: Date;
+  if(rem.reminder_type === "daily") {
+    const hhmm=String(rem.remind_time||"08:00").slice(0,5);
+    target = new Date(nowLocal.toISOString().slice(0,10)+"T"+hhmm+":00Z");
+  } else {
+    if(!training || training.user_id!==rem.user_id || training.status!=="planned") return null;
+    target = new Date(String(training.scheduled_date)+"T"+String(training.start_time).slice(0,5)+":00Z");
+    target = new Date(target.getTime()-Number(rem.lead_minutes||45)*60000);
+  }
+  const diff=nowLocal.getTime()-target.getTime();
+  if(!Number.isFinite(diff) || diff < 0 || diff > 90000) return null;
+  return {
+    key:target.toISOString().slice(0,16),
+    due:target.getTime(),
+    description:rem.reminder_type==="daily"?"Przyjmij: "+rem.title+" — "+rem.dose_text :
+      "Przed treningiem: "+rem.title+" — "+rem.dose_text,
+  };
+}
+async function processSupplementRemindersDue() {
+  const nowLocal=warsawClock();
+  const current=nowLocal.toISOString().slice(0,10);
+  const dayBefore=new Date(nowLocal.getTime()-24*60*60*1000).toISOString().slice(0,10);
+  const dayAfter=new Date(nowLocal.getTime()+24*60*60*1000).toISOString().slice(0,10);
+  const {data:reminders,error:remError}=await db.from("forma_supplement_reminders")
+    .select("id,user_id,slug,title,dose_text,note,reminder_type,remind_time,lead_minutes,enabled")
+    .eq("enabled",true).limit(500);
+  if(remError) throw remError;
+  if(!reminders?.length) return {scheduled:0,delivered:0,failed:0};
+  const {data:trainings,error:trainingError}=await db.from("training_schedule")
+    .select("user_id,scheduled_date,start_time,status").gte("scheduled_date",dayBefore)
+    .lte("scheduled_date",dayAfter).eq("status","planned").limit(500);
+  if(trainingError) throw trainingError;
+  const {data:subscriptions,error:subError}=await db.from("forma_push_subscriptions")
+    .select("user_id,device_id,endpoint,p256dh,auth_secret").limit(500);
+  if(subError) throw subError;
+  const byDevice = new Map<string,{sub:Record<string,any>,tasks:Array<{rem:Record<string,any>,key:string,description:string}>}>();
+  for(const rem of reminders){
+    const possibilities=rem.reminder_type==="daily"?[null]:
+      (trainings||[]).filter(t=>t.user_id===rem.user_id);
+    for(const item of possibilities){
+      const task=supplementDeadline(rem,item,nowLocal);
+      if(!task) continue;
+      for(const sub of subscriptions||[]){
+        if(sub.user_id!==rem.user_id) continue;
+        // Group supplements with the same minute into one notification.
+        const grouping=sub.device_id+"|"+task.key;
+        if(!byDevice.has(grouping))byDevice.set(grouping,{sub,tasks:[]});
+        byDevice.get(grouping)!.tasks.push({rem,key:task.key,description:task.description});
+      }
+    }
+  }
+  let attempted=0,delivered=0,failed=0;
+  for(const batch of byDevice.values()){
+    const claimed: Array<{id:string,task:{rem:Record<string,any>,key:string,description:string}}>= [];
+    for(const task of batch.tasks){
+      const {data,error}=await db.from("forma_supplement_push_delivery")
+        .upsert({
+          reminder_id:task.rem.id,device_id:batch.sub.device_id,delivery_key:task.key,
+          status:"sending",
+        },{onConflict:"reminder_id,device_id,delivery_key",ignoreDuplicates:true})
+        .select("id").maybeSingle();
+      if(error){console.error("Failed to claim supplement reminder",error.message);continue;}
+      if(data?.id) claimed.push({id:data.id,task});
+    }
+    if(!claimed.length) continue;
+    attempted+=claimed.length;
+    const groupBody=claimed.map(x=>x.task.rem.title+" — "+x.task.rem.dose_text).join("; ").slice(0,190);
+    const type=claimed.some(x=>x.task.rem.reminder_type==="pre_workout")?"pre-workout":"daily";
+    try{
+      await sendPush(batch.sub,{
+        type:"supplements",title:type==="daily"?"FORMA • Suplementy na dziś":"FORMA • Suplementacja przed treningiem",
+        body:groupBody,url:"/",key:claimed.map(x=>x.task.key).join(","),
+      });
+      const ids=claimed.map(x=>x.id);
+      const {error}=await db.from("forma_supplement_push_delivery")
+        .update({status:"sent",completed_at:new Date().toISOString()}).in("id",ids);
+      if(error)console.error("Failed to finalize supplement deliveries",error.message);
+      delivered++;
+    }catch(e){
+      const message=e instanceof Error?e.message:"Push delivery failure";
+      console.error("FORMA supplement push error",message);
+      await db.from("forma_supplement_push_delivery")
+        .update({status:"failed",completed_at:new Date().toISOString(),error_message:message.slice(0,180)})
+        .in("id",claimed.map(x=>x.id));
+      failed++;
+    }
+  }
+  return {scheduled:attempted,delivered,failed};
+}
+
 async function handleRequest(req: Request) {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
   if (req.method !== "POST") return output({ error: "Method not allowed" }, 405);
@@ -162,7 +270,9 @@ async function handleRequest(req: Request) {
     const internal = req.headers.get("X-Forma-Worker") || "";
     const config = await configRow();
     if (!equalSecret(internal, config.cron_token)) return output({ error: "Unauthorized" }, 401);
-    return output(await processDue());
+    const rest = await processDue();
+    const supplements=await processSupplementRemindersDue();
+    return output({rest,supplements});
   }
 
   const user = await authenticatedUser(req);
