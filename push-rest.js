@@ -195,6 +195,10 @@
       if (!enabled) return Promise.reject(new Error("Włącz najpierw powiadomienia w tle w FORMIE."));
       return call("test-meal-prep");
     },
+    testFoodReview() {
+      if (!enabled) return Promise.reject(new Error("Włącz najpierw powiadomienia w tle w FORMIE."));
+      return call("test-food-review");
+    },
     schedule(dueAt, label, timerId) {
       if (!enabled) return Promise.resolve({ scheduled: false });
       return queue(async () => {
