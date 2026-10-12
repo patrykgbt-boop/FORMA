@@ -1603,6 +1603,20 @@
       const clean=items.map(({id,...x})=>x);const ins=await client.from("food_log_items").insert(clean);if(ins.error){console.error(ins.error);$("#foodLogMessage").textContent="Błąd zapisu produktów.";return;}
     }
     const sums=items.reduce((a,x)=>{const t=calcFoodItem(x);a.kcal+=t.kcal;a.protein+=t.protein;a.carbs+=t.carbs;a.fat+=t.fat;return a;},{kcal:0,protein:0,carbs:0,fat:0});
+    // If the food diary was edited directly, previously checked nightly confirmations
+    // for changed meals must be reviewed again. Unchanged meals stay confirmed.
+    const foodSignature=x=>[String(x.product_name||"").trim(),Number(x.amount_g||0),
+      Number(x.kcal_per_100||0),Number(x.protein_per_100||0),Number(x.carbs_per_100||0),Number(x.fat_per_100||0)].join("|");
+    const revisedMeals=foodMealTypes.filter(([key])=>{
+      const old=foodItemsFor(date,key).map(foodSignature).join(";");
+      const updated=items.filter(x=>x.meal_type===key).map(foodSignature).join(";");
+      return old!==updated;
+    }).map(([key])=>key);
+    if(revisedMeals.length){
+      const reset=await client.from("forma_food_meal_reviews").delete().eq("user_id",currentUser.id)
+        .eq("entry_date",date).in("meal_type",revisedMeals);
+      if(reset.error)console.warn("Could not refresh food confirmation checklist",reset.error);
+    }
     const nutrition={user_id:currentUser.id,entry_date:date,calories:items.length?Math.round(sums.kcal):null,protein_g:items.length?Math.round(sums.protein):null,carbs_g:items.length?Math.round(sums.carbs):null,fat_g:items.length?Math.round(sums.fat):null,updated_at:new Date().toISOString()};
     const d=await client.from("daily_entries").upsert(nutrition,{onConflict:"user_id,entry_date"});if(d.error)console.error(d.error);
     await loadCloud();go("diet");selectedDietDay=dateDayNumber(date);renderDiet();$("#foodLogMessage").textContent="Zapisano i przeliczono makro.";toast("Makro dnia przeliczone");
