@@ -388,6 +388,64 @@ async function processMealPrepDue() {
   return {due:due.length,sent,failed};
 }
 
+
+// 22:00 food check-in is sent only for meals not yet confirmed.
+// Check-ins and logged ingredients are private to each authenticated FORMA user.
+const foodReviewMeals:Record<string,string>={
+  breakfast:"Śniadanie",lunch:"Obiad",dinner:"Kolacja",snack:"Dodatki",
+};
+async function foodReviewDueFor(userId:string,localDate:string){
+  const {data, error}=await db.from("forma_food_meal_reviews")
+    .select("meal_type").eq("user_id",userId).eq("entry_date",localDate);
+  if(error)throw error;
+  const done=new Set((data||[]).map(x=>x.meal_type));
+  return Object.entries(foodReviewMeals).filter(([key])=>!done.has(key)).map(([,label])=>label);
+}
+async function processFoodReviewDue(){
+  const nowLocal=warsawClock();
+  const localDate=nowLocal.toISOString().slice(0,10);
+  const nowClock=nowLocal.toISOString().slice(11,16);
+  const {data:settings,error:settingsError}=await db.from("forma_food_review_settings")
+    .select("user_id,remind_time,enabled").eq("enabled",true).limit(500);
+  if(settingsError)throw settingsError;
+  const due=(settings||[]).filter(row=>String(row.remind_time).slice(0,5)===nowClock);
+  if(!due.length)return {due:0,sent:0,failed:0};
+  const {data:subs,error:subsError}=await db.from("forma_push_subscriptions")
+    .select("user_id,device_id,endpoint,p256dh,auth_secret").limit(500);
+  if(subsError)throw subsError;
+  let sent=0,failed=0;
+  for(const pref of due){
+    const remaining=await foodReviewDueFor(pref.user_id,localDate);
+    if(!remaining.length)continue;
+    const body="Do zatwierdzenia: "+remaining.join(", ")+". Zgodnie z planem? Zapisz składniki jednym dotknięciem lub wpisz zmianę.";
+    for(const sub of (subs||[]).filter(x=>x.user_id===pref.user_id)){
+      const {data:claim,error:claimError}=await db.from("forma_food_review_deliveries")
+        .upsert({user_id:pref.user_id,device_id:sub.device_id,review_date:localDate,status:"sending"},
+          {onConflict:"user_id,device_id,review_date",ignoreDuplicates:true})
+        .select("id").maybeSingle();
+      if(claimError){console.error("Food-review claim failed",claimError.message);continue;}
+      if(!claim)continue;
+      try{
+        await sendPush(sub,{
+          type:"food-review",title:"FORMA • Uzupełnij dzisiejsze posiłki",
+          body:body.slice(0,220),url:"/",entryDate:localDate,
+        });
+        await db.from("forma_food_review_deliveries")
+          .update({status:"sent",completed_at:new Date().toISOString()}).eq("id",claim.id);
+        sent++;
+      }catch(e){
+        const message=e instanceof Error?e.message:"Push failed";
+        console.error("Food review push failed",message);
+        await db.from("forma_food_review_deliveries")
+          .update({status:"failed",completed_at:new Date().toISOString(),error_message:message.slice(0,180)})
+          .eq("id",claim.id);
+        failed++;
+      }
+    }
+  }
+  return {due:due.length,sent,failed};
+}
+
 async function handleRequest(req: Request) {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
   if (req.method !== "POST") return output({ error: "Method not allowed" }, 405);
@@ -412,7 +470,8 @@ async function handleRequest(req: Request) {
     const rest = await processDue();
     const supplements=await processSupplementRemindersDue();
     const mealPrep=await processMealPrepDue();
-    return output({rest,supplements,mealPrep});
+    const foodReview=await processFoodReviewDue();
+    return output({rest,supplements,mealPrep,foodReview});
   }
 
   const user = await authenticatedUser(req);
@@ -444,6 +503,20 @@ async function handleRequest(req: Request) {
       url:"/",targetDate:details.date,
     });
     return output({sent:true,targetDate:details.date});
+  }
+
+  if(body.action==="test-food-review"){
+    const deviceId=deviceIdFrom(body);
+    if(!deviceId)return output({error:"Invalid device ID"},400);
+    const {data:sub}=await db.from("forma_push_subscriptions").select("endpoint,p256dh,auth_secret")
+      .eq("user_id",user.id).eq("device_id",deviceId).maybeSingle();
+    if(!sub)return output({error:"Web Push not enabled on this device"},409);
+    const date=warsawClock().toISOString().slice(0,10);
+    const remaining=await foodReviewDueFor(user.id,date);
+    await sendPush(sub,{type:"food-review-test",title:"FORMA • Test dziennika posiłków",
+      body:remaining.length?"Do sprawdzenia: "+remaining.join(", "):"Wszystkie posiłki na dziś masz już potwierdzone.",
+      url:"/",entryDate:date});
+    return output({sent:true,remaining:remaining.length});
   }
 
   const deviceId = deviceIdFrom(body);
