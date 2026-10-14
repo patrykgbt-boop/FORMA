@@ -173,8 +173,37 @@
       '<ul class="exercise-guide-tips">'+guide.tips.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>';
     open();
   }
+  const trainingGroups=[
+    {title:"Upper A",items:[
+      "Wyciskanie sztangi leżąc","Ściąganie drążka wyciągu","Wyciskanie na skosie Smith",
+      "Przyciąganie / maszyna upper-back","Krzyżowanie linek","Uginanie sztangi",
+      "Wznosy bokiem","Prostowanie nadgarstków z hantlami"
+    ]},
+    {title:"Lower A",items:[
+      "Przysiad ze sztangą","Hip thrust — maszyna / Smith","Leg press",
+      "Uginanie nóg","Łydki","Brzuch"
+    ]},
+    {title:"Upper B",items:[
+      "Wyciskanie żołnierskie / Smith","Podciąganie","Wyciskanie hantli na skosie",
+      "Wiosłowanie siedząc / maszyna","Dipy","Odwrotne rozpiętki","Modlitewnik",
+      "Prostowanie ramion na wyciągu","Uginanie młotkowe z hantlami",
+      "Rotacje przedramion (pronacja/supinacja)"
+    ]},
+    {title:"Lower B",items:[
+      "Martwy ciąg — top set","Martwy ciąg — back-off","Hack squat / front squat",
+      "Bułgarskie","Uginanie nóg","Łydki","Core"
+    ]}
+  ];
   function showCatalog(){
-    content.innerHTML=header("Biblioteka instrukcji","6 statycznych ilustracji ćwiczeń — część to inne warianty niż aktualny plan Upper B.")+
+    content.innerHTML=header("Biblioteka techniki ćwiczeń","Cztery dni treningowe: szczegółowe instrukcje każdego aktualnego ćwiczenia i sześć ilustracji obrazkowych.")+
+      '<p class="exercise-guide-catalog-summary">Wybierz dzień i ćwiczenie. Przy niektórych ćwiczeniach możesz przełączać maszynę lub wariant ruchu.</p>'+
+      '<div class="exercise-guide-day-groups">'+trainingGroups.map(group=>
+        '<section class="exercise-guide-day-group"><h4>'+esc(group.title)+'</h4>'+
+        group.items.map(name=>
+          '<button type="button" data-guide-name="'+esc(name)+'">'+esc(name)+'</button>'
+        ).join("")+'</section>'
+      ).join("")+'</div>'+
+      '<h4>Sześć instrukcji graficznych</h4>'+
       '<div class="exercise-guide-catalog">'+posters.map(p=>
       '<button type="button" class="exercise-guide-catalog-card" data-guide-poster="'+esc(p.slug)+'">'+
       '<img loading="lazy" src="'+src(p.slug)+'" alt="'+esc(p.name)+'">'+
@@ -207,6 +236,12 @@
       return;
     }
     if(event.target.closest?.("[data-guide-catalog]")){showCatalog();return;}
+    const listBtn=event.target.closest?.("[data-guide-name]");
+    if(listBtn){
+      const name=listBtn.dataset.guideName;
+      if(byName[name]) showGuide(name,"",name);
+      return;
+    }
     const posterBtn=event.target.closest?.("[data-guide-poster]");
     if(posterBtn){showPoster(posterBtn.dataset.guidePoster);return;}
     if(event.target.closest?.(".exercise-guide-close, .exercise-guide-back-to-workout, .exercise-guide-floating-exit") || event.target===modal)close();
