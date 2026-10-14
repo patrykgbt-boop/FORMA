@@ -30,3 +30,109 @@
 .exercise-guide-catalog-card strong{font-size:12px}.exercise-guide-catalog-card small{font-size:11px;line-height:1.4;color:#b0c0d1}
 .exercise-guide-back{background:#193243;color:#e0fff7;border:1px solid #3b8d85;padding:10px 12px;border-radius:9px;margin-top:12px;cursor:pointer}
 @media(max-width:580px){.exercise-guide-modal{padding:0}.exercise-guide-shell{border-radius:0;max-height:100dvh;height:100dvh;width:100%}.exercise-guide-content{padding:14px}.exercise-guide-content h3{font-size:21px}.exercise-guide-steps{grid-template-columns:1fr}.exercise-guide-catalog-card img{height:140px}}
+
+/* iOS PWA: keep the exit controls outside the scrollable instruction content.
+   Min-height:0 is essential for nested flex scrollers in standalone Safari. */
+.exercise-guide-modal {
+  box-sizing:border-box;
+  overflow:hidden;
+  align-items:center;
+}
+.exercise-guide-shell {
+  min-height:0;
+  height:min(880px,calc(100dvh - 26px));
+  flex:0 1 auto;
+}
+.exercise-guide-bar {
+  flex:0 0 auto;
+  min-height:54px;
+  position:relative;
+  z-index:2;
+}
+.exercise-guide-content {
+  flex:1 1 auto;
+  min-height:0;
+  max-height:100%;
+  overflow-y:auto;
+  touch-action:pan-y;
+  padding-bottom:85px;
+}
+.exercise-guide-bar .exercise-guide-back-to-workout {
+  background:#193e44;
+  border:1px solid #3b8d85;
+  color:#e3fff9;
+  padding:10px 12px;
+  font-size:13px;
+  border-radius:9px;
+  font-weight:750;
+  min-height:42px;
+  cursor:pointer;
+}
+.exercise-guide-floating-exit {
+  display:none;
+  position:fixed;
+  z-index:10025;
+  bottom:max(16px,calc(env(safe-area-inset-bottom, 0px) + 12px));
+  left:50%;
+  transform:translateX(-50%);
+  width:calc(100% - 32px);
+  max-width:420px;
+  min-height:49px;
+  padding:12px 20px;
+  border:1px solid #52ada3;
+  border-radius:13px;
+  background:#0a4549;
+  color:#fff;
+  box-shadow:0 7px 24px rgba(0,0,0,.65);
+  font-size:14px;
+  font-weight:800;
+  cursor:pointer;
+}
+@media(max-width:580px) {
+  .exercise-guide-modal {
+    box-sizing:border-box;
+    align-items:stretch;
+    justify-content:stretch;
+    padding-top:max(54px,env(safe-area-inset-top, 0px));
+    padding-bottom:env(safe-area-inset-bottom, 0px);
+    padding-left:0;
+    padding-right:0;
+  }
+  .exercise-guide-shell {
+    box-sizing:border-box;
+    height:100%;
+    max-height:100%;
+    min-height:0;
+    width:100%;
+    flex:1 1 auto;
+    overflow:hidden;
+  }
+  .exercise-guide-bar {
+    box-sizing:border-box;
+    padding:8px 12px;
+    gap:8px;
+    min-height:56px;
+    border-bottom:1px solid #3b566c;
+    flex-wrap:nowrap;
+  }
+  .exercise-guide-bar strong {display:none}
+  .exercise-guide-bar .exercise-guide-back-to-workout {
+    flex:1 1 auto;
+    text-align:left;
+  }
+  .exercise-guide-close {
+    flex:none;
+    min-height:42px;
+    font-size:16px;
+  }
+  .exercise-guide-content {
+    min-height:0;
+    max-height:none;
+    flex:1 1 0;
+    overflow-y:auto;
+    padding-bottom:112px;
+  }
+  .exercise-guide-floating-exit {
+    display:block;
+  }
+}
