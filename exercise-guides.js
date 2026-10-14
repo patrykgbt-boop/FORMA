@@ -82,16 +82,46 @@
   const content=document.getElementById("exerciseGuideContent");
   if(!modal || !content) return;
   let lastFocus=null;
-  function open(){
-    lastFocus=document.activeElement;
-    modal.hidden=false;
-    document.body.classList.add("exercise-guide-open-state");
-    modal.querySelector(".exercise-guide-close")?.focus();
+  let guideHistoryToken=null;
+  function safeFocus(element) {
+    if(!element?.focus) return;
+    try { element.focus({preventScroll:true}); }
+    catch { element.focus(); }
   }
-  function close(){
+  function open(){
+    if(modal.hidden) {
+      lastFocus=document.activeElement;
+      // Give the standalone iPhone app a local history entry: the iOS
+      // back gesture can dismiss an instruction without leaving training.
+      if(window.history?.pushState) {
+        guideHistoryToken="forma-guide-"+Date.now();
+        try {
+          const state=window.history.state;
+          window.history.pushState({
+            ...(state && typeof state==="object" ? state : {}),
+            formaExerciseGuideToken:guideHistoryToken
+          },"",window.location.href);
+        } catch { guideHistoryToken=null; }
+      }
+    }
+    modal.hidden=false;
+    modal.scrollTop=0;
+    content.scrollTop=0;
+    document.body.classList.add("exercise-guide-open-state");
+    // On iOS a normal focus() may scroll the entire full-screen dialog,
+    // hiding its close bar above the viewport.
+    safeFocus(modal.querySelector(".exercise-guide-back-to-workout"));
+  }
+  function close(fromHistory=false){
+    if(modal.hidden) return;
     modal.hidden=true;
     document.body.classList.remove("exercise-guide-open-state");
-    lastFocus?.focus?.();
+    const token=guideHistoryToken;
+    guideHistoryToken=null;
+    safeFocus(lastFocus?.isConnected===false ? null : lastFocus);
+    if(!fromHistory && token && window.history?.state?.formaExerciseGuideToken===token) {
+      window.history.back();
+    }
   }
   function header(title,subtitle){
     return '<p class="exercise-guide-eyebrow">FORMA • TECHNIKA ĆWICZENIA</p>'+
@@ -151,8 +181,26 @@
     if(event.target.closest?.("[data-guide-catalog]")){showCatalog();return;}
     const posterBtn=event.target.closest?.("[data-guide-poster]");
     if(posterBtn){showPoster(posterBtn.dataset.guidePoster);return;}
-    if(event.target.closest?.(".exercise-guide-close") || event.target===modal)close();
+    if(event.target.closest?.(".exercise-guide-close, .exercise-guide-back-to-workout, .exercise-guide-floating-exit") || event.target===modal)close();
   });
   document.addEventListener("keydown",event=>{if(event.key==="Escape"&&!modal.hidden)close();});
+  window.addEventListener("popstate",()=>{
+    if(!modal.hidden) close(true);
+  });
+  // Alternative to Safari's back gesture when running as an installed PWA:
+  // swipe to the right starting at the left edge of the guide.
+  let startTouch=null;
+  modal.addEventListener("touchstart",event=>{
+    if(modal.hidden || event.touches.length!==1) return;
+    const touch=event.touches[0];
+    startTouch=touch.clientX<=45?{x:touch.clientX,y:touch.clientY}:null;
+  },{passive:true});
+  modal.addEventListener("touchend",event=>{
+    if(!startTouch || modal.hidden) return;
+    const start=startTouch;
+    startTouch=null;
+    const touch=event.changedTouches[0];
+    if(touch && touch.clientX-start.x>90 && Math.abs(touch.clientY-start.y)<65) close();
+  },{passive:true});
   window.FORMA_EXERCISE_GUIDES={showGuide,showCatalog,posters:posters.map(x=>({...x}))};
 })();
