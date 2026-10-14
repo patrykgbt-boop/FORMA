@@ -1,6 +1,6 @@
-const SHELL_CACHE="forma-shell-v15";
-const RUNTIME_CACHE="forma-runtime-v15";
-const SHELL=["/","/manifest.webmanifest","/icon-192.png","/icon-512.png","/apple-touch-icon.png","/rest-timer.js","/push-rest.js","/supplements.js","/meal-prep.js","/food-review.js","/exercise-guides.js","/exercise-guides.css","/exercise-guides/chest-press.webp","/exercise-guides/seated-row.webp","/exercise-guides/shoulder-press.webp","/exercise-guides/face-pull.webp","/exercise-guides/triceps-pushdown.webp","/exercise-guides/rope-hammer-curl.webp"];
+const SHELL_CACHE="forma-shell-v16";
+const RUNTIME_CACHE="forma-runtime-v16";
+const SHELL=["/","/manifest.webmanifest","/icon-192.png","/icon-512.png","/apple-touch-icon.png","/rest-timer.js","/push-rest.js","/supplements.js","/meal-prep.js","/food-review.js","/exercise-guides-extra.js","/exercise-guides.js","/exercise-guides.css","/exercise-guides/chest-press.webp","/exercise-guides/seated-row.webp","/exercise-guides/shoulder-press.webp","/exercise-guides/face-pull.webp","/exercise-guides/triceps-pushdown.webp","/exercise-guides/rope-hammer-curl.webp"];
 const OPTIONAL_CDN=[
   "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2",
   "https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"
