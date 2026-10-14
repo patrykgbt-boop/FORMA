@@ -76,12 +76,16 @@
       tips:["Pracuj małym ciężarem, ponieważ dźwignia jest długa.","Nie skręcaj całego ramienia zamiast przedramienia.","Nie wymuszaj zakresu przy dyskomforcie w nadgarstku lub łokciu."],
     },
   };
+  // Extra guides load first; this merges technique instructions without touching
+  // the current workout plan or any saved workout history.
+  Object.assign(byName, window.FORMA_ADDITIONAL_GUIDES || {});
   const esc = x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const src=slug=>"/exercise-guides/"+encodeURIComponent(slug)+".webp";
   const modal=document.getElementById("exerciseGuideModal");
   const content=document.getElementById("exerciseGuideContent");
   if(!modal || !content) return;
   let lastFocus=null;
+  let displayedExercise=null;
   let guideHistoryToken=null;
   function safeFocus(element) {
     if(!element?.focus) return;
@@ -137,14 +141,31 @@
     return '<div class="exercise-guide-steps">'+records.map((step,i)=>
     '<div class="exercise-guide-step"><b>'+String(i+1)+'</b><p>'+esc(step)+'</p></div>').join("")+'</div>';
   }
-  function showGuide(name,description){
-    const guide=byName[name]||null;
-    if(!guide){
+  function showGuide(name,description,variantName="",choiceId=null){
+    displayedExercise={name,description,variantName};
+    const base=byName[name]||null;
+    if(!base){
       content.innerHTML=header(name,"Wskazówki z planu treningowego")+
         '<p class="exercise-guide-summary">'+esc(description||"Ustaw stabilną pozycję, kontroluj obciążenie i pracuj w komfortowym zakresie ruchu.")+'</p>';
       open();return;
     }
-    content.innerHTML=header(name,guide.equipment)+
+    // The user can train on a different machine than the original plan.
+    // Match an explicitly named machine/variant first; otherwise show a safe
+    // default and let the user switch manually inside the guide.
+    const alternatives=Array.isArray(base.variants)?base.variants:[];
+    const normalized=String(variantName||"").toLocaleLowerCase("pl-PL");
+    const chosen=alternatives.find(v=>v.id===choiceId)||
+      alternatives.find(v=>(v.matches||[]).some(alias=>normalized.includes(String(alias).toLocaleLowerCase("pl-PL"))))||
+      alternatives[0]||null;
+    const guide=chosen?{...base,...chosen}:base;
+    const switches=alternatives.length?
+      '<div class="exercise-guide-variants"><p>Wybierz wariant wykonania:</p><div class="exercise-guide-variant-choices">'+
+      alternatives.map(v=>'<button type="button" data-guide-variant="'+esc(v.id)+'" class="'+(v.id===chosen?.id?'active':'')+
+        '" aria-pressed="'+String(v.id===chosen?.id)+'">'+esc(v.label)+'</button>').join("")+
+      '</div></div>':"";
+    const performed=variantName && variantName!==name?
+      '<p class="exercise-guide-performed"><strong>Wpisany sprzęt:</strong> '+esc(variantName)+'</p>':"";
+    content.innerHTML=header(name,guide.equipment)+performed+switches+
       '<p class="exercise-guide-muscles"><strong>Pracują:</strong> '+esc(guide.muscles)+'</p>'+
       (guide.poster?poster(guide.poster,guide.imageNote):"")+
       '<h4>Ruch krok po kroku</h4>'+guidesGrid(name,guide.steps)+
@@ -170,12 +191,19 @@
     open();
   }
   document.addEventListener("click",event=>{
+    const variantButton=event.target.closest?.("[data-guide-variant]");
+    if(variantButton && displayedExercise){
+      showGuide(displayedExercise.name,displayedExercise.description,
+        displayedExercise.variantName,variantButton.dataset.guideVariant);
+      return;
+    }
     const guide=event.target.closest?.(".exercise-guide-trigger");
     if(guide){
       const card=guide.closest(".exercise-card");
       const name=card?.dataset?.name || guide.dataset.exerciseName || "";
       const description=card?.querySelector(".exercise-description p")?.textContent||"";
-      showGuide(name,description);
+      const variantName=card?.querySelector(".exercise-variant-input")?.value?.trim()||name;
+      showGuide(name,description,variantName);
       return;
     }
     if(event.target.closest?.("[data-guide-catalog]")){showCatalog();return;}
@@ -202,5 +230,6 @@
     const touch=event.changedTouches[0];
     if(touch && touch.clientX-start.x>90 && Math.abs(touch.clientY-start.y)<65) close();
   },{passive:true});
-  window.FORMA_EXERCISE_GUIDES={showGuide,showCatalog,posters:posters.map(x=>({...x}))};
+  window.FORMA_EXERCISE_GUIDES={showGuide,showCatalog,posters:posters.map(x=>({...x})),
+    guideNames:Object.keys(byName),guideCount:Object.keys(byName).length};
 })();
