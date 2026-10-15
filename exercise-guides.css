@@ -152,3 +152,32 @@
 .exercise-guide-day-group button:hover{border-color:#5eead4}
 .exercise-guide-catalog-summary{color:#b9cde0;line-height:1.55;font-size:12px}
 @media(max-width:580px){.exercise-guide-day-groups{grid-template-columns:1fr}}
+
+
+/* One exercise at a time: responsive crop of each composite WebP sheet.
+   Source image 1055x1491; crop rectangle from exercise-guide-panels.js. */
+.exercise-guide-crop {
+  position:relative;
+  display:block;
+  overflow:hidden;
+  isolation:isolate;
+  width:min(100%,560px);
+  height:auto;
+  max-width:100%;
+  box-sizing:border-box;
+  margin:14px auto 9px;
+  background:#081321;
+  border:1px solid #34516a;
+  border-radius:12px;
+}
+.exercise-guide-crop img {
+  position:absolute;
+  display:block;
+  max-width:none!important;
+  max-height:none!important;
+  height:auto!important;
+  object-fit:initial!important;
+  border:0;
+  pointer-events:none;
+  user-select:none;
+}
