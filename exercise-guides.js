@@ -9,6 +9,14 @@
     {name:"Face Pull na linie",slug:"face-pull",note:"Ćwiczenie pokrewne dla tyłu barków, ale nie jest zamienną ilustracją odwrotnych rozpiętek."},
     {name:"Prostowanie ramion na wyciągu",slug:"triceps-pushdown",note:"Pasuje do prostowania ramion na wyciągu w Upper B."},
     {name:"Uginanie młotkowe na linie",slug:"rope-hammer-curl",note:"Wariant na linie wyciągu — w aktualnym Upper B masz uginanie z hantlami."},
+    {name:"Upper A — plansza 1",slug:"upper-a-1",note:"Wyciskanie, ściąganie drążka, Smith i maszyna Upper-Back."},
+    {name:"Upper A — plansza 2",slug:"upper-a-2",note:"Krzyżowanie linek, biceps, wznosy bokiem i nadgarstki."},
+    {name:"Lower A — plansza 1",slug:"lower-a-1",note:"Przysiad, hip thrust i leg press."},
+    {name:"Lower A — plansza 2",slug:"lower-a-2",note:"Uginanie nóg, łydki i brzuch."},
+    {name:"Upper B — plansza 1",slug:"upper-b-1",note:"Wyciskanie, podciąganie, wiosłowanie i dipy."},
+    {name:"Upper B — plansza 2",slug:"upper-b-2",note:"Barki, modlitewnik, triceps, biceps i przedramiona."},
+    {name:"Lower B — plansza 1",slug:"lower-b-1",note:"Martwy ciąg i dwa warianty przysiadu."},
+    {name:"Lower B — plansza 2",slug:"lower-b-2",note:"Bułgarskie, tył uda, łydki i core."},
   ];
 
   const byName = {
@@ -137,6 +145,22 @@
     '" alt="Graficzna instrukcja wykonania ćwiczenia — '+esc(slug)+'"></div>'+
     (note?'<p class="exercise-guide-variant-note">ℹ '+esc(note)+'</p>':"");
   }
+  function cropPanel(panel,name){
+    // The source is a composite training sheet. Clip it to the exact exercise
+    // so iPhone users never see another exercise while checking technique.
+    const [x,y,w,h]=panel.crop;
+    const sourceWidth=1055;
+    const file=src(panel.sheet);
+    const imgWidth=(sourceWidth/w*100).toFixed(5);
+    const offLeft=(x/w*100).toFixed(5);
+    const offTop=(y/h*100).toFixed(5);
+    return '<div class="exercise-guide-crop" style="aspect-ratio:'+w+'/'+h+'">'+
+      '<img decoding="async" loading="eager" src="'+file+
+      '" alt="Instrukcja graficzna ćwiczenia: '+esc(name)+
+      '" style="width:'+imgWidth+'%;left:-'+offLeft+'%;top:-'+offTop+'%" />'+
+      '</div>'+
+      (panel.note?'<p class="exercise-guide-variant-note">ℹ '+esc(panel.note)+'</p>':'');
+  }
   function guidesGrid(key,records){
     return '<div class="exercise-guide-steps">'+records.map((step,i)=>
     '<div class="exercise-guide-step"><b>'+String(i+1)+'</b><p>'+esc(step)+'</p></div>').join("")+'</div>';
@@ -165,9 +189,10 @@
       '</div></div>':"";
     const performed=variantName && variantName!==name?
       '<p class="exercise-guide-performed"><strong>Wpisany sprzęt:</strong> '+esc(variantName)+'</p>':"";
+    const panel=window.FORMA_EXERCISE_PANELS?.[name]||null;
     content.innerHTML=header(name,guide.equipment)+performed+switches+
       '<p class="exercise-guide-muscles"><strong>Pracują:</strong> '+esc(guide.muscles)+'</p>'+
-      (guide.poster?poster(guide.poster,guide.imageNote):"")+
+      (panel?cropPanel(panel,name):guide.poster?poster(guide.poster,guide.imageNote):"")+
       '<h4>Ruch krok po kroku</h4>'+guidesGrid(name,guide.steps)+
       '<h4>Najważniejsze wskazówki</h4>'+
       '<ul class="exercise-guide-tips">'+guide.tips.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul>';
@@ -203,7 +228,7 @@
           '<button type="button" data-guide-name="'+esc(name)+'">'+esc(name)+'</button>'
         ).join("")+'</section>'
       ).join("")+'</div>'+
-      '<h4>Sześć instrukcji graficznych</h4>'+
+      '<h4>Wszystkie plansze graficzne</h4>'+
       '<div class="exercise-guide-catalog">'+posters.map(p=>
       '<button type="button" class="exercise-guide-catalog-card" data-guide-poster="'+esc(p.slug)+'">'+
       '<img loading="lazy" src="'+src(p.slug)+'" alt="'+esc(p.name)+'">'+
