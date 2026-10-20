@@ -47,7 +47,7 @@
     <div class="auth-card">
       <div class="brand auth-brand"><div class="brand-mark">F</div><div><strong>FORMA</strong><small>trening + dieta</small></div></div>
       <p class="eyebrow">SYNCHRONIZACJA W CHMURZE</p>
-      <h1>Zaloguj się do FORMY</h1>
+      <h1 id="authTitle">Zaloguj się do FORMY</h1>
       <p class="muted">To samo konto na telefonie i komputerze = te same dane.</p>
       <form id="authForm" class="auth-form">
         <label>E-mail<input id="authEmail" type="email" autocomplete="email" required placeholder="twoj@email.pl"></label>
@@ -55,9 +55,17 @@
         <div class="auth-actions">
           <button id="signInBtn" type="submit" class="primary">Zaloguj</button>
           <button id="signUpBtn" type="button" class="secondary">Utwórz konto</button>
-          <button id="resendBtn" type="button" class="text-btn">Wyślij ponownie link aktywacyjny</button>
+          <button id="forgotPasswordBtn" type="button" class="text-btn">Nie pamiętam hasła</button>
+          <button id="resendBtn" type="button" class="text-btn">Potwierdź e-mail (nowe konta)</button>
         </div>
-        <span id="authMessage" class="message"></span>
+        <span id="authMessage" class="message" role="status" aria-live="polite"></span>
+      </form>
+      <form id="authRecoveryForm" class="auth-form hidden">
+        <p class="muted">Otworzyłeś link odzyskiwania dostępu. Ustaw teraz nowe hasło do istniejącego konta FORMA.</p>
+        <label>Nowe hasło<input id="authNewPassword" type="password" autocomplete="new-password" minlength="8" required placeholder="minimum 8 znaków"></label>
+        <label>Powtórz nowe hasło<input id="authConfirmNewPassword" type="password" autocomplete="new-password" minlength="8" required placeholder="powtórz hasło"></label>
+        <div class="auth-actions"><button class="primary" type="submit">Zapisz nowe hasło</button></div>
+        <span id="authRecoveryMessage" class="message" role="status" aria-live="polite"></span>
       </form>
     </div>
   </div>
@@ -892,7 +900,16 @@
   }
 
   function showAuth(show){ $("#authScreen").classList.toggle("hidden",!show); }
+  let authRecoveryMode = new URLSearchParams(window.location.hash.replace(/^#/,"")).get("type")==="recovery";
+  function showPasswordRecovery(show){
+    authRecoveryMode=show;
+    $("#authForm").classList.toggle("hidden",show);
+    $("#authRecoveryForm").classList.toggle("hidden",!show);
+    $("#authTitle").textContent=show?"Ustaw nowe hasło":"Zaloguj się do FORMY";
+    if(show)showAuth(true);
+  }
   async function initAuth(){
+    if(authRecoveryMode){showPasswordRecovery(true);return;}
     const {data:{session}}=await client.auth.getSession();
     currentUser=session?.user||null;
     if(currentUser){ showAuth(false); await loadCloud(); }
@@ -915,12 +932,52 @@
     if(data.session){ currentUser=data.user; showAuth(false); await loadCloud(); toast("Konto utworzone"); }
     else $("#authMessage").textContent="Konto utworzone. Sprawdź e-mail i potwierdź rejestrację.";
   });
+  $("#forgotPasswordBtn").addEventListener("click", async ()=>{
+    const email=$("#authEmail").value.trim();
+    if(!email || !$("#authEmail").checkValidity()){
+      $("#authMessage").textContent="Wpisz poprawny e-mail konta FORMA, aby odzyskać hasło.";
+      $("#authEmail").focus();
+      return;
+    }
+    const button=$("#forgotPasswordBtn");
+    button.disabled=true;
+    $("#authMessage").textContent="Zlecanie odzyskiwania hasła…";
+    try{
+      const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+"/"});
+      $("#authMessage").textContent=error ? ("Nie udało się wysłać linku odzyskiwania: "+error.message) :
+        "Jeśli konto istnieje i wysyłka jest dostępna, otrzymasz e-mail do zmiany hasła. Sprawdź też Spam. Nie zakładaj nowego konta.";
+    }catch(err){
+      console.error("Password reset request:",err);
+      $("#authMessage").textContent="Nie można połączyć się z serwerem. Sprawdź internet i spróbuj ponownie.";
+    }finally{button.disabled=false;}
+  });
+  $("#authRecoveryForm").addEventListener("submit",async ev=>{
+    ev.preventDefault();
+    const pass=$("#authNewPassword").value, repeat=$("#authConfirmNewPassword").value;
+    if(pass.length<8){$("#authRecoveryMessage").textContent="Hasło musi mieć minimum 8 znaków.";return;}
+    if(pass!==repeat){$("#authRecoveryMessage").textContent="Hasła nie są identyczne.";return;}
+    $("#authRecoveryMessage").textContent="Zapisywanie nowego hasła…";
+    const submit=$("#authRecoveryForm button[type=submit]");
+    submit.disabled=true;
+    try{
+      const {error}=await client.auth.updateUser({password:pass});
+      if(error){$("#authRecoveryMessage").textContent=error.message;return;}
+      $("#authNewPassword").value="";
+      $("#authConfirmNewPassword").value="";
+      showPasswordRecovery(false);
+      $("#authMessage").textContent="Hasło zostało zmienione.";
+      const {data:{session}}=await client.auth.getSession();
+      if(session?.user){currentUser=session.user;showAuth(false);await loadCloud();toast("Hasło zmienione, zalogowano");}
+      else showAuth(true);
+    }catch(err){console.error("Password update:",err);$("#authRecoveryMessage").textContent="Nie udało się zmienić hasła. Otwórz najnowszy link ponownie.";}
+    finally{submit.disabled=false;}
+  });
   $("#resendBtn").addEventListener("click", async ()=>{
     const email=$("#authEmail").value.trim();
     if(!email){ $("#authMessage").textContent="Najpierw wpisz adres e-mail."; return; }
     $("#authMessage").textContent="Wysyłanie nowego linku…";
     const {error}=await client.auth.resend({type:"signup",email,options:{emailRedirectTo:window.location.origin}});
-    $("#authMessage").textContent=error?error.message:"Nowy link aktywacyjny został wysłany. Użyj najnowszej wiadomości.";
+    $("#authMessage").textContent=error?error.message:"Jeśli konto wymaga potwierdzenia i wysyłka e-mail jest dostępna, otrzymasz link. Dla wcześniej aktywowanego konta użyj logowania albo opcji „Nie pamiętam hasła”.";
   });
   const hashParams=new URLSearchParams(window.location.hash.replace(/^#/,""));
   if(hashParams.get("error_code")){
@@ -930,7 +987,8 @@
   $("#signOutBtn").addEventListener("click", async ()=>{ if(window.FORMA_REST_PUSH?.isEnabled?.()){try{await window.FORMA_REST_PUSH.disable();}catch(err){console.warn("Could not revoke push subscription before sign out:",err);}} await client.auth.signOut(); currentUser=null; state=cloneDefault(); renderAll(); showAuth(true); setSync(false,"Niezalogowany"); });
   client.auth.onAuthStateChange(async (event,session)=>{
     setTimeout(()=>window.dispatchEvent(new Event("forma:auth")),0);
-    if(event==="SIGNED_IN" && session?.user && currentUser?.id!==session.user.id){ currentUser=session.user; showAuth(false); await loadCloud(); }
+    if(event==="PASSWORD_RECOVERY"){showPasswordRecovery(true);return;}
+    if(event==="SIGNED_IN" && session?.user && currentUser?.id!==session.user.id && !authRecoveryMode){ currentUser=session.user; showAuth(false); await loadCloud(); }
     if(event==="SIGNED_OUT"){ currentUser=null; showAuth(true); }
   });
 
