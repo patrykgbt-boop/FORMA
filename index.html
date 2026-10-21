@@ -1205,14 +1205,6 @@
   async function saveDetailedWorkout(){
     if(!currentUser)return;
     const date=$("#jDate").value||todayISO,day=Number($("#workoutDaySelect").value);
-    $("#workoutMessage").textContent="Zapisywanie treningu…";
-    const sessionPayload={user_id:currentUser.id,session_date:date,day_of_week:day,duration_min:val("#jDuration"),mood:$("#jMood").value||null,notes:$("#jNotes").value.trim()||sessionFor(date,day)?.notes||"",completed_at:new Date().toISOString(),updated_at:new Date().toISOString()};
-    const sRes=await client.from("workout_sessions").upsert(sessionPayload,{onConflict:"user_id,session_date,day_of_week"}).select("*").single();
-    if(sRes.error){console.error(sRes.error);$("#workoutMessage").textContent="Błąd zapisu sesji.";return;}
-    const sessionId=sRes.data.id;
-    const del=await client.from("workout_sets").delete().eq("session_id",sessionId).eq("user_id",currentUser.id);
-    if(del.error){console.error(del.error);$("#workoutMessage").textContent="Błąd aktualizacji serii.";return;}
-    const payload=[];
     // Do not silently save a new machine under the planned exercise name.
     const unnamed=[...$("#workoutExercises").querySelectorAll(".exercise-card")].find(card=>
       card.querySelector(".exercise-variant-select")?.value==="__new_variant__" &&
@@ -1222,6 +1214,14 @@
       )
     );
     if(unnamed){$("#workoutMessage").textContent="Podaj nazwę nowego wariantu, zanim zapiszesz trening.";return;}
+    $("#workoutMessage").textContent="Zapisywanie treningu…";
+    const sessionPayload={user_id:currentUser.id,session_date:date,day_of_week:day,duration_min:val("#jDuration"),mood:$("#jMood").value||null,notes:$("#jNotes").value.trim()||sessionFor(date,day)?.notes||"",completed_at:new Date().toISOString(),updated_at:new Date().toISOString()};
+    const sRes=await client.from("workout_sessions").upsert(sessionPayload,{onConflict:"user_id,session_date,day_of_week"}).select("*").single();
+    if(sRes.error){console.error(sRes.error);$("#workoutMessage").textContent="Błąd zapisu sesji.";return;}
+    const sessionId=sRes.data.id;
+    const del=await client.from("workout_sets").delete().eq("session_id",sessionId).eq("user_id",currentUser.id);
+    if(del.error){console.error(del.error);$("#workoutMessage").textContent="Błąd aktualizacji serii.";return;}
+    const payload=[];
     [...$("#workoutExercises").querySelectorAll(".exercise-card")].forEach(card=>{
       [...card.querySelectorAll(".set-row.data")].forEach((row,i)=>{
         const w=row.querySelector(".set-weight").value,r=row.querySelector(".set-reps").value,rir=row.querySelector(".set-rir").value;
