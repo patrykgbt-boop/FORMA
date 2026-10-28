@@ -89,6 +89,16 @@ export default function App(){
    }catch(e){setStatus('Problem podczas kończenia sesji: '+e.message);setWarning('Nagranie mogło pozostać w pamięci telefonu. Wyczyść stare nagrania po sprawdzeniu.');}
    finally{setWorking(false)}
  }
+ function discardPending(){
+   Alert.alert('Odrzucić pomiar?','Niezapisany wynik zostanie usunięty z telefonu. Dane zapisane w FORMA pozostaną bez zmian.',[
+     {text:'Anuluj',style:'cancel'},
+     {text:'Odrzuć pomiar',style:'destructive',onPress:()=>{
+       localStorage.removeItem(PENDING);
+       setPending(null);setLatency('15');setAwake('0');setQuality('4');
+       setStatus('Pomiar odrzucony. Możesz rozpocząć nowe monitorowanie.');
+     }}
+   ]);
+ }
  async function syncNight(){
    if(!pending||!session?.user?.id)return;
    if(pending.userId!==session.user.id)return setStatus('To zapis z innego konta FORMA. Zaloguj się na właściwe konto.');
@@ -147,6 +157,7 @@ export default function App(){
       <Text style={styles.caption}>Jakość wypoczynku (1 = słabo; 5 = bardzo dobrze)</Text>
       <View style={styles.scores}>{[1,2,3,4,5].map(n=><Pressable key={n} onPress={()=>setQuality(String(n))} style={[styles.score,quality===String(n)&&styles.scoreActive]}><Text style={[styles.scoreText,quality===String(n)&&{color:'#07111f'}]}>{n}</Text></Pressable>)}</View>
       <Action label="Zapisz wynik do FORMA" onPress={syncNight} disabled={busy}/>
+      <Action label="Odrzuć pomiar" secondary onPress={discardPending} disabled={busy}/>
    </>:<><Text style={styles.muted}>Połóż Samsunga na szafce nocnej, nie pod pościelą. Sprawdź wolne miejsce oraz ustawienia baterii dla FORMA Sleep.</Text>
        <Action label="Rozpocznij monitorowanie" onPress={startNight} disabled={busy||!!warning}/></>}
  </View>}
