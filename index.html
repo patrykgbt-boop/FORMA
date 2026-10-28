@@ -1552,6 +1552,9 @@
     if(!plan||!String(plan[meal]||"").trim())return {error:"Brak dania w planie na ten dzień."};
     if(typed!==String(plan[meal]||"").trim())return {error:"Masz niezapisane zmiany planu. Zapisz najpierw ten dzień."};
     if(!recipe||!String(recipe.ingredients||"").trim())return {error:"Brakuje przepisu i gramatur. Uzupełnij przepis, zanim przeniesiesz posiłek."};
+    const plannedTitle=String(plan[meal]).split(":")[0].trim().toLocaleLowerCase("pl-PL");
+    const recipeTitle=String(recipe.recipe_name||"").trim().toLocaleLowerCase("pl-PL");
+    if(plannedTitle!==recipeTitle)return {error:"Przepis nie odpowiada aktualnemu daniu w planie. Zaktualizuj przepis przed przeniesieniem, aby nie wpisać innych składników."};
     if(!window.FORMA_MEAL_IMPORT)return {error:"Nie wczytano modułu posiłków. Odśwież stronę przy połączeniu z internetem."};
     const built=window.FORMA_MEAL_IMPORT.buildItems(recipe,state.foodProducts);
     if(!built.rows.length)return {error:"Przepis nie ma rozpoznawalnych składników."};
@@ -1564,6 +1567,21 @@
       const already=foodItemsFor(dietDateForDay(selectedDietDay),importMealToLogType(meal)).length>0;
       button.textContent=already?"✓ W dzienniku":"✓ Zjedzone";
       button.setAttribute("aria-label",already?"Posiłek już ma zapisane produkty, nie dodawaj ponownie":"Zapisz planowany posiłek do rzeczywistego dziennika");
+    });
+  }
+  function foodLogHasUnsavedEdits(){
+    // Nie odrzucaj ręcznych wpisów, nawet gdy nie są jeszcze kompletne.
+    const date=selectedDietDate();
+    const key=x=>[x.meal_type,String(x.product_name||"").trim(),
+      Number(x.amount_g||0),Number(x.kcal_per_100||0),Number(x.protein_per_100||0),
+      Number(x.carbs_per_100||0),Number(x.fat_per_100||0)].join("|");
+    const saved=foodItemsFor(date).map(key).sort();
+    const draft=collectFoodRows().map(key).sort();
+    if(saved.length!==draft.length||saved.some((x,i)=>x!==draft[i]))return true;
+    return $$("#foodMeals .food-row.data").some(row=>{
+      const name=row.querySelector(".fi-name").value.trim();
+      const amount=row.querySelector(".fi-amount").value.trim();
+      return (name&&!amount)||(!name&&amount);
     });
   }
   function plannedMealIngredientsFromPreview(meal){
@@ -1649,6 +1667,10 @@
     const helper=window.FORMA_MEAL_IMPORT,problem=helper?.validateRows(items);
     if(problem){$("#dietDayMessage").textContent=problem;return;}
     const date=dietDateForDay(selectedDietDay),week=currentDietWeekStart(),day=selectedDietDay;
+    if(foodLogHasUnsavedEdits()){
+      $("#dietDayMessage").textContent="Masz niezapisane ręczne zmiany w dzienniku. Najpierw kliknij «Zapisz jedzenie i przelicz makro», aby ich nie stracić.";
+      return;
+    }
     if(foodItemsFor(date,importMealToLogType(meal)).length){
       $("#dietDayMessage").textContent="Posiłek już ma zapisane produkty — nic nie dodano.";
       return;
