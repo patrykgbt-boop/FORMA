@@ -15,7 +15,7 @@ Aplikacja zawiera `expo-updates`. Po poprawnym połączeniu projektu Expo i zain
 
 1. Załóż bezpłatne konto na https://expo.dev/ (nie jest potrzebny Play Store ani Mac).
 2. Projekt Expo został utworzony: `patryk9xk3s-team/forma-sleep`, Project ID: `070ad17e-2d91-4253-be1f-bd0075a777de` (publiczny i już skonfigurowany w app.config.js). **Nie twórz drugiego projektu**.
-3. W Expo Account settings → Access tokens wygeneruj token dla konta posiadającego dostęp do projektu. W GitHub repo FORMA → Settings → Secrets and variables → Actions → **Secrets** dodaj `EXPO_TOKEN`. Nie ujawniaj tokenu w kodzie, zrzutach ekranu ani rozmowie.
+3. W Expo Account settings → Access tokens wygeneruj token dla konta posiadającego dostęp do projektu. W GitHub repo FORMA → Settings → Secrets and variables → Actions → **Secrets** dodaj `FORMA`. Nie ujawniaj tokenu w kodzie, zrzutach ekranu ani rozmowie.
 4. Uruchom workflow `FORMA Sleep Android - APK bez sklepu` ręcznie. Pobierz artefakt `FORMA-Sleep-Android-APK` **wyłącznie po sukcesie workflow** i zainstaluj `app-release.apk`.
 5. Uruchom workflow `FORMA Sleep Android - publish OTA` ręcznie, aby opublikować pierwszą aktualizację kanału `production` (jeżeli jeszcze żadna nie została wydana). Następne zmiany w App.js i src/** na `main` publikują OTA automatycznie po skonfigurowaniu tokenu.
 6. W aplikacji otwórz „Aktualizacje aplikacji”. Komunikat `OTA nieaktywne` oznacza, że masz APK bez połączenia z Expo.
