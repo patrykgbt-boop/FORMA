@@ -12,7 +12,6 @@ permissions:
   contents: read
 jobs:
   publish-ota:
-    if: ${{ vars.EXPO_EAS_PROJECT_ID != '' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     defaults:
@@ -21,7 +20,7 @@ jobs:
     env:
       CI: '1'
       EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-      EXPO_EAS_PROJECT_ID: ${{ vars.EXPO_EAS_PROJECT_ID }}
+      EXPO_EAS_PROJECT_ID: '070ad17e-2d91-4253-be1f-bd0075a777de'
       EXPO_PUBLIC_SUPABASE_URL: 'https://ymemohuafzogbhgggcvm.supabase.co'
       EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_-3RrLnYXbVyGL7QeKgsEwg_ynhEAi7f'
     steps:

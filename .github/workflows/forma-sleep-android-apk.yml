@@ -20,7 +20,7 @@ jobs:
         working-directory: mobile/forma-sleep-android
     env:
       CI: '1'
-      EXPO_EAS_PROJECT_ID: ${{ vars.EXPO_EAS_PROJECT_ID }}
+      EXPO_EAS_PROJECT_ID: '070ad17e-2d91-4253-be1f-bd0075a777de'
       EXPO_PUBLIC_SUPABASE_URL: 'https://ymemohuafzogbhgggcvm.supabase.co'
       EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_-3RrLnYXbVyGL7QeKgsEwg_ynhEAi7f'
     steps:
@@ -34,12 +34,6 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
-      - name: Require Expo project for OTA-enabled APK
-        run: |
-          if [ -z "$EXPO_EAS_PROJECT_ID" ]; then
-            echo "::error::Ustaw GitHub Actions variable EXPO_EAS_PROJECT_ID. Bez niej APK nie obsługiwałby OTA."
-            exit 1
-          fi
       - name: Install packages
         run: npm install --no-audit --fund=false
       - name: Align Expo packages
@@ -47,7 +41,7 @@ jobs:
       - name: Verify OTA configuration
         run: |
           npx expo config --json > /tmp/forma-sleep-expo-config.json
-          node -e "const c=require('/tmp/forma-sleep-expo-config.json'); if(!c.updates?.url || !c.runtimeVersion || c.updates?.requestHeaders?.['expo-channel-name']!=='production')process.exit(1); console.log('OTA enabled for runtime',c.runtimeVersion);"
+          node -e "const c=require('/tmp/forma-sleep-expo-config.json'); if(c.updates?.url!==('https://u.expo.dev/'+process.env.EXPO_EAS_PROJECT_ID)||c.extra?.eas?.projectId!==process.env.EXPO_EAS_PROJECT_ID||c.runtimeVersion!=='forma-sleep-android-runtime-1'||c.updates?.requestHeaders?.['expo-channel-name']!=='production')process.exit(1); console.log('OTA enabled for runtime',c.runtimeVersion);"
       - name: Generate Android project
         run: npx expo prebuild --platform android --no-install --clean
       - name: Assemble standalone APK

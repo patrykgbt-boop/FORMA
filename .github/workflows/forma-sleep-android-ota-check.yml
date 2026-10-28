@@ -17,7 +17,7 @@ jobs:
         working-directory: mobile/forma-sleep-android
     env:
       CI: '1'
-      EXPO_EAS_PROJECT_ID: '00000000-0000-4000-8000-000000000001'
+      EXPO_EAS_PROJECT_ID: '070ad17e-2d91-4253-be1f-bd0075a777de'
       EXPO_PUBLIC_SUPABASE_URL: 'https://ymemohuafzogbhgggcvm.supabase.co'
       EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_-3RrLnYXbVyGL7QeKgsEwg_ynhEAi7f'
     steps:
@@ -34,6 +34,6 @@ jobs:
       - name: Check dynamic OTA configuration
         run: |
           npx expo config --json > /tmp/forma-sleep-check.json
-          node -e "const c=require('/tmp/forma-sleep-check.json'); if(c.runtimeVersion!=='forma-sleep-android-runtime-1'||c.updates?.requestHeaders?.['expo-channel-name']!=='production'||!c.updates?.url) process.exit(1);"
+          node -e "const c=require('/tmp/forma-sleep-check.json'); if(c.runtimeVersion!=='forma-sleep-android-runtime-1'||c.updates?.requestHeaders?.['expo-channel-name']!=='production'||c.updates?.url!==('https://u.expo.dev/'+process.env.EXPO_EAS_PROJECT_ID)) process.exit(1);"
       - name: Bundle Android JS and assets (does not publish)
         run: npx expo export --platform android --output-dir /tmp/forma-sleep-android-ota-check
