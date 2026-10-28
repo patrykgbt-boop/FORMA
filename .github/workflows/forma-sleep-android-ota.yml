@@ -19,7 +19,7 @@ jobs:
         working-directory: mobile/forma-sleep-android
     env:
       CI: '1'
-      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      EXPO_TOKEN: ${{ secrets.FORMA }}
       EXPO_EAS_PROJECT_ID: '070ad17e-2d91-4253-be1f-bd0075a777de'
       EXPO_PUBLIC_SUPABASE_URL: 'https://ymemohuafzogbhgggcvm.supabase.co'
       EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_-3RrLnYXbVyGL7QeKgsEwg_ynhEAi7f'
@@ -33,7 +33,7 @@ jobs:
       - name: Check Expo authorization
         run: |
           if [ -z "$EXPO_TOKEN" ]; then
-            echo "::error::Ustaw GitHub Actions secret EXPO_TOKEN (token Expo)."
+            echo "::error::Ustaw GitHub Actions secret FORMA (token dostępu Expo)."
             exit 1
           fi
       - name: Install dependencies
