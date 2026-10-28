@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "FORMA Sleep",
+    "slug": "forma-sleep-ios",
+    "scheme": "formasleep",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "platforms": [
+      "ios"
+    ],
+    "ios": {
+      "bundleIdentifier": "pl.forma.sleep.monitor",
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "FORMA Sleep używa mikrofonu po uruchomieniu sesji snu. Analiza pozostaje lokalna.",
+        "UIFileSharingEnabled": false,
+        "LSSupportsOpeningDocumentsInPlace": false,
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "plugins": [
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "FORMA Sleep potrzebuje mikrofonu do nocnego monitorowania dźwięków. Nagrania nie są wysyłane do chmury.",
+          "enableBackgroundRecording": true,
+          "enableBackgroundPlayback": false
+        }
+      ]
+    ],
+    "extra": {
+      "privacy": "Wysyłane są wyłącznie wyniki, a nagrania analizowane na urządzeniu."
+    }
+  }
+}

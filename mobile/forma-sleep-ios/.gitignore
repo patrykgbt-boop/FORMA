@@ -1,0 +1,10 @@
+node_modules/
+.expo/
+.env
+.env.local
+*.ipa
+*.mobileprovision
+*.p12
+ios/
+android/
+*.log
