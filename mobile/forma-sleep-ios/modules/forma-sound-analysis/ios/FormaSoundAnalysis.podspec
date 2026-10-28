@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.license = { :type => 'MIT' }
   s.author = 'FORMA'
   s.homepage = 'https://github.com/patrykgbt-boop/FORMA'
-  s.source = { :path => '.' }
+  s.source = { :git => 'https://github.com/patrykgbt-boop/FORMA.git' }
   s.platforms = { :ios => '16.4' }
   s.swift_version = '5.9'
   s.source_files = '**/*.{h,m,mm,swift}'
