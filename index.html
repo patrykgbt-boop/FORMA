@@ -45,6 +45,28 @@
 .meal-card-head{align-items:center;flex-wrap:wrap}.meal-card-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.meal-card-actions .meal-import-btn,.meal-card-actions .meal-import-edit{padding:7px 10px;font-size:11px}.planned-meal-preview{background:#0c1728;border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px}.planned-meal-preview[hidden],.planned-meal-preview.hidden{display:none!important}.planned-meal-preview p{margin:5px 0 10px;font-size:12px;color:var(--muted)}.planned-meal-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center}.planned-meal-top select{background:#0d1627;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:8px}.planned-meal-scroll{overflow-x:auto}.planned-meal-table{min-width:620px;width:100%;border-collapse:collapse;font-size:11px}.planned-meal-table th{text-align:left;color:var(--muted);font-weight:600}.planned-meal-table td,.planned-meal-table th{padding:5px 3px}.planned-meal-table input{width:100%;min-width:56px;border:1px solid var(--line);background:#0d1627;color:var(--text);border-radius:7px;padding:7px 6px}.planned-meal-table .pi-name{min-width:170px}.planned-meal-table .pi-amount{min-width:72px}.planned-meal-table .pi-remove{color:var(--bad);border:0;background:transparent;font-weight:700;font-size:17px}.planned-meal-warning{font-size:11px;color:var(--warning);margin:8px 0}.planned-meal-warning:empty{display:none}.planned-meal-summary{font-size:12px;color:var(--text);margin:10px 0}.planned-meal-controls{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.planned-meal-controls button{padding:9px 12px;font-size:12px}.planned-meal-msg{font-size:12px;color:var(--muted);margin-top:8px}
 
 .bench-coach-panel{min-width:0}.bench-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:14px 0}.bench-metrics>div{display:flex;flex-direction:column;border-radius:12px;background:#0e1729;border:1px solid var(--line);padding:12px;gap:5px}.bench-metrics span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}.bench-metrics strong{font-size:21px;color:var(--text)}.bench-metrics small,.bench-goal small{font-size:11px;color:var(--muted)}.bench-goals{display:grid;grid-template-columns:1fr 1fr;gap:14px}.bench-goal{border:1px solid var(--line);border-radius:12px;padding:12px}.bench-goal-heading{display:flex;justify-content:space-between;gap:9px;align-items:center;font-size:13px;margin-bottom:10px}.bench-goal-heading span{font-variant-numeric:tabular-nums;color:#9be9df;font-size:12px}.bench-track{height:9px;background:#0d1627;border-radius:20px;overflow:hidden;margin-bottom:8px}.bench-bar{height:100%;width:0;background:var(--accent);transition:width .25s}.bench-chart-box{border:1px solid var(--line);border-radius:12px;background:#0d1627;margin-top:12px;padding:12px}.bench-chart-head{display:flex;align-items:center;justify-content:space-between;gap:9px;flex-wrap:wrap}.bench-chart-head strong{font-size:13px}.bench-chart-head small{font-size:11px;color:var(--muted)}.bench-sparkline{margin-top:12px;min-height:122px}.bench-sparkline svg{width:100%;height:140px;display:block;overflow:visible}.bench-advice{padding:14px;border:1px solid #385e68;background:#102129;border-radius:12px;margin-top:12px}.bench-advice strong{font-size:13px}.bench-advice p{margin:7px 0;font-size:14px;font-weight:700}.bench-advice small{display:block;color:#b5c8d0;line-height:1.45}.bench-history{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.bench-history-item{padding:10px;border-radius:10px;border:1px solid var(--line);background:#0d1627}.bench-history-item strong{display:block;font-size:14px;margin-top:4px}.bench-history-item small{color:var(--muted)}.bench-disclaimer{margin-top:12px}.bench-exercise-coach{font-size:11px;color:var(--muted);margin:6px 0 0;line-height:1.35}@media(max-width:720px){.bench-metrics{grid-template-columns:1fr 1fr}.bench-metrics>div:last-child{grid-column:1/-1}.bench-goals{grid-template-columns:1fr}.bench-history{grid-template-columns:1fr 1fr}}@media(max-width:450px){.bench-history{grid-template-columns:1fr}.bench-metrics strong{font-size:18px}}
+
+/* FORMA Sylwetka */
+.physique-form{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:14px}
+.physique-form label,.physique-compare-head label,.physique-priorities label,.physique-goals-form>label{display:grid;gap:5px;font-size:12px;color:var(--muted)}
+.physique-form input,.physique-form select,.physique-form textarea,.physique-compare-head select,.physique-priorities select,.physique-goals-form textarea{width:100%;min-width:0;background:#0d1627;border:1px solid var(--line);color:var(--text);border-radius:9px;padding:9px;outline:none}
+.physique-span{grid-column:1/-1}.physique-compare-head{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:12px 0}
+.physique-compare-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.physique-photo-card{display:flex;flex-direction:column;background:#0d1627;border:1px solid var(--line);border-radius:12px;padding:10px;gap:8px;min-width:0}
+.physique-photo-card strong{font-size:12px}.physique-photo-card img{width:100%;height:320px;object-fit:contain;background:#090f1b;border-radius:8px}
+.physique-photo-empty{display:grid;place-items:center;background:#101c30;min-height:125px;border-radius:8px;color:var(--muted);font-size:12px}
+.physique-photo-card .physique-photo-empty{flex:1}.physique-photo-card small{font-size:10px;color:var(--muted)}
+.physique-gallery{display:grid;gap:8px;margin-top:15px;max-height:440px;overflow-y:auto}
+.physique-gallery-item{display:grid;grid-template-columns:58px 1fr auto;gap:9px;align-items:center;background:#0d1627;border:1px solid var(--line);border-radius:10px;padding:8px}
+.physique-gallery-item img{width:58px;height:72px;object-fit:cover;border-radius:6px}
+.physique-gallery-item strong,.physique-gallery-item small{display:block;font-size:11px}.physique-gallery-item small{color:var(--muted);margin-top:3px}
+.physique-measures{display:grid;gap:7px;margin-top:14px}.physique-measure-item{display:flex;gap:9px;justify-content:space-between;align-items:center;padding:9px;border-radius:9px;border:1px solid var(--line);font-size:11px}
+.physique-measure-item span{color:var(--muted)}.physique-goals-form{display:grid;gap:13px}.physique-priorities{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.physique-priorities select{margin-top:3px}.physique-recommendations{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.physique-advice-row{background:#0d1627;border:1px solid var(--line);padding:12px;border-radius:11px}
+.physique-advice-row strong{font-size:13px}.physique-advice-row p{font-size:12px;margin:7px 0;line-height:1.5}.physique-advice-row small{color:var(--muted);font-size:11px}
+@media(max-width:780px){.physique-compare-head,.physique-priorities{grid-template-columns:1fr 1fr}.physique-recommendations{grid-template-columns:1fr}.physique-photo-card img{height:230px}}
+@media(max-width:520px){.physique-compare-grid{grid-template-columns:1fr 1fr}.physique-photo-card:last-child{grid-column:1/-1}.physique-photo-card img{height:260px}.physique-photo-card:last-child img{height:220px}.physique-form{grid-template-columns:1fr 1fr}.physique-measure-item{flex-wrap:wrap}.physique-compare-head{grid-template-columns:1fr 1fr 1fr}}
 </style>
 <link rel="stylesheet" href="/exercise-guides.css">
 </head>
@@ -92,6 +114,7 @@
         <button class="nav-btn" data-view="sleep"><span>☾</span> Sen</button>
         <button class="nav-btn" data-view="diet"><span>◉</span> Dieta</button>
         <button class="nav-btn" data-view="progress"><span>↗</span> Postępy</button>
+        <button class="nav-btn" data-view="physique"><span>◇</span> Sylwetka</button>
         <button class="nav-btn" data-view="settings"><span>⚙</span> Ustawienia</button>
       </nav>
 
@@ -703,6 +726,64 @@
         </div>
       </section>
 
+      <section class="view" id="view-physique">
+        <article class="panel">
+          <div class="panel-head"><div><p class="eyebrow">FORMA SYLWETKA</p><h3>Porównanie sylwetki i plan rozwoju</h3></div><span class="pill">Prywatne zdjęcia</span></div>
+          <p class="muted">Porównuj własne zdjęcia w stałych warunkach z wybraną inspiracją. Budowa kości, proporcje i genetyka różnią się — celem jest rozwój Twojej sylwetki, nie identyczny wygląd. Ten moduł nie diagnozuje ani automatycznie nie szacuje procentu tkanki tłuszczowej ze zdjęć.</p>
+          <div class="physique-compare-head">
+            <label>Wcześniej<select id="physiqueCompareA"></select></label>
+            <label>Teraz<select id="physiqueCompareB"></select></label>
+            <label>Ujęcie<select id="physiqueCompareView"><option value="front">Przód</option><option value="back">Tył</option><option value="side">Bok</option></select></label>
+          </div>
+          <div class="physique-compare-grid" id="physiqueCompareGrid"></div>
+          <p class="muted" id="physiqueSummary">Dodaj zdjęcia i pomiary, aby zobaczyć porównanie.</p>
+          <p class="muted">Dobre warunki: podobne oświetlenie, odległość, postawa i pora dnia. Zdjęcia co 4 tygodnie; obwód talii co tydzień.</p>
+        </article>
+        <div class="dashboard-grid" style="margin-top:14px">
+          <article class="panel">
+            <div class="panel-head"><div><p class="eyebrow">DOKUMENTACJA</p><h3>Dodaj zdjęcie</h3></div></div>
+            <form id="physiquePhotoForm" class="physique-form">
+              <label>Data<input id="physiquePhotoDate" type="date" required></label>
+              <label>Rodzaj<select id="physiquePhotoKind"><option value="progress">Moja sylwetka</option><option value="reference">Sylwetka docelowa</option></select></label>
+              <label>Ujęcie<select id="physiquePhotoView"><option value="front">Przód</option><option value="back">Tył</option><option value="side">Bok</option></select></label>
+              <label class="physique-span">Zdjęcie (JPG / PNG / HEIC obsługiwane, gdy urządzenie je odczytuje)<input id="physiquePhotoFile" type="file" accept="image/*" required></label>
+              <button class="primary physique-span" type="submit">Zapisz zdjęcie prywatnie</button>
+            </form>
+            <p class="muted">Zdjęcie zostaje zmniejszone i zapisane jako JPG bez metadanych EXIF. Dostęp jest ograniczony do Twojego konta Supabase; podgląd używa tymczasowych odnośników. Zapisuj zdjęcia referencyjne, do których masz prawo.</p>
+            <div id="physiqueGallery" class="physique-gallery"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-head"><div><p class="eyebrow">CO 7 DNI</p><h3>Pomiary ciała</h3></div></div>
+            <form id="physiqueMeasureForm" class="physique-form">
+              <label>Data<input id="physiqueMeasureDate" type="date" required></label>
+              <label>Pas [cm]<input id="physique-waist" type="number" min="40" max="200" step="0.1"></label>
+              <label>Klatka [cm]<input id="physique-chest" type="number" min="50" max="200" step="0.1"></label>
+              <label>Barki [cm]<input id="physique-shoulders" type="number" min="50" max="220" step="0.1"></label>
+              <label>Ramię [cm]<input id="physique-arm" type="number" min="15" max="80" step="0.1"></label>
+              <label>Udo [cm]<input id="physique-thigh" type="number" min="20" max="120" step="0.1"></label>
+              <label class="physique-span">Notatki<textarea id="physique-notes" rows="2" maxlength="1200" placeholder="np. obwód ramienia bez pompy, pomiar po przebudzeniu"></textarea></label>
+              <button class="primary physique-span" type="submit">Zapisz pomiary</button>
+            </form>
+            <div id="physiqueMeasureList" class="physique-measures"></div>
+          </article>
+        </div>
+        <article class="panel" style="margin-top:14px">
+          <div class="panel-head"><div><p class="eyebrow">CEL SYLWETKOWY</p><h3>Partie do rozbudowy</h3></div></div>
+          <p class="muted">Wybierz priorytety na podstawie zdjęć i rzeczywistych postępów. Domyślnie podkreślone: górna klatka, barki i szerokość pleców.</p>
+          <form id="physiqueGoalsForm" class="physique-goals-form">
+            <div id="physiquePriorities" class="physique-priorities"></div>
+            <label>Cel / obserwacje<textarea id="physiqueTargetNotes" rows="3" maxlength="1200" placeholder="np. bardziej widoczna górna klatka, szersze plecy, proporcje V"></textarea></label>
+            <button class="primary" type="submit">Zapisz priorytety</button>
+          </form>
+        </article>
+        <article class="panel" style="margin-top:14px">
+          <div class="panel-head"><div><p class="eyebrow">TRENER FORMA</p><h3>Rekomendacje ćwiczeń i diety</h3></div></div>
+          <p class="muted">Rekomendacje powstają na podstawie zapisanych priorytetów, obwodów, masy i ćwiczeń obecnych w planie — nie z automatycznej analizy obrazu. Nie wprowadzają zmian w planie ani kaloriach bez potwierdzenia.</p>
+          <div id="physiqueRecommendations" class="physique-recommendations"></div>
+          <p id="physiqueMessage" class="message" role="status"></p>
+        </article>
+      </section>
+
       <section class="view" id="view-sleep"><p class="muted">Wczytywanie FORMA Sleep…</p></section>
       <section class="view" id="view-settings">
         <div class="two-col">
@@ -795,6 +876,14 @@
     dietRecipes: state.dietRecipes || []
   });
   window.FORMA_SLEEP_CONTEXT = () => ({client,userId:currentUser?.id||null,entries:state.entries||[],refresh:()=>loadCloud()});
+  window.FORMA_PHYSIQUE_CONTEXT = () => ({
+    client,
+    userId: currentUser?.id || null,
+    entries: state.entries||[],
+    exercisePlan: state.exercisePlan||[],
+    workoutSets: state.workoutSets||[],
+    settings: state.settings||{}
+  });
   window.FORMA_SUPPLEMENTS_CONTEXT = () => ({
     client,
     userId: currentUser?.id || null,
@@ -1031,7 +1120,7 @@
   $("#todayLabel").textContent = today.toLocaleDateString("pl-PL",{weekday:"short",day:"2-digit",month:"short"});
   $("#jDate").value=todayISO;
 
-  const titles={dashboard:"Dashboard",journal:"Dziennik",training:"Trening",diet:"Dieta",progress:"Postępy",sleep:"Sen i regeneracja",settings:"Ustawienia"};
+  const titles={dashboard:"Dashboard",journal:"Dziennik",training:"Trening",diet:"Dieta",progress:"Postępy",sleep:"Sen i regeneracja",settings:"Ustawienia",physique:"Sylwetka"};
   function go(view){
     $$(".view").forEach(v=>v.classList.remove("active")); $("#view-"+view).classList.add("active");
     $$(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.view===view)); $("#pageTitle").textContent=titles[view];
@@ -2538,6 +2627,7 @@
 <script src="/exercise-guides-extra.js" defer></script>
 <script src="/exercise-guides.js" defer></script>
 <script src="/rest-timer.js" defer></script>
+<script src="/physique.js" defer></script>
 <script src="/sleep.js" defer></script>
 </body>
 </html>
