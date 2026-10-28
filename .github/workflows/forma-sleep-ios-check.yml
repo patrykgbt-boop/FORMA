@@ -1,0 +1,30 @@
+name: FORMA Sleep iOS – JS bundle check
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'mobile/forma-sleep-ios/**'
+      - '.github/workflows/forma-sleep-ios-check.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  ios-js-bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: mobile/forma-sleep-ios
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --no-audit --fund=false
+      - name: Validate Expo configuration
+        run: npx expo config --json > /dev/null
+      - name: Bundle JavaScript for iOS without credentials
+        run: npx expo export --platform ios --output-dir /tmp/forma-sleep-ios-export
