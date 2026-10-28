@@ -1140,11 +1140,13 @@
   }
 
   // Lokalna kopia robocza jest oddzielna dla konta, daty i rodzaju treningu.
+  let workoutDraftDirty=false;
   function workoutDraftKey(userId,date,day){
     return "forma-workout-draft-v1:"+String(userId)+":"+String(date)+":"+String(day);
   }
   function saveWorkoutDraft(){
     if(!currentUser)return;
+    workoutDraftDirty=true;
     const container=$("#workoutExercises"),date=$("#jDate").value||todayISO,day=Number($("#workoutDaySelect").value);
     if(!container?.querySelector(".exercise-card")||!day)return;
     const cards=[...container.querySelectorAll(".exercise-card")].map(card=>({
@@ -1165,6 +1167,7 @@
     }catch(err){console.warn("Nie można utworzyć kopii treningu:",err);$("#workoutMessage").textContent="Uwaga: pamięć urządzenia jest pełna — zapisz trening przy aktywnym internecie.";}
   }
   function clearWorkoutDraft(date,day){
+    workoutDraftDirty=false;
     if(!currentUser)return;
     try{localStorage.removeItem(workoutDraftKey(currentUser.id,date,day));}catch{}
   }
@@ -1194,6 +1197,7 @@
         rows.appendChild(row);
       });
     }
+    workoutDraftDirty=true;
     $("#workoutMessage").textContent="Przywrócono niezapisany trening z tego urządzenia. Sprawdź serie i kliknij «Zapisz trening».";
     return true;
   }
@@ -1277,7 +1281,7 @@
       container.appendChild(card);
     });
     $("#workoutMessage").textContent=session?"Wczytano zapisany trening z tego dnia. Możesz go edytować.":"";
-    restoreWorkoutDraft(date,chosen);
+    if(!restoreWorkoutDraft(date,chosen))workoutDraftDirty=false;
   }
   async function saveDetailedWorkout(){
     if(!currentUser)return;
@@ -1479,7 +1483,7 @@
   });
   ["#jDuration","#jMood","#jNotes"].forEach(id=>$(id).addEventListener("change",saveWorkoutDraft));
   window.addEventListener("pagehide",()=>{
-    if($("#authScreen").classList.contains("hidden")&&$("#view-journal").classList.contains("active"))saveWorkoutDraft();
+    if(workoutDraftDirty&&$("#authScreen").classList.contains("hidden")&&$("#view-journal").classList.contains("active"))saveWorkoutDraft();
   });
   $("#workoutDaySelect").addEventListener("change",renderWorkoutModule);
   $("#jDate").addEventListener("change",renderWorkoutModule);
