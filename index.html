@@ -42,6 +42,8 @@
 
 /* FORMA: planned meal -> real food log */
 .meal-card-head{align-items:center;flex-wrap:wrap}.meal-card-actions{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.meal-card-actions .meal-import-btn,.meal-card-actions .meal-import-edit{padding:7px 10px;font-size:11px}.planned-meal-preview{background:#0c1728;border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px}.planned-meal-preview[hidden],.planned-meal-preview.hidden{display:none!important}.planned-meal-preview p{margin:5px 0 10px;font-size:12px;color:var(--muted)}.planned-meal-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center}.planned-meal-top select{background:#0d1627;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:8px}.planned-meal-scroll{overflow-x:auto}.planned-meal-table{min-width:620px;width:100%;border-collapse:collapse;font-size:11px}.planned-meal-table th{text-align:left;color:var(--muted);font-weight:600}.planned-meal-table td,.planned-meal-table th{padding:5px 3px}.planned-meal-table input{width:100%;min-width:56px;border:1px solid var(--line);background:#0d1627;color:var(--text);border-radius:7px;padding:7px 6px}.planned-meal-table .pi-name{min-width:170px}.planned-meal-table .pi-amount{min-width:72px}.planned-meal-table .pi-remove{color:var(--bad);border:0;background:transparent;font-weight:700;font-size:17px}.planned-meal-warning{font-size:11px;color:var(--warning);margin:8px 0}.planned-meal-warning:empty{display:none}.planned-meal-summary{font-size:12px;color:var(--text);margin:10px 0}.planned-meal-controls{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.planned-meal-controls button{padding:9px 12px;font-size:12px}.planned-meal-msg{font-size:12px;color:var(--muted);margin-top:8px}
+
+.bench-coach-panel{min-width:0}.bench-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:14px 0}.bench-metrics>div{display:flex;flex-direction:column;border-radius:12px;background:#0e1729;border:1px solid var(--line);padding:12px;gap:5px}.bench-metrics span{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}.bench-metrics strong{font-size:21px;color:var(--text)}.bench-metrics small,.bench-goal small{font-size:11px;color:var(--muted)}.bench-goals{display:grid;grid-template-columns:1fr 1fr;gap:14px}.bench-goal{border:1px solid var(--line);border-radius:12px;padding:12px}.bench-goal-heading{display:flex;justify-content:space-between;gap:9px;align-items:center;font-size:13px;margin-bottom:10px}.bench-goal-heading span{font-variant-numeric:tabular-nums;color:#9be9df;font-size:12px}.bench-track{height:9px;background:#0d1627;border-radius:20px;overflow:hidden;margin-bottom:8px}.bench-bar{height:100%;width:0;background:var(--accent);transition:width .25s}.bench-chart-box{border:1px solid var(--line);border-radius:12px;background:#0d1627;margin-top:12px;padding:12px}.bench-chart-head{display:flex;align-items:center;justify-content:space-between;gap:9px;flex-wrap:wrap}.bench-chart-head strong{font-size:13px}.bench-chart-head small{font-size:11px;color:var(--muted)}.bench-sparkline{margin-top:12px;min-height:122px}.bench-sparkline svg{width:100%;height:140px;display:block;overflow:visible}.bench-advice{padding:14px;border:1px solid #385e68;background:#102129;border-radius:12px;margin-top:12px}.bench-advice strong{font-size:13px}.bench-advice p{margin:7px 0;font-size:14px;font-weight:700}.bench-advice small{display:block;color:#b5c8d0;line-height:1.45}.bench-history{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.bench-history-item{padding:10px;border-radius:10px;border:1px solid var(--line);background:#0d1627}.bench-history-item strong{display:block;font-size:14px;margin-top:4px}.bench-history-item small{color:var(--muted)}.bench-disclaimer{margin-top:12px}.bench-exercise-coach{font-size:11px;color:var(--muted);margin:6px 0 0;line-height:1.35}@media(max-width:720px){.bench-metrics{grid-template-columns:1fr 1fr}.bench-metrics>div:last-child{grid-column:1/-1}.bench-goals{grid-template-columns:1fr}.bench-history{grid-template-columns:1fr 1fr}}@media(max-width:450px){.bench-history{grid-template-columns:1fr}.bench-metrics strong{font-size:18px}}
 </style>
 <link rel="stylesheet" href="/exercise-guides.css">
 </head>
@@ -641,6 +643,27 @@
           </details>
         </article>
 
+        <article class="panel bench-coach-panel" id="benchCoachPanel" style="margin-top:14px">
+          <div class="panel-head">
+            <div><p class="eyebrow">TRENER SIŁOWY</p><h3>Bench 110 kg × 3–5</h3></div>
+            <span class="pill" id="benchDataStatus">Dane treningowe</span>
+          </div>
+          <p class="muted">Do końca stycznia: minimum 110 kg × 3, ambitnie 110 kg × 5. Trend pochodzi wyłącznie z roboczych serii klasycznego wyciskania sztangi na płaskiej ławce.</p>
+          <div class="bench-metrics">
+            <div><span>Ostatnia najlepsza seria</span><strong id="benchLatestSet">—</strong><small id="benchLatestDate">Brak wpisów</small></div>
+            <div><span>Ostatnie e1RM</span><strong id="benchLatestE1rm">—</strong><small>Metoda Epleya</small></div>
+            <div><span>Najlepsze e1RM</span><strong id="benchRecordE1rm">—</strong><small id="benchTrendLabel">Trend: brak danych</small></div>
+          </div>
+          <div class="bench-goals">
+            <div class="bench-goal"><div class="bench-goal-heading"><strong>110 kg × 3</strong><span id="benchMinProgress">—</span></div><div class="bench-track"><div id="benchMinBar" class="bench-bar"></div></div><small id="benchMinStatus">Próg e1RM ≈ 121,0 kg</small></div>
+            <div class="bench-goal"><div class="bench-goal-heading"><strong>110 kg × 5</strong><span id="benchStretchProgress">—</span></div><div class="bench-track"><div id="benchStretchBar" class="bench-bar"></div></div><small id="benchStretchStatus">Próg e1RM ≈ 128,3 kg</small></div>
+          </div>
+          <div class="bench-chart-box"><div class="bench-chart-head"><strong>Trend e1RM</strong><small>Najlepsza seria robocza z każdego treningu</small></div><div id="benchSparkline" class="bench-sparkline"><span class="muted">Zapisz serię wyciskania, aby zobaczyć wykres.</span></div></div>
+          <div class="bench-advice"><strong>Proponowana progresja na następny Upper A</strong><p id="benchNextLoad">Brak danych do rekomendacji.</p><small id="benchAdviceDetail"></small></div>
+          <div class="bench-history" id="benchRecentSessions"></div>
+          <p class="muted bench-disclaimer">Postęp do progu e1RM to orientacyjny wskaźnik siły, nie prawdopodobieństwo wykonania 110 kg. Nie zmieniamy ciężaru bez sprawdzenia techniki, RIR i regeneracji. Słaby punkt: końcowy wyprost łokci; ćwiczenia pomocnicze są w Upper B.</p>
+        </article>
+
         <article class="panel strength-panel" style="margin-top:14px">
           <div class="panel-head">
             <div><p class="eyebrow">SIŁA I REKORDY</p><h3>PR / e1RM</h3></div>
@@ -726,6 +749,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script src="/planned-meal.js"></script>
+  <script src="/bench-coach.js"></script>
   <script>
 (() => {
   const SUPABASE_URL = "https://ymemohuafzogbhgggcvm.supabase.co";
@@ -1127,17 +1151,21 @@
     return {allTop,allMin,base};
   }
   function progressionFor(ex,date,variantName=ex.name){
-    const prev=recentPerformances(ex.id,date,variantName), step=Number(ex.progression_step_kg||2.5);
+    const prev=recentPerformances(ex.id,date,variantName);
     if(!prev.length){
-      return {weight:variantName!==ex.name||ex.start_weight_kg==null?null:Number(ex.start_weight_kg),message:variantName!==ex.name?"Inny wariant — ustal ciężar na tej maszynie":"Pierwsza sesja — ustal bazę",previous:"Brak wcześniejszego wyniku dla tego wariantu"};
+      return {weight:variantKey(variantName)!==variantKey(ex.name)||ex.start_weight_kg==null?null:Number(ex.start_weight_kg),
+        message:variantKey(variantName)!==variantKey(ex.name)?"Inny wariant — ustal ciężar na tej maszynie":"Pierwsza sesja — ustal bazę",
+        previous:"Brak wcześniejszego wyniku dla tego wariantu",
+        detail:"Zacznij od ciężaru z kontrolowanym zapasem powtórzeń."};
     }
-    const p1=evaluatePerformance(ex,prev[0].sets),p2=prev[1]?evaluatePerformance(ex,prev[1].sets):null;
-    let weight=p1.base, message="Utrzymaj ciężar i dodaj powtórzenia";
-    if(p1.allTop&&p1.base!=null){weight=p1.base+step;message=`Progres: +${step} kg`;}
-    else if(!p1.allMin&&p2&&!p2.allMin&&p1.base!=null){
-      const raw=p1.base*0.925;weight=Math.max(0,Math.round(raw/step)*step);message="2 słabsze sesje — reset ok. -7,5%";
-    } else if(p1.allMin){message="Zakres zaliczony — dobij do górnej granicy";}
-    return {weight,message,previous:`${prev[0].session.session_date}: ${perfSummary(prev[0].sets)}`};
+    const core=window.FORMA_BENCH_COACH;
+    if(core){
+      const hint=core.recommend(ex,prev);
+      return {...hint,previous:`${prev[0].session.session_date}: ${perfSummary(prev[0].sets)}`};
+    }
+    return {weight:Number(prev[0].sets[0].weight_kg),message:"Utrzymaj ciężar",
+      previous:`${prev[0].session.session_date}: ${perfSummary(prev[0].sets)}`,
+      detail:"Niedostępny moduł progresji — nie zwiększaj ciężaru automatycznie."};
   }
   function renumberSetRows(card){[...card.querySelectorAll(".set-row.data")].forEach((r,i)=>{r.querySelector(".set-no").textContent=i+1;r.dataset.setno=i+1;});}
   function makeSetRow(setNo,weight,reps="",rir=""){
@@ -1260,6 +1288,8 @@
         card.dataset.recweight=progression.weight??"";
         card.querySelector(".progression-chip").innerHTML="<strong>"+esc(progression.message)+"</strong><br><span class=\"muted\">Sugerowany ciężar: "+(progression.weight==null?"ustal na treningu":progression.weight+" kg")+"</span>";
         card.querySelector(".history-mini").textContent="Poprzednio (ten wariant): "+progression.previous;
+        const coachInfo=card.querySelector(".bench-exercise-coach");
+        if(coachInfo)coachInfo.textContent=progression.detail||"Seria robocza: oceń ciężar, powtórzenia i RIR.";
         applyWeight.disabled=progression.weight==null;
         hint.textContent="Wyniki porównujemy tylko dla tej samej maszyny. Przycisk uzupełnia ciężar, ale nie kopiuje powtórzeń ani RIR.";
         hint.classList.remove("warning");
@@ -1284,6 +1314,11 @@
         hint.textContent="Wstawiono sugerowany ciężar do pustych serii. Powtórzenia i RIR wpisz po wykonaniu.";
         hint.classList.remove("warning");
       });
+      if(ex.id===window.FORMA_BENCH_COACH?.BENCH_ID){
+        const info=document.createElement("p");info.className="bench-exercise-coach";
+        info.textContent=progression.detail||"Cel: 110 kg × 3–5. Nie oceniaj postępu po jednym treningu.";
+        card.querySelector(".progression-chip").appendChild(info);
+      }
       card.querySelector(".add-set").addEventListener("click",()=>rows.appendChild(makeSetRow(rows.children.length+1,progression.weight??"","","")));
       refreshVariant();
       container.appendChild(card);
@@ -2319,6 +2354,63 @@
     return [...byDate.values()].sort((a,b)=>a.session_date.localeCompare(b.session_date));
   }
   function liftCandidate(names,patterns){return names.find(n=>patterns.some(re=>re.test(n)))||null;}
+
+  function renderBenchCoach(){
+    const c=window.FORMA_BENCH_COACH,panel=$("#benchCoachPanel");
+    if(!c||!panel)return;
+    const bench=(state.exercisePlan||[]).find(x=>x.id===c.BENCH_ID);
+    const data=c.benchData(state.workoutSessions,state.workoutSets,c.BENCH_ID);
+    const latest=data.latest,best=data.best;
+    $("#benchLatestSet").textContent=latest?latest.best.weight+" kg × "+latest.best.reps:"—";
+    $("#benchLatestDate").textContent=latest?formatDate(latest.date)+(latest.best.rir==null?"":" • RIR "+latest.best.rir):"Brak zapisanych serii";
+    $("#benchLatestE1rm").textContent=latest?latest.best.e1rm.toFixed(1)+" kg":"—";
+    $("#benchRecordE1rm").textContent=best?best.e1rm.toFixed(1)+" kg":"—";
+    $("#benchDataStatus").textContent=data.sessions>=3?data.sessions+" treningi":"Wstępne dane";
+    const d=data.trendDelta;
+    $("#benchTrendLabel").textContent=data.sessions<2?"Brak trendu":
+      (d>0.5?"+":d<-.5?"":"")+d.toFixed(1)+" kg vs poprzednio"+(data.sessions<3?" • wstępnie":"");
+    const all=(state.workoutSets||[]).filter(x=>x.exercise_id===c.BENCH_ID&&c.isFlatBenchName(x.exercise_name)&&x.is_warmup!==true);
+    const confirmed3=all.some(x=>Number(x.weight_kg)>=110&&Number(x.reps)>=3);
+    const confirmed5=all.some(x=>Number(x.weight_kg)>=110&&Number(x.reps)>=5);
+    for(const [kind,target,done] of [["Min",data.targetMin,confirmed3],["Stretch",data.targetStretch,confirmed5]]){
+      const pct=best?Math.max(0,Math.min(100,100*best.e1rm/target)):0;
+      $("#bench"+kind+"Progress").textContent=best?pct.toFixed(0)+"% e1RM":"Brak danych";
+      $("#bench"+kind+"Bar").style.width=pct+"%";
+      $("#bench"+kind+"Status").textContent=done?"Cel potwierdzony w serii roboczej":
+        "Próg e1RM ≈ "+target.toFixed(1)+" kg • wynik 110 kg jeszcze niepotwierdzony";
+    }
+    const graph=$("#benchSparkline"),recent=data.trend.slice(-10);
+    if(!recent.length){graph.innerHTML='<span class="muted">Zapisz pierwszą serię wyciskania.</span>';}
+    else {
+      const values=recent.map(x=>x.best.e1rm),min=Math.min(...values),max=Math.max(...values),
+        floor=Math.max(0,min-4),ceil=Math.max(floor+8,max+4),width=600,height=140,pad=25;
+      const px=i=>recent.length===1?width/2:pad+i*(width-2*pad)/(recent.length-1);
+      const py=y=>height-28-(y-floor)/(ceil-floor)*(height-55);
+      const coords=recent.map((x,i)=>px(i).toFixed(1)+","+py(x.best.e1rm).toFixed(1)).join(" ");
+      graph.innerHTML='<svg viewBox="0 0 600 140" aria-label="Wykres e1RM w kolejnych treningach" role="img">'+
+        '<line x1="24" y1="112" x2="576" y2="112" stroke="#35445b" />'+
+        '<polyline fill="none" stroke="#5eead4" stroke-width="3" stroke-linejoin="round" points="'+coords+'"/>'+
+        recent.map((x,i)=>'<circle cx="'+px(i).toFixed(1)+'" cy="'+py(x.best.e1rm).toFixed(1)+'" r="4.5" fill="#5eead4"/>').join("")+
+        '<text x="8" y="14" fill="#b7c7d8" font-size="12">'+ceil.toFixed(0)+' kg</text>'+
+        '<text x="8" y="134" fill="#b7c7d8" font-size="12">'+floor.toFixed(0)+' kg</text>'+
+        '</svg>';
+    }
+    $("#benchRecentSessions").innerHTML=data.trend.slice(-3).reverse().map(row=>
+      '<div class="bench-history-item"><small>'+formatDate(row.date)+'</small><strong>'+
+      row.best.weight+' kg × '+row.best.reps+'</strong><small>e1RM '+row.best.e1rm.toFixed(1)+
+      ' kg'+(row.best.rir==null?'':' • RIR '+row.best.rir)+'</small></div>').join("")||
+      '<div class="muted">Brak sesji wyciskania płasko.</div>';
+    if(!bench){$("#benchNextLoad").textContent="Brak ćwiczenia wyciskania w planie.";
+      $("#benchAdviceDetail").textContent="Sprawdź listę ćwiczeń Upper A.";return;}
+    const history=recentPerformances(bench.id,"9999-12-31",bench.name);
+    const rec=history.length?c.recommend(bench,history):null;
+    $("#benchNextLoad").textContent=rec&&rec.weight!=null?
+      rec.message+" • około "+rec.weight+" kg":
+      "Zbierz serie robocze klasycznego wyciskania.";
+    $("#benchAdviceDetail").textContent=rec?
+      rec.detail+" Rekomendacja dotyczy serii roboczych "+bench.target_sets+"×"+bench.rep_min+"–"+bench.rep_max+
+        ". Przerwy 3–4 min, zwykle RIR 1–2.":"Nie kopiuj ciężarów ze skosu ani węższego chwytu.";
+  }
   function renderStrengthDashboard(){
     const select=$("#strengthExerciseSelect");if(!select)return;
     const rows=strengthWorkSets(),names=[...new Set(rows.map(x=>x.exercise_name))].sort((a,b)=>a.localeCompare(b,"pl"));
@@ -2345,7 +2437,7 @@
   }
   $("#strengthExerciseSelect").addEventListener("change",e=>{selectedStrengthExercise=e.target.value;renderStrengthDashboard();drawStrengthChart();});
 
-  function renderProgress(){const sorted=[...state.entries].sort((a,b)=>a.date.localeCompare(b.date)).filter(e=>e.weight!=null),first=sorted[0],last=sorted.at(-1),seven=lastNDays(7);$("#firstWeight").textContent=first?first.weight.toFixed(1)+" kg":"—";$("#lastWeight").textContent=last?last.weight.toFixed(1)+" kg":"—";if(first&&last){const d=last.weight-first.weight;$("#totalChange").textContent=(d>0?"+":"")+d.toFixed(1)+" kg"}else $("#totalChange").textContent="—";const sl=avg(seven.filter(e=>e.sleep!=null).map(e=>e.sleep)),st=avg(seven.filter(e=>e.steps!=null).map(e=>e.steps));$("#avgSleep").textContent=sl?sl.toFixed(1)+" h":"—";$("#avgSteps").textContent=st?Math.round(st):"—";renderWeeklyReviews();renderStrengthDashboard();}
+  function renderProgress(){const sorted=[...state.entries].sort((a,b)=>a.date.localeCompare(b.date)).filter(e=>e.weight!=null),first=sorted[0],last=sorted.at(-1),seven=lastNDays(7);$("#firstWeight").textContent=first?first.weight.toFixed(1)+" kg":"—";$("#lastWeight").textContent=last?last.weight.toFixed(1)+" kg":"—";if(first&&last){const d=last.weight-first.weight;$("#totalChange").textContent=(d>0?"+":"")+d.toFixed(1)+" kg"}else $("#totalChange").textContent="—";const sl=avg(seven.filter(e=>e.sleep!=null).map(e=>e.sleep)),st=avg(seven.filter(e=>e.steps!=null).map(e=>e.steps));$("#avgSleep").textContent=sl?sl.toFixed(1)+" h":"—";$("#avgSteps").textContent=st?Math.round(st):"—";renderWeeklyReviews();renderStrengthDashboard();renderBenchCoach();}
   function renderSettings(){const s=state.settings;$("#sHeight").value=s.height??"";$("#sTargetWeight").value=s.targetWeight??"";$("#sCalories").value=s.calories??"";$("#sProtein").value=s.protein??"";$("#sCarbs").value=s.carbs??"";$("#sFat").value=s.fat??"";$("#sSteps").value=s.steps??"";$("#sWorkouts").value=s.workouts??"";$("#sGoal").value=s.goal||"redukcja";}
   $("#settingsForm").addEventListener("submit",async ev=>{ev.preventDefault();state.settings={height:val("#sHeight"),targetWeight:val("#sTargetWeight"),calories:val("#sCalories"),protein:val("#sProtein"),carbs:val("#sCarbs"),fat:val("#sFat"),steps:val("#sSteps"),workouts:val("#sWorkouts"),goal:$("#sGoal").value};const ok=await cloud(()=>client.from("user_settings").upsert(settingsToDb(),{onConflict:"user_id"}));if(ok){saveCache();renderAll();$("#settingsMessage").textContent="Zapisano w chmurze.";toast("Ustawienia zapisane");}});
 
