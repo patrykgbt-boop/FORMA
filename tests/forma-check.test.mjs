@@ -4,13 +4,13 @@ import fs from "node:fs";
 import vm from "node:vm";
 
 const html=fs.readFileSync(new URL("../index.html",import.meta.url),"utf8");
-const inline=[...html.matchAll(/<script\\b([^>]*)>([\\s\\S]*?)<\\/script>/g)]
-  .filter(m=>! /\\bsrc\\s*=/.test(m[1])).map(m=>m[2]);
+const inline=[...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)]
+  .filter(m=>!/\bsrc\s*=/.test(m[1])).map(m=>m[2]);
 const scripts=fs.readdirSync(new URL("..",import.meta.url)).filter(x=>x.endsWith(".js"));
 const extract=(name)=>{
   const begin=inline[0].indexOf("  function "+name+"(");
   assert.ok(begin>=0,"Missing function "+name);
-  const ending=inline[0].indexOf("\\n  }",begin);
+  const ending=inline[0].indexOf("\n  }",begin);
   assert.ok(ending>begin,"Missing close of function "+name);
   return inline[0].slice(begin,ending+5);
 };
