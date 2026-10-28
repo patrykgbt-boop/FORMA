@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "FORMA Sleep",
-    "slug": "forma-sleep-android",
+    "slug": "forma-sleep",
     "scheme": "formasleep",
     "version": "0.2.0",
     "orientation": "portrait",
@@ -32,6 +32,7 @@
     ],
     "extra": {
       "privacy": "Nagrania pozostają lokalnie. Dane czasu snu i ocenę synchronizujemy z FORMA; klasyfikacja chrapania niedostępna."
-    }
+    },
+    "owner": "patryk9xk3s-team"
   }
 }
