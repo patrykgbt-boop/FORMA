@@ -50,7 +50,7 @@ test("pure set validation rejects partial, duplicate, malformed records",()=>{
   const good=[{exercise_id:"x",exercise_name:"Bench",set_number:1,weight_kg:95,reps:5,rir:1,is_warmup:false}];
   assert.equal(validate(good),null);
   assert.match(validate([]),/ser/i);
-  assert.match(validate([...good,{...good}]),/numer|powtórzon/i);
+  assert.match(validate([...good,{...good[0]}]),/numer|powtórzon/i);
   assert.match(validate([{...good,reps:null}]),/powt/i);
   assert.match(validate([{...good,weight_kg:-10}]),/ciężar/i);
   assert.match(validate([{...good,rir:11}]),/RIR/i);
