@@ -1138,6 +1138,82 @@
     row.querySelector(".remove-set").addEventListener("click",()=>{row.remove();renumberSetRows(row.closest(".exercise-card"));});
     return row;
   }
+
+  // Lokalna kopia robocza jest oddzielna dla konta, daty i rodzaju treningu.
+  function workoutDraftKey(userId,date,day){
+    return "forma-workout-draft-v1:"+String(userId)+":"+String(date)+":"+String(day);
+  }
+  function saveWorkoutDraft(){
+    if(!currentUser)return;
+    const container=$("#workoutExercises"),date=$("#jDate").value||todayISO,day=Number($("#workoutDaySelect").value);
+    if(!container?.querySelector(".exercise-card")||!day)return;
+    const cards=[...container.querySelectorAll(".exercise-card")].map(card=>({
+      exercise_id:card.dataset.exid,
+      exercise_name:card.querySelector(".exercise-variant-input")?.value.trim()||"",
+      is_custom:card.querySelector(".exercise-variant-select")?.value==="__new_variant__",
+      sets:[...card.querySelectorAll(".set-row.data")].map(row=>({
+        weight:row.querySelector(".set-weight").value,
+        reps:row.querySelector(".set-reps").value,
+        rir:row.querySelector(".set-rir").value,
+        warmup:row.dataset.warmup==="1"
+      }))
+    }));
+    const payload={saved_at:new Date().toISOString(),duration:$("#jDuration").value,mood:$("#jMood").value,notes:$("#jNotes").value,cards};
+    try{
+      localStorage.setItem(workoutDraftKey(currentUser.id,date,day),JSON.stringify(payload));
+      $("#workoutMessage").textContent="Wpisy przechowywane lokalnie do czasu zatwierdzenia treningu.";
+    }catch(err){console.warn("Nie można utworzyć kopii treningu:",err);$("#workoutMessage").textContent="Uwaga: pamięć urządzenia jest pełna — zapisz trening przy aktywnym internecie.";}
+  }
+  function clearWorkoutDraft(date,day){
+    if(!currentUser)return;
+    try{localStorage.removeItem(workoutDraftKey(currentUser.id,date,day));}catch{}
+  }
+  function restoreWorkoutDraft(date,day){
+    if(!currentUser)return false;
+    let draft;
+    try{draft=JSON.parse(localStorage.getItem(workoutDraftKey(currentUser.id,date,day))||"null");}catch{return false;}
+    if(!draft||!Array.isArray(draft.cards))return false;
+    $("#jDuration").value=draft.duration??$("#jDuration").value;
+    $("#jMood").value=draft.mood??$("#jMood").value;
+    $("#jNotes").value=draft.notes??$("#jNotes").value;
+    for(const entry of draft.cards){
+      const card=[...$("#workoutExercises").querySelectorAll(".exercise-card")].find(x=>x.dataset.exid===entry.exercise_id);
+      if(!card||!Array.isArray(entry.sets))continue;
+      const selector=card.querySelector(".exercise-variant-select");
+      const input=card.querySelector(".exercise-variant-input");
+      const matched=[...selector.options].find(o=>o.value===entry.exercise_name);
+      selector.value=matched&&!entry.is_custom?matched.value:"__new_variant__";
+      card.querySelector(".exercise-variant-custom").classList.toggle("hidden",selector.value!=="__new_variant__");
+      input.value=entry.exercise_name||"";
+      input.dispatchEvent(new Event("input"));
+      const rows=card.querySelector(".set-rows");
+      rows.innerHTML="";
+      entry.sets.slice(0,30).forEach((set,i)=>{
+        const row=makeSetRow(i+1,set.weight??"",set.reps??"",set.rir??"");
+        row.dataset.warmup=set.warmup?"1":"0";
+        rows.appendChild(row);
+      });
+    }
+    $("#workoutMessage").textContent="Przywrócono niezapisany trening z tego urządzenia. Sprawdź serie i kliknij «Zapisz trening».";
+    return true;
+  }
+  // Komunikaty walidacji nie mogą nadpisywać serii już zapisanych w chmurze.
+  function validateWorkoutPayload(sets){
+    if(!Array.isArray(sets)||sets.length<1||sets.length>200)return "Trening wymaga co najmniej jednej wykonanej serii (maks. 200).";
+    const seen=new Set();
+    for(const set of sets){
+      if(!set.exercise_name||!String(set.exercise_name).trim()||!set.exercise_id)return "Wybierz i nazwij wariant ćwiczenia.";
+      if(!Number.isInteger(Number(set.set_number))||Number(set.set_number)<1||Number(set.set_number)>30)return "Niepoprawny numer serii.";
+      const key=String(set.exercise_id)+":"+String(set.set_number);
+      if(seen.has(key))return "Powtórzony numer serii w ćwiczeniu.";
+      seen.add(key);
+      if(set.weight_kg===null||!Number.isFinite(Number(set.weight_kg))||Number(set.weight_kg)<0||Number(set.weight_kg)>1000)return "Niepoprawny ciężar serii.";
+      if(set.reps===null||!Number.isInteger(Number(set.reps))||Number(set.reps)<1||Number(set.reps)>100)return "Podaj liczbę powtórzeń od 1 do 100.";
+      if(set.rir!==null&&(!Number.isFinite(Number(set.rir))||Number(set.rir)<0||Number(set.rir)>10))return "RIR musi być w zakresie 0–10.";
+    }
+    return null;
+  }
+
   function renderWorkoutModule(){
     const select=$("#workoutDaySelect"),container=$("#workoutExercises");if(!select||!container)return;
     const daysAvail=availableWorkoutDays();const date=$("#jDate").value||todayISO;
@@ -1164,7 +1240,7 @@
       const rows=card.querySelector(".set-rows"),selectVariant=card.querySelector(".exercise-variant-select");
       const variantInput=card.querySelector(".exercise-variant-input"),customLabel=card.querySelector(".exercise-variant-custom");
       const applyWeight=card.querySelector(".apply-variant-weight"),hint=card.querySelector(".exercise-variant-hint");
-      if(existing.length) existing.forEach((s,i)=>{const row=makeSetRow(i+1,s.weight_kg==null?"":Number(s.weight_kg),s.reps??"",s.rir??"");row.dataset.restStarted="1";rows.appendChild(row);});
+      if(existing.length) existing.forEach((s,i)=>{const row=makeSetRow(i+1,s.weight_kg==null?"":Number(s.weight_kg),s.reps??"",s.rir??"");row.dataset.restStarted="1";row.dataset.warmup=s.is_warmup?"1":"0";rows.appendChild(row);});
       else for(let i=1;i<=Number(ex.target_sets);i++) rows.appendChild(makeSetRow(i,progression.weight??"","",""));
       function refreshVariant(){
         const variant=variantInput.value.trim();
@@ -1201,38 +1277,70 @@
       container.appendChild(card);
     });
     $("#workoutMessage").textContent=session?"Wczytano zapisany trening z tego dnia. Możesz go edytować.":"";
+    restoreWorkoutDraft(date,chosen);
   }
   async function saveDetailedWorkout(){
     if(!currentUser)return;
     const date=$("#jDate").value||todayISO,day=Number($("#workoutDaySelect").value);
-    // Do not silently save a new machine under the planned exercise name.
-    const unnamed=[...$("#workoutExercises").querySelectorAll(".exercise-card")].find(card=>
-      card.querySelector(".exercise-variant-select")?.value==="__new_variant__" &&
-      !card.querySelector(".exercise-variant-input")?.value.trim() &&
-      [...card.querySelectorAll(".set-row.data")].some(r=>
-        [".set-weight",".set-reps",".set-rir"].some(c=>r.querySelector(c).value!=="")
-      )
-    );
-    if(unnamed){$("#workoutMessage").textContent="Podaj nazwę nowego wariantu, zanim zapiszesz trening.";return;}
-    $("#workoutMessage").textContent="Zapisywanie treningu…";
-    const sessionPayload={user_id:currentUser.id,session_date:date,day_of_week:day,duration_min:val("#jDuration"),mood:$("#jMood").value||null,notes:$("#jNotes").value.trim()||sessionFor(date,day)?.notes||"",completed_at:new Date().toISOString(),updated_at:new Date().toISOString()};
-    const sRes=await client.from("workout_sessions").upsert(sessionPayload,{onConflict:"user_id,session_date,day_of_week"}).select("*").single();
-    if(sRes.error){console.error(sRes.error);$("#workoutMessage").textContent="Błąd zapisu sesji.";return;}
-    const sessionId=sRes.data.id;
-    const del=await client.from("workout_sets").delete().eq("session_id",sessionId).eq("user_id",currentUser.id);
-    if(del.error){console.error(del.error);$("#workoutMessage").textContent="Błąd aktualizacji serii.";return;}
-    const payload=[];
+    const button=$("#saveDetailedWorkout"),message=$("#workoutMessage");
+    const existing=sessionFor(date,day);
+    const payload=[],errors=[];
     [...$("#workoutExercises").querySelectorAll(".exercise-card")].forEach(card=>{
+      const variant=card.querySelector(".exercise-variant-input")?.value.trim()||"";
       [...card.querySelectorAll(".set-row.data")].forEach((row,i)=>{
-        const w=row.querySelector(".set-weight").value,r=row.querySelector(".set-reps").value,rir=row.querySelector(".set-rir").value;
-        if(w===""&&r===""&&rir==="")return;
-        payload.push({session_id:sessionId,user_id:currentUser.id,exercise_id:card.dataset.exid,exercise_name:card.querySelector(".exercise-variant-input")?.value.trim()||card.dataset.name,set_number:i+1,weight_kg:w===""?null:Number(w),reps:r===""?null:Number(r),rir:rir===""?null:Number(rir),updated_at:new Date().toISOString()});
+        const w=row.querySelector(".set-weight").value.trim();
+        const r=row.querySelector(".set-reps").value.trim();
+        const rir=row.querySelector(".set-rir").value.trim();
+        // Sugerowane, niewykonane serie (bez powtórzeń i RIR) nie są zapisywane.
+        if(r===""&&rir==="")return;
+        if(r===""||w===""){errors.push("Uzupełnij ciężar i powtórzenia we wszystkich rozpoczętych seriach.");return;}
+        if(!variant){errors.push("Wpisz nazwę wybranego wariantu ćwiczenia.");return;}
+        payload.push({
+          exercise_id:card.dataset.exid,
+          exercise_name:variant,
+          set_number:i+1,
+          weight_kg:Number(w),
+          reps:Number(r),
+          rir:rir===""?null:Number(rir),
+          is_warmup:row.dataset.warmup==="1"
+        });
       });
     });
-    if(payload.length){const ins=await client.from("workout_sets").insert(payload);if(ins.error){console.error(ins.error);$("#workoutMessage").textContent="Błąd zapisu serii.";return;}}
-    const daily={user_id:currentUser.id,entry_date:date,training_type:workoutDayLabels[day]||days[day-1],training_duration_min:val("#jDuration"),mood:$("#jMood").value||null,updated_at:new Date().toISOString()};
-    const dRes=await client.from("daily_entries").upsert(daily,{onConflict:"user_id,entry_date"});if(dRes.error)console.error(dRes.error);
-    await loadCloud();go("journal");$("#jDate").value=date;$("#workoutDaySelect").value=String(day);renderWorkoutModule();$("#workoutMessage").textContent="Trening zapisany. Progresja przeliczona.";toast("Trening zapisany");
+    const problem=errors[0]||validateWorkoutPayload(payload);
+    if(problem){message.textContent=problem+" Niezapisane wpisy pozostają na urządzeniu.";saveWorkoutDraft();message.textContent=problem;return;}
+    if(navigator.onLine===false){saveWorkoutDraft();message.textContent="Brak internetu — trening zachowany na urządzeniu. Ponów zapis po odzyskaniu połączenia.";return;}
+    button.disabled=true;
+    message.textContent="Zapisywanie treningu w chmurze…";
+    try{
+      const {data,error}=await client.rpc("save_workout_atomic",{
+        p_date:date,
+        p_day_of_week:day,
+        p_duration_min:val("#jDuration"),
+        p_mood:$("#jMood").value||null,
+        p_notes:$("#jNotes").value.trim()||existing?.notes||"",
+        p_sets:payload,
+        p_expected_updated_at:existing?.updated_at||null
+      });
+      if(error)throw error;
+      if(!data||Number(data.saved_sets)!==payload.length)throw new Error("Niepotwierdzony zapis treningu — sprawdź historię.");
+      // Czyszczenie lokalnego szkicu następuje dopiero po potwierdzeniu transakcji.
+      clearWorkoutDraft(date,day);
+      const daily={user_id:currentUser.id,entry_date:date,training_type:workoutDayLabels[day]||days[day-1],
+        training_duration_min:val("#jDuration"),mood:$("#jMood").value||null,updated_at:new Date().toISOString()};
+      const dRes=await client.from("daily_entries").upsert(daily,{onConflict:"user_id,entry_date"});
+      if(dRes.error)console.warn("Trening zapisany, lecz dziennik dnia nie został uaktualniony:",dRes.error);
+      await loadCloud();
+      go("journal");
+      $("#jDate").value=date;$("#workoutDaySelect").value=String(day);renderWorkoutModule();
+      $("#workoutMessage").textContent=dRes.error?"Trening zapisany, ale wpis dzienny wymaga ponownej synchronizacji.":"Trening bezpiecznie zapisany. Serie i progresja zsynchronizowane.";
+      toast("Trening zapisany");
+    }catch(err){
+      console.error("Bezpieczny zapis treningu:",err);
+      saveWorkoutDraft();
+      message.textContent=err?.code==="40001"||/Konflikt wersji|zmienił się na innym/.test(String(err?.message||""))
+        ?"Trening zmienił się na innym urządzeniu. Zapis w chmurze nie został nadpisany. Kopia lokalna zachowana — odśwież historię i zweryfikuj serie."
+        :"Zapis do chmury nie powiódł się. Dotychczasowe serie w Supabase są bez zmian, a wpisy zachowano na tym urządzeniu. Spróbuj ponownie.";
+    }finally{button.disabled=false;}
   }
 
   function planDayOptionLabel(d){return workoutDayLabels[d]||days[d-1];}
@@ -1364,6 +1472,15 @@
   }
   $("#resetPlan").addEventListener("click",async()=>{if(!confirm("Wyczyścić cały plan treningowy?"))return;const ok=await cloud(()=>client.from("training_plan").delete().eq("user_id",currentUser.id));if(ok){state.trainingPlan={};saveCache();renderTraining();toast("Plan wyczyszczony");}});
   $("#saveDetailedWorkout").addEventListener("click",saveDetailedWorkout);
+  $("#workoutExercises").addEventListener("input",saveWorkoutDraft);
+  $("#workoutExercises").addEventListener("change",saveWorkoutDraft);
+  $("#workoutExercises").addEventListener("click",ev=>{
+    if(ev.target.closest(".add-set,.remove-set,.apply-variant-weight"))saveWorkoutDraft();
+  });
+  ["#jDuration","#jMood","#jNotes"].forEach(id=>$(id).addEventListener("change",saveWorkoutDraft));
+  window.addEventListener("pagehide",()=>{
+    if($("#authScreen").classList.contains("hidden")&&$("#view-journal").classList.contains("active"))saveWorkoutDraft();
+  });
   $("#workoutDaySelect").addEventListener("change",renderWorkoutModule);
   $("#jDate").addEventListener("change",renderWorkoutModule);
   $("#planDaySelect").addEventListener("change",renderStructuredPlanEditor);
