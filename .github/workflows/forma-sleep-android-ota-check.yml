@@ -29,8 +29,8 @@ jobs:
           node-version: '22'
       - name: Install packages
         run: npm install --no-audit --fund=false
-      - name: Align Expo versions
-        run: npx expo install --fix
+      - name: Verify Expo package versions
+        run: npx expo install --check
       - name: Check dynamic OTA configuration
         run: |
           npx expo config --json > /tmp/forma-sleep-check.json

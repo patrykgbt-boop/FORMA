@@ -27,7 +27,8 @@
           "enableBackgroundRecording": true,
           "enableBackgroundPlayback": false
         }
-      ]
+      ],
+      "expo-sqlite"
     ],
     "extra": {
       "privacy": "Nagrania pozostają lokalnie. Dane czasu snu i ocenę synchronizujemy z FORMA; klasyfikacja chrapania niedostępna."
