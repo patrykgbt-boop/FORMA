@@ -1,0 +1,77 @@
+name: FORMA Sleep - bezplatny niepodpisany IPA
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'mobile/forma-sleep-ios/**'
+      - '.github/workflows/forma-sleep-unsigned-ipa.yml'
+permissions:
+  contents: read
+jobs:
+  build-ipa:
+    runs-on: macos-26
+    timeout-minutes: 80
+    defaults:
+      run:
+        working-directory: mobile/forma-sleep-ios
+    env:
+      CI: '1'
+      EXPO_NO_GIT_STATUS: '1'
+      EXPO_PUBLIC_SUPABASE_URL: 'https://ymemohuafzogbhgggcvm.supabase.co'
+      EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_-3RrLnYXbVyGL7QeKgsEwg_ynhEAi7f'
+    steps:
+      - name: Pobierz kod FORMA
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Skonfiguruj Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+      - name: Sprawdz srodowisko
+        run: |
+          xcodebuild -version
+          node --version
+          pod --version
+      - name: Instaluj zaleznosci
+        run: npm install --no-audit --fund=false
+      - name: Uzgodnij wersje z Expo SDK
+        run: npx expo install --fix
+      - name: Wygeneruj projekt Xcode
+        run: npx expo prebuild --platform ios --no-install --clean
+      - name: Instaluj CocoaPods
+        run: |
+          cd ios
+          pod install --repo-update
+      - name: Kompiluj bez podpisu Apple
+        shell: bash
+        run: |
+          set -euo pipefail
+          WORKSPACE=$(find ios -maxdepth 1 -type d -name '*.xcworkspace' | head -n 1)
+          SCHEME_PATH=$(find ios -path 'ios/Pods' -prune -o -type f -name '*.xcscheme' -print | head -n 1)
+          test -n "$WORKSPACE"
+          test -n "$SCHEME_PATH"
+          SCHEME=$(basename "$SCHEME_PATH" .xcscheme)
+          echo "Building scheme $SCHEME"
+          xcodebuild -workspace "$WORKSPACE" -scheme "$SCHEME" -configuration Release -sdk iphoneos \
+            -destination 'generic/platform=iOS' -derivedDataPath "$RUNNER_TEMP/forma-derived" \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY='' build
+      - name: Pakuj niepodpisana aplikacje do IPA
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP=$(find "$RUNNER_TEMP/forma-derived/Build/Products/Release-iphoneos" -maxdepth 1 -type d -name '*.app' | head -n 1)
+          test -n "$APP"
+          mkdir -p "$RUNNER_TEMP/forma-package/Payload"
+          ditto "$APP" "$RUNNER_TEMP/forma-package/Payload/$(basename "$APP")"
+          cd "$RUNNER_TEMP/forma-package"
+          zip -qry "$RUNNER_TEMP/FORMA-Sleep-unsigned.ipa" Payload
+          unzip -t "$RUNNER_TEMP/FORMA-Sleep-unsigned.ipa" | tail -n 2
+      - name: Udostepnij plik IPA na GitHub
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: FORMA-Sleep-iOS-unsigned-IPA
+          path: '${{ runner.temp }}/FORMA-Sleep-unsigned.ipa'
+          retention-days: 7
+          if-no-files-found: error
