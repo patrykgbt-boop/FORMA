@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "FORMA Sleep",
+    "slug": "forma-sleep-android",
+    "scheme": "formasleep",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "platforms": [
+      "android"
+    ],
+    "android": {
+      "package": "pl.forma.sleep.monitor.android",
+      "versionCode": 1,
+      "permissions": [
+        "RECORD_AUDIO",
+        "FOREGROUND_SERVICE",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "POST_NOTIFICATIONS"
+      ]
+    },
+    "plugins": [
+      [
+        "expo-audio",
+        {
+          "recordAudioAndroid": true,
+          "enableBackgroundRecording": true,
+          "enableBackgroundPlayback": false
+        }
+      ]
+    ],
+    "extra": {
+      "privacy": "Nagrania pozostają lokalnie. Dane czasu snu i ocenę synchronizujemy z FORMA; klasyfikacja chrapania niedostępna."
+    }
+  }
+}

@@ -67,7 +67,7 @@ function render(){
  const graph=records.slice(0,14).reverse();
  $("slChart").innerHTML=graph.length?graph.map(x=>'<div class="sleep-chart-col"><div class="sleep-bar '+(x.mins<420?'short':'')+'" style="height:'+Math.max(2,Math.min(100,Math.round(x.mins/600*100)))+'%" title="'+safe(dateText(x.date)+" — "+duration(x.mins))+'"></div><small>'+safe(x.date.slice(8,10)+"."+x.date.slice(5,7))+'</small></div>').join(""):'<div class="sleep-empty">Dodaj pierwszą noc, aby zobaczyć wykres.</div>';
  $("slList").innerHTML=records.length?records.slice(0,60).map(x=>{
-  const r=x.raw,origin=x.source==="dziennik"?"Wpis historyczny":x.source==="ios"?"Monitor iPhone":x.source==="apple_health"?"Apple Health":"Ręczny wpis";
+  const r=x.raw,origin=x.source==="dziennik"?"Wpis historyczny":x.source==="ios"?"Monitor iPhone":x.source==="android"?"Monitor Android":x.source==="apple_health"?"Apple Health":"Ręczny wpis";
   const desc=origin+(x.quality==null?"":" • jakość "+x.quality+"/5")+(r?" • "+time(new Date(r.bed_at))+"–"+time(new Date(r.woke_at)):" • szczegóły w Dzienniku")+(r?.source==="ios"?(r.snoring_minutes==null?" • chrapanie: brak oceny":" • możliwe chrapanie: "+r.snoring_minutes+" min"):"");
   const actions=r?'<div class="sleep-night-actions"><button type="button" class="secondary" data-edit="'+safe(x.date)+'">Edytuj</button><button type="button" class="danger" data-delete="'+safe(x.date)+'">Usuń</button></div>':"";
   return '<div class="sleep-night"><div><strong>'+dateText(x.date)+' • '+duration(x.mins)+'</strong><small>'+safe(desc)+'</small>'+(r?.notes?'<small>'+safe(r.notes)+'</small>':"")+'</div>'+actions+'</div>';
