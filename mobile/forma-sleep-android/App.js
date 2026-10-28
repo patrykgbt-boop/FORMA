@@ -2,6 +2,7 @@ import React, {useEffect,useMemo,useState} from 'react';
 import {ActivityIndicator,Alert,AppState,KeyboardAvoidingView,Platform,Pressable,SafeAreaView,ScrollView,StatusBar,StyleSheet,Text,TextInput,View} from 'react-native';
 import {useAudioRecorder,useAudioRecorderState,RecordingPresets,requestRecordingPermissionsAsync,setAudioModeAsync} from 'expo-audio';
 import {File,Directory,Paths} from 'expo-file-system';
+import * as Updates from 'expo-updates';
 import {supabase} from './src/supabase';
 import {localDate,buildNight,diffMinutes,minutesLabel} from './src/sleep-utils';
 
@@ -26,6 +27,9 @@ export default function App(){
  const [latency,setLatency]=useState('15'),[awake,setAwake]=useState('0'),[quality,setQuality]=useState('4');
  const [working,setWorking]=useState(false),[status,setStatus]=useState(''),[history,setHistory]=useState([]);
  const [warning,setWarning]=useState('');
+ const [updateBusy,setUpdateBusy]=useState(false),[updateMessage,setUpdateMessage]=useState('');
+ const {isUpdatePending,isDownloading,downloadProgress,currentlyRunning}=Updates.useUpdates();
+
  const busy=working;
  useEffect(()=>{
    let mounted=true;
@@ -99,6 +103,34 @@ export default function App(){
      }}
    ]);
  }
+ async function checkAndDownloadUpdate(){
+   if(!Updates.isEnabled)return setUpdateMessage('Aktualizacje OTA nie są włączone w tym APK. Zainstaluj wersję przygotowaną po konfiguracji Expo.');
+   if(active||working||updateBusy)return setUpdateMessage('Najpierw zakończ bieżące nagrywanie lub operację.');
+   setUpdateBusy(true);setUpdateMessage('Sprawdzanie aktualizacji…');
+   try{
+     const check=await Updates.checkForUpdateAsync();
+     if(!check.isAvailable){
+       setUpdateMessage('Brak nowych aktualizacji dla tej wersji Androida.');
+       return;
+     }
+     setUpdateMessage('Pobieranie aktualizacji…');
+     const downloaded=await Updates.fetchUpdateAsync();
+     setUpdateMessage(downloaded.isNew?'Aktualizacja pobrana. Zastosuj ją po zakończeniu pracy.':'Aktualizacja jest już dostępna do uruchomienia.');
+   }catch(e){setUpdateMessage('Nie udało się pobrać aktualizacji: '+(e?.message||String(e)));}
+   finally{setUpdateBusy(false);}
+ }
+ async function applyDownloadedUpdate(){
+   if(active||working||updateBusy)return setUpdateMessage('Nie można restartować aplikacji w trakcie nagrywania lub zapisu.');
+   if(!Updates.isEnabled||!isUpdatePending)return setUpdateMessage('Brak pobranej aktualizacji.');
+   Alert.alert('Uruchomić nową wersję?','Aplikacja uruchomi się ponownie. Upewnij się, że nie trwa nagrywanie.',[
+     {text:'Później',style:'cancel'},
+     {text:'Uruchom',onPress:async()=>{
+       setUpdateBusy(true);
+       try{await Updates.reloadAsync();}
+       catch(e){setUpdateMessage('Nie udało się uruchomić aktualizacji: '+(e?.message||String(e)));setUpdateBusy(false);}
+     }}
+   ]);
+ }
  async function syncNight(){
    if(!pending||!session?.user?.id)return;
    if(pending.userId!==session.user.id)return setStatus('To zapis z innego konta FORMA. Zaloguj się na właściwe konto.');
@@ -164,6 +196,16 @@ export default function App(){
  {!!warning&&<View style={styles.card}><Text style={[styles.heading,{color:C.red}]}>Uwaga — przerwana sesja</Text><Text style={styles.muted}>{warning}</Text><Action label="Wyczyść nagrania lokalne" danger onPress={clearOrphanedAudio} disabled={busy||!!active}/></View>}
  {!!status&&<View style={styles.card}><Text style={styles.muted}>{status}</Text></View>}
  {busy&&<ActivityIndicator color={C.mint} size="large"/>}
+ <View style={styles.card}>
+   <Text style={styles.heading}>Aktualizacje aplikacji</Text>
+   <Text style={styles.caption}>Runtime: {Updates.runtimeVersion||'nieznany'} • {Updates.isEnabled?(currentlyRunning.isEmbeddedLaunch?'wersja APK':'wersja OTA'):'OTA nieaktywne'}</Text>
+   <Text style={styles.muted}>{!Updates.isEnabled?'Ta instalacja nie jest połączona z serwerem aktualizacji.':isUpdatePending?'Nowa wersja jest pobrana i czeka na zastosowanie.':'Aplikacja sprawdza aktualizacje przy uruchamianiu. Pobrana wersja aktywuje się po następnym pełnym uruchomieniu.'}</Text>
+   <Action label={updateBusy||isDownloading?'Sprawdzanie / pobieranie…':'Sprawdź aktualizacje'} secondary onPress={checkAndDownloadUpdate} disabled={!Updates.isEnabled||updateBusy||isDownloading||busy||!!active}/>
+   {isUpdatePending&&<Action label="Zastosuj pobraną aktualizację" onPress={applyDownloadedUpdate} disabled={updateBusy||busy||!!active}/>}
+   {isDownloading&&<Text style={styles.caption}>Pobieranie: {Math.round((downloadProgress||0)*100)}%</Text>}
+   {!!updateMessage&&<Text style={styles.caption}>{updateMessage}</Text>}
+   <Text style={styles.caption}>Nowe uprawnienia, biblioteki natywne i zmiany Androida nadal wymagają APK. Aktualizacja nie przerwie trwającej sesji.</Text>
+ </View>
  {session&&<View style={styles.card}><Text style={styles.heading}>Ostatnie noce w FORMA</Text>
   {history.length?history.map((item,i)=><View key={i} style={styles.historyRow}><Text style={styles.white}>{item.sleep_date}</Text><Text style={styles.muted}>{minutesLabel(item.sleep_duration_min)} • {item.snoring_minutes==null?'brak oceny chrapania':'możliwe chrapanie '+item.snoring_minutes+' min'}</Text></View>):<Text style={styles.muted}>Brak historii. Zapisz pierwszą noc.</Text>}
  </View>}

@@ -1,32 +1,39 @@
 # FORMA Sleep Android — Samsung Galaxy A52s
 
-**Pierwsza wersja testowa.** Bez Google Play, bez płatnego konta deweloperskiego i bez MacBooka. APK przygotowuje GitHub Actions w repozytorium publicznym.
+Bezpłatny APK z GitHub Actions. Monitorowanie i synchronizacja z FORMA (Supabase); brak rozpoznawania chrapania w wersji testowej.
 
-## Funkcje i ograniczenia
-- Logowanie istniejącym kontem FORMA (Supabase).
-- Nagrywanie mikrofonu uruchamiane przez użytkownika. Android używa foreground service z widocznym stałym powiadomieniem podczas blokady ekranu (do sprawdzenia na prawdziwym Samsungu).
-- Obliczenie czasu trwania sesji; rano wpisujesz minuty zasypiania, czuwanie i ocenę snu.
-- Synchronizacja z public.sleep_nights (source: android) oraz daily_entries.sleep_hours; wynik oczekujący na synchronizację pozostaje na telefonie.
-- Plik surowego audio jest usuwany lokalnie po zatrzymaniu sesji (o ile system na to pozwoli), nigdy nie wysyłamy go do Supabase.
-- W tej wersji **nie ma jeszcze rozpoznawania chrapania**. Nie udajemy, że 0 min to wynik badania. Nie mierzymy snu REM, głębokiego ani bezdechu.
+## Aktualizacje OTA — Expo EAS Update
 
-## Jak zainstalować
-1. Otwórz https://github.com/patrykgbt-boop/FORMA/actions/workflows/forma-sleep-android-apk.yml.
-2. Gdy przebieg ma status success (zielony), kliknij go i w sekcji Artifacts pobierz FORMA-Sleep-Android-APK (ZIP).
-3. Rozpakuj ZIP, skopiuj app-release.apk na Samsunga (USB lub dysk prywatny) i otwórz w Moje pliki.
-4. Udziel Moje pliki jednorazowej zgody na instalację aplikacji z tego źródła, gdy Android o to poprosi.
-5. Włącz FORMA Sleep, nadaj mikrofon i zaloguj się tym samym kontem FORMA co na iPhonie.
-6. W ustawieniach Samsung: Aplikacje → FORMA Sleep → Bateria → Bez ograniczeń (nazwy w One UI mogą się różnić).
-7. Przetestuj 2–5 minut z zablokowanym ekranem, po czym zakończ i zapisz wynik.
-8. Na iPhonie otwórz główną FORMA → Sen; zobaczysz zsynchronizowane dane z Androida.
+Aplikacja zawiera `expo-updates`. Po poprawnym połączeniu projektu Expo i zainstalowaniu **nowego APK OTA**:
+- Przy pełnym uruchomieniu automatycznie sprawdza i pobiera aktualizacje kodu JS. Zwykle zaczynają działać przy kolejnym pełnym uruchomieniu.
+- W sekcji **Aktualizacje aplikacji** można ręcznie sprawdzić, pobrać i zastosować aktualizację.
+- Nie restartuje się samoczynnie w trakcie nagrywania. Ręczne zastosowanie jest zablokowane podczas aktywnej sesji.
+- Nowa biblioteka natywna, zmiana uprawnień, Expo SDK lub Android wymaga nowego APK i zmiany `runtimeVersion` przy niekompatybilnych zmianach.
+- Stary APK sprzed wdrożenia OTA **nie potrafi** otrzymywać OTA.
 
-## Aktualizacje
-- APK jest podpisany kluczem kompilacji testowej. Jeżeli podpis zmieni się między buildami, Android może wymagać odinstalowania wcześniejszej wersji przed zainstalowaniem nowej. Zawsze zsynchronizuj zaległe pomiary.
-- Nie instaluj z przypadkowych stron; pobieraj wyłącznie z GitHub projektu FORMA.
+### Pierwsze uruchomienie usługi (jednorazowo)
 
-## Ważne
-- Mikrofon uruchamiaj w widocznej aplikacji. Praca w tle wymaga usługi z powiadomieniem i pozwolenia na mikrofon.
-- Oszczędzanie baterii, przychodzące rozmowy lub brak pamięci mogą przerwać nagrywanie.
-- Nie zostawiaj telefonu pod poduszką przy ładowaniu. Nagrywanie może przechwycić dźwięki współlokatorów — uzgodnij to z nimi.
+1. Załóż bezpłatne konto na https://expo.dev/ (nie jest potrzebny Play Store ani Mac).
+2. Utwórz projekt Expo dla `forma-sleep-android` (np. przez `npx eas-cli@latest init` uruchomione w `mobile/forma-sleep-android` na Windows; instalacja Node.js wymagana) i odczytaj **Project ID** (UUID) w Expo. Nie twórz kolejnych projektów przy każdym buildzie.
+3. W GitHub repo FORMA → Settings → Secrets and variables → Actions → **Variables** ustaw `EXPO_EAS_PROJECT_ID` = Project ID.
+4. W Expo Account settings → Access tokens wygeneruj token. W GitHub → Actions → **Secrets** dodaj `EXPO_TOKEN`. Token powinien mieć możliwie ograniczony zakres uprawnień. Nigdy nie wpisuj tokenu do kodu ani GitHub Variables.
+5. Uruchom workflow `FORMA Sleep Android - APK bez sklepu` ręcznie. Pobierz artefakt `FORMA-Sleep-Android-APK` **wyłącznie po sukcesie workflow** i zainstaluj `app-release.apk`.
+6. Uruchom workflow `FORMA Sleep Android - publish OTA` ręcznie, aby opublikować pierwszą aktualizację kanału `production` (jeżeli jeszcze żadna nie została wydana). Następne zmiany w App.js i src/** na `main` publikują OTA automatycznie po skonfigurowaniu tokenu.
+7. W aplikacji otwórz „Aktualizacje aplikacji”. Komunikat `OTA nieaktywne` oznacza, że masz APK bez połączenia z Expo.
+8. Przetestuj aktualizację na Samsungu przy włączonym internecie i wyłączonym nagrywaniu. Sprawdź potem działanie monitorowania przy zablokowanym ekranie.
 
-Źródła: https://docs.expo.dev/versions/latest/sdk/audio/ ; https://developer.android.com/develop/background-work/services/fgs/restrictions-bg-start
+**Ograniczenie:** EAS Update ma plan Free z limitami. Nie wymaga karty płatniczej ani dodatkowej opłaty w ramach limitu. GitHub Actions pozostaje budowniczym APK (EAS Build nie jest używany).
+
+### Uwagi o instalacji APK
+- APK z workflow jest podpisany testowo. Jeżeli podpis zmienił się między kompilacjami, Android może zażądać odinstalowania starej aplikacji. **Przed odinstalowaniem zsynchronizuj sesje**, ponieważ lokalne wyniki i logowanie mogą zostać utracone.
+- Po pierwszym OTA-APK dalsze aktualizacje JS nie wymagają ponownej instalacji.
+- Pobieraj APK wyłącznie z https://github.com/patrykgbt-boop/FORMA/actions/workflows/forma-sleep-android-apk.yml.
+
+## Monitorowanie i ograniczenia
+- Włącz mikrofon i zezwól na pracę podczas zablokowanego ekranu: Ustawienia → Aplikacje → FORMA Sleep → Bateria → Bez ograniczeń.
+- Rozpoczynaj nagrywanie ręcznie; system Android może przerwać je przy małej ilości pamięci, ograniczeniach baterii lub przychodzącym połączeniu.
+- Po nocy wpisz zasypianie, czuwanie i ocenę, następnie zapisz wynik do FORMA.
+- Pliki audio nie są wysyłane do Supabase; jeśli pozostały po awarii, możesz użyć „Wyczyść nagrania lokalne”.
+- Nie mierzymy REM, bezdechu ani snu głębokiego. Przy telefonie na wspólnej szafce nocnej uszanowanie prywatności innych osób jest konieczne.
+
+Dokumentacja: https://docs.expo.dev/eas-update/getting-started/ ; https://docs.expo.dev/versions/latest/sdk/updates/

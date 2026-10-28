@@ -1,0 +1,49 @@
+name: FORMA Sleep Android - publish OTA
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'mobile/forma-sleep-android/App.js'
+      - 'mobile/forma-sleep-android/index.js'
+      - 'mobile/forma-sleep-android/src/**'
+      - '.github/workflows/forma-sleep-android-ota.yml'
+permissions:
+  contents: read
+jobs:
+  publish-ota:
+    if: ${{ vars.EXPO_EAS_PROJECT_ID != '' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: mobile/forma-sleep-android
+    env:
+      CI: '1'
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      EXPO_EAS_PROJECT_ID: ${{ vars.EXPO_EAS_PROJECT_ID }}
+      EXPO_PUBLIC_SUPABASE_URL: 'https://ymemohuafzogbhgggcvm.supabase.co'
+      EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: 'sb_publishable_-3RrLnYXbVyGL7QeKgsEwg_ynhEAi7f'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+      - name: Check Expo authorization
+        run: |
+          if [ -z "$EXPO_TOKEN" ]; then
+            echo "::error::Ustaw GitHub Actions secret EXPO_TOKEN (token Expo)."
+            exit 1
+          fi
+      - name: Install dependencies
+        run: npm install --no-audit --fund=false
+      - name: Align Expo packages
+        run: npx expo install --fix
+      - name: Verify OTA target
+        run: |
+          npx expo config --json > /tmp/forma-sleep-expo-config.json
+          node -e "const c=require('/tmp/forma-sleep-expo-config.json'); if(c.updates?.url!==('https://u.expo.dev/'+process.env.EXPO_EAS_PROJECT_ID) || c.runtimeVersion!=='forma-sleep-android-runtime-1')process.exit(1);"
+      - name: Publish update (production / Android)
+        run: npx --yes eas-cli@latest update --channel production --platform android --message "GitHub ${{ github.sha }}" --non-interactive
