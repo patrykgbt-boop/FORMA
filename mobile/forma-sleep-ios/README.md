@@ -18,6 +18,7 @@ Wymagane: Node.js 22+, konto Expo, płatne konto Apple Developer Program do podp
 2. Uruchom npm install, a następnie npx expo install --check. W razie ostrzeżeń uruchom npx expo install --fix i zapisz package-lock.json.
 3. Skopiuj .env.example do .env i wstaw publiczny klucz Supabase publishable z panelu projektu (nie service_role).
 4. Uruchom npx expo login oraz npx eas-cli@latest init. Zweryfikuj unikalność ios.bundleIdentifier.
+4a. W Expo (Project settings > Environment variables) skonfiguruj dla środowiska production dwie zmienne publiczne: EXPO_PUBLIC_SUPABASE_URL i EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY, tak aby były dostępne w EAS Build (same lokalne pliki .env są ignorowane przez Git). Alternatywnie użyj eas env:set --name ... --value ... --environment production --visibility plaintext.
 5. Uruchom npx eas-cli@latest build --platform ios --profile production.
 6. Uruchom npx eas-cli@latest submit --platform ios --profile production, skonfiguruj test wewnętrzny App Store Connect i zaproś swoje konto do TestFlight.
 7. Zainstaluj aplikację przez TestFlight na iPhonie 16 Pro i przeprowadź poniższy test.
