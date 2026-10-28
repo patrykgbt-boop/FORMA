@@ -648,7 +648,7 @@
             <div><p class="eyebrow">TRENER SIŁOWY</p><h3>Bench 110 kg × 3–5</h3></div>
             <span class="pill" id="benchDataStatus">Dane treningowe</span>
           </div>
-          <p class="muted">Do końca stycznia: minimum 110 kg × 3, ambitnie 110 kg × 5. Trend pochodzi wyłącznie z roboczych serii klasycznego wyciskania sztangi na płaskiej ławce.</p>
+          <p class="muted">Do końca stycznia: minimum 110 kg × 3, ambitnie 110 kg × 5. Trend e1RM pochodzi z serii roboczych klasycznego wyciskania sztangi na płaskiej ławce, w zakresie 1–6 powtórzeń (bez rozgrzewki).</p>
           <div class="bench-metrics">
             <div><span>Ostatnia najlepsza seria</span><strong id="benchLatestSet">—</strong><small id="benchLatestDate">Brak wpisów</small></div>
             <div><span>Ostatnie e1RM</span><strong id="benchLatestE1rm">—</strong><small>Metoda Epleya</small></div>
@@ -2343,7 +2343,9 @@
   }
   function strengthWorkSets(){
     const sessions=new Map((state.workoutSessions||[]).map(s=>[s.id,s]));
-    return (state.workoutSets||[]).filter(x=>!x.is_warmup&&Number(x.weight_kg)>0&&Number(x.reps)>0&&Number(x.reps)<=20&&sessions.has(x.session_id)).map(x=>{
+    return (state.workoutSets||[]).filter(x=>!x.is_warmup&&Number(x.weight_kg)>0&&Number(x.reps)>0&&Number(x.reps)<=20&&sessions.has(x.session_id) &&
+      !(window.FORMA_BENCH_COACH && x.exercise_id===window.FORMA_BENCH_COACH.BENCH_ID &&
+        window.FORMA_BENCH_COACH.isFlatBenchName(x.exercise_name) && Number(x.reps)>6)).map(x=>{
       const session=sessions.get(x.session_id),weight=Number(x.weight_kg),reps=Number(x.reps);
       return {...x,session_date:session.session_date,weight,reps,e1rm:weight*(1+reps/30)};
     });
