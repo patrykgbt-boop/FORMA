@@ -191,7 +191,7 @@ function init(){
   $(id).addEventListener("change",comparison);
  document.querySelector('[data-view="physique"]')?.addEventListener("click",load);
  window.addEventListener("forma:data-loaded",load);
- window.addEventListener("forma:auth",()=>{if(!context()){measures=[];photos=[];urls.clear();goals=null;note("Zaloguj się, aby korzystać z galerii.");}});
+ window.addEventListener("forma:auth",()=>{if(!context()){measures=[];photos=[];urls.clear();goals=null;api=null;for(const id of ["physiqueGallery","physiqueCompareGrid","physiqueMeasureList","physiqueRecommendations"]){const node=$(id);if(node)node.replaceChildren();}note("Zaloguj się, aby korzystać z galerii.");}});
  if(context())load();
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",init);
