@@ -16,8 +16,9 @@
     return r===1?w:w*(1+r/30);
   }
   function validSet(s){
+    // Bench 110×3–5: only heavy sets (1–6 reps) for a more comparable e1RM trend.
     return s && s.is_warmup!==true && Number(s.weight_kg)>0 &&
-      Number.isInteger(Number(s.reps)) && Number(s.reps)>=1 && Number(s.reps)<=10 &&
+      Number.isInteger(Number(s.reps)) && Number(s.reps)>=1 && Number(s.reps)<=6 &&
       epley(s.weight_kg,s.reps)!==null;
   }
   function benchData(sessions,sets,exerciseId=BENCH_ID,upToDate=null){
