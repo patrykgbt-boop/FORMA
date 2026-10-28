@@ -46,4 +46,4 @@ jobs:
           npx expo config --json > /tmp/forma-sleep-expo-config.json
           node -e "const c=require('/tmp/forma-sleep-expo-config.json'); if(c.updates?.url!==('https://u.expo.dev/'+process.env.EXPO_EAS_PROJECT_ID) || c.runtimeVersion!=='forma-sleep-android-runtime-1')process.exit(1);"
       - name: Publish update (production / Android)
-        run: npx --yes eas-cli@latest update --channel production --platform android --message "GitHub ${{ github.sha }}" --non-interactive
+        run: npx --yes eas-cli@latest update --channel production --platform android --message "GitHub ${{ github.sha }}" --environment production --non-interactive
